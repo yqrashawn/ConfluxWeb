@@ -1,29 +1,41 @@
-# conflux-web-cfx
+# web3-eth
 
-This is a sub package of [ConfluxWeb.js][repo]
+This is a sub package of [web3.js][repo]
 
-This is the Cfx package to be used [ConfluxWeb.js][repo].
+This is the Eth package to be used [web3.js][repo].
+Please read the [documentation][docs] for more.
 
 ## Installation
 
+### Node.js
+
 ```bash
-npm install conflux-web-cfx
+npm install web3-eth
 ```
+
+### In the Browser
+
+Build running the following in the [web3.js][repo] repository:
+
+```bash
+npm run-script build-all
+```
+
+Then include `dist/web3-eth.js` in your html file.
+This will expose the `Web3Eth` object on the window object.
+
 
 ## Usage
 
 ```js
-import {Cfx} from 'conflux-web-cfx';
+// in node.js
+var Web3Eth = require('web3-eth');
 
-const cfx = new Cfx(
-    'http://127.0.0.1:4546',
-    null,
-    options
-);
+var eth = new Web3Eth('ws://localhost:8546');
 ```
 
-## Types 
 
-All the typescript typings are placed in the types folder. 
+[docs]: http://web3js.readthedocs.io/en/1.0/
+[repo]: https://github.com/ethereum/web3.js
 
-[repo]: https://github.com/Conflux-Chain/ConfluxWeb
+

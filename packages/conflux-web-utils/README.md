@@ -1,42 +1,46 @@
-# conflux-web-utils
+# web3-utils
 
-This is a sub package of [ConfluxWeb.js][repo]
+This is a sub package of [web3.js][repo]
 
 This contains useful utility functions for Dapp developers.   
+Please read the [documentation][docs] for more.
 
 ## Installation
 
+### Node.js
+
 ```bash
-npm install conflux-web-utils
+npm install web3-utils
 ```
+
+### In the Browser
+
+Build running the following in the [web3.js][repo] repository:
+
+```bash
+npm run-script build-all
+```
+
+Then include `dist/web3-utils.js` in your html file.
+This will expose the `Web3Utils` object on the window object.
+
 
 ## Usage
 
-Import all of the utils functions
-
 ```js
-import * as Utils from 'conflux-web-utils';
-
-console.log(Utils);
-> {
-    sha3: Function,
-    soliditySha3: Function,
-    isAddress: Function,
+// in node.js
+var Web3Utils = require('web3-utils');
+console.log(Web3Utils);
+{
+    sha3: function(){},
+    soliditySha3: function(){},
+    isAddress: function(){},
     ...
 }
 ```
 
-Import what you need
 
-```js
-import { asciiToHex } from 'conflux-web-utils';
+[docs]: http://web3js.readthedocs.io/en/1.0/
+[repo]: https://github.com/ethereum/web3.js
 
-console.log(asciiToHex('I have 100!'));
-> "0x49206861766520313030e282ac"
-```
 
-## Types 
-
-All the typescript typings are placed in the types folder.
-
-[repo]: https://github.com/Conflux-Chain/ConfluxWeb

@@ -1,17 +1,49 @@
-# conflux-web-core-method
+# web3-core-method
 
-This is a sub package of [ConfluxWeb.js][repo]
+This is a sub package of [web3.js][repo]
 
-The Method module abstracts the JSON-RPC method and is used within most [ConfluxWeb.js][repo] packages.
+The Method package used within most [web3.js][repo] packages.
+Please read the [documentation][docs] for more.
 
 ## Installation
 
+### Node.js
+
 ```bash
-npm install conflux-web-core-method
+npm install web3-core-method
 ```
 
-## Types 
+### In the Browser
 
-All the typescript typings are placed in the types folder. 
+Build running the following in the [web3.js][repo] repository:
 
-[repo]: https://github.com/Conflux-Chain/ConfluxWeb
+```bash
+npm run-script build-all
+```
+
+Then include `dist/web3-core-method.js` in your html file.
+This will expose the `Web3Method` object on the window object.
+
+
+## Usage
+
+```js
+// in node.js
+var Web3Method = require('web3-core-method');
+
+var method = new Web3Method({
+    name: 'sendTransaction',
+    call: 'eth_sendTransaction',
+    params: 1,
+    inputFormatter: [inputTransactionFormatter]
+});
+method.attachToObject(myCoolLib);
+
+myCoolLib.sendTransaction({...}, function(){ ... });
+```
+
+
+[docs]: http://web3js.readthedocs.io/en/1.0/
+[repo]: https://github.com/ethereum/web3.js
+
+

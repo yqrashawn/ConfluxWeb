@@ -1,52 +1,55 @@
 {
-    "name": "conflux-web",
-    "version": "0.1.22-alpha.0",
-    "description": "Conflux JavaScript API",
-    "repository": "https://github.com/Conflux-Chain/ConfluxWeb/tree/master/packages/conflux-web",
+    "name": "web3",
+    "version": "1.2.1",
+    "description": "Ethereum JavaScript API",
+    "repository": "https://github.com/ethereum/web3.js/tree/1.x/packages/web3",
     "license": "LGPL-3.0",
-    "main": "dist/conflux-web.cjs.js",
-    "module": "dist/conflux-web.esm.js",
-    "browser": "dist/conflux-web.umd.js",
+    "engines": {
+        "node": ">=8.0.0"
+    },
+    "main": "src/index.js",
+    "bugs": {
+        "url": "https://github.com/ethereum/web3.js/issues"
+    },
     "keywords": [
-        "Conflux",
+        "Ethereum",
         "JavaScript",
         "API"
     ],
-    "author": "conflux-chain.org",
+    "author": "ethereum.org",
     "authors": [
         {
-            "name": "Yanpei Liu",
-            "email": "ypliu@conflux-chain.org"
+            "name": "Fabian Vogelsteller",
+            "email": "fabian@ethereum.org",
+            "homepage": "http://frozeman.de"
+        },
+        {
+            "name": "Marek Kotewicz",
+            "email": "marek@parity.io",
+            "url": "https://github.com/debris"
+        },
+        {
+            "name": "Marian Oancea",
+            "url": "https://github.com/cubedro"
+        },
+        {
+            "name": "Gav Wood",
+            "email": "g@parity.io",
+            "homepage": "http://gavwood.com"
+        },
+        {
+            "name": "Jeffery Wilcke",
+            "email": "jeffrey.wilcke@ethereum.org",
+            "url": "https://github.com/obscuren"
         }
     ],
-    "scripts": {
-        "build": "rollup -c",
-        "dev": "rollup -c -w",
-        "test": "jest",
-        "dtslint": "dtslint types --onlyTestTsNext",
-        "postinstall": "node angular-patch.js"
-    },
-    "types": "types/index.d.ts",
     "dependencies": {
-        "@babel/runtime": "^7.3.1",
-        "@types/node": "^10.12.18",
-        "conflux-web-cfx": "0.1.22-alpha.0",
-        "conflux-web-core": "0.1.22-alpha.0",
-        "conflux-web-core-helpers": "0.1.15-alpha.0",
-        "conflux-web-core-method": "0.1.22-alpha.0",
-        "conflux-web-net": "0.1.15-alpha.0",
-        "conflux-web-providers": "0.1.15-alpha.0",
-        "conflux-web-utils": "0.1.15-alpha.0",
-        "jest": "^24.8.0"
-    },
-    "devDependencies": {
-        "definitelytyped-header-parser": "^1.0.1",
-        "dtslint": "0.4.2"
-    },
-    "files": [
-        "dist",
-        "types/index.d.ts",
-        "angular-patch.js"
-    ],
-    "gitHead": "b37d51086a47b3b9dcecde42fac4ce765f7c302d"
+        "web3-bzz": "1.2.1",
+        "web3-core": "1.2.1",
+        "web3-eth": "1.2.1",
+        "web3-eth-personal": "1.2.1",
+        "web3-net": "1.2.1",
+        "web3-shh": "1.2.1",
+        "web3-utils": "1.2.1"
+    }
 }

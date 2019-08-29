@@ -1,39 +1,24 @@
 {
-    "name": "conflux-web-cfx-accounts",
-    "version": "0.1.22-alpha.0",
-    "description": "ConfluxWeb module to generate Conflux accounts and sign data and transactions.",
-    "repository": "https://github.com/Conflux-Chain/ConfluxWeb/tree/master/packages/conflux-web-cfx-accounts",
+    "name": "web3-eth-accounts",
+    "version": "1.2.1",
+    "description": "Web3 module to generate Ethereum accounts and sign data and transactions.",
+    "repository": "https://github.com/ethereum/web3.js/tree/1.x/packages/web3-eth-accounts",
     "license": "LGPL-3.0",
-    "main": "dist/conflux-web-cfx-accounts.cjs.js",
-    "module": "dist/conflux-web-cfx-accounts.esm.js",
-    "browser": "dist/conflux-web-cfx-accounts.umd.js",
-    "types": "types/index.d.ts",
-    "scripts": {
-        "build": "rollup -c",
-        "dev": "rollup -c -w",
-        "test": "jest",
-        "dtslint": "dtslint types --onlyTestTsNext"
+    "engines": {
+        "node": ">=8.0.0"
     },
+    "main": "src/index.js",
     "dependencies": {
-        "@babel/runtime": "^7.3.1",
-        "conflux-web-core": "0.1.22-alpha.0",
-        "conflux-web-core-helpers": "0.1.15-alpha.0",
-        "conflux-web-core-method": "0.1.22-alpha.0",
-        "conflux-web-providers": "0.1.15-alpha.0",
-        "conflux-web-utils": "0.1.15-alpha.0",
+        "any-promise": "1.3.0",
         "crypto-browserify": "3.12.0",
-        "eth-lib": "0.2.8",
-        "lodash": "^4.17.11",
-        "scrypt.js": "0.2.0",
-        "uuid": "3.3.2"
-    },
-    "devDependencies": {
-        "definitelytyped-header-parser": "^1.0.1",
-        "dtslint": "0.4.2"
-    },
-    "files": [
-        "dist",
-        "types/index.d.ts"
-    ],
-    "gitHead": "5bd1d26ba861ce65bc21c652bb7ec28642a173a5"
+        "eth-lib": "0.2.7",
+        "scryptsy": "2.1.0",
+        "semver": "6.2.0",
+        "underscore": "1.9.1",
+        "uuid": "3.3.2",
+        "web3-core": "1.2.1",
+        "web3-core-helpers": "1.2.1",
+        "web3-core-method": "1.2.1",
+        "web3-utils": "1.2.1"
+    }
 }

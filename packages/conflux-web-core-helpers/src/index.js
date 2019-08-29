@@ -19,8 +19,14 @@
  * @author Fabian Vogelsteller <fabian@ethereum.org>
  * @date 2017
  */
-// TODO: Most formatters and utils methods could be removed with a web3-core-types module.
-// Note: Removed the errors temporary and will add later the Winston logger.
-// The errors are still the same as before with some new ones.
 
-export * as formatters from './Formatters';
+"use strict";
+
+var errors = require('./errors');
+var formatters = require('./formatters');
+
+module.exports = {
+    errors: errors,
+    formatters: formatters
+};
+

@@ -15,27 +15,53 @@
     along with web3.js.  If not, see <http://www.gnu.org/licenses/>.
 */
 /**
- * @file Network.js
- * @author Samuel Furter <samuel@ethereum.org>
- * @date 2018
+ * @file index.js
+ * @author Fabian Vogelsteller <fabian@ethereum.org>
+ * @date 2017
  */
 
-import {formatters} from 'conflux-web-core-helpers';
-import * as Utils from 'conflux-web-utils';
-import MethodFactory from './factories/MethodFactory';
-import NetworkModule from './Network.js';
+"use strict";
 
-/**
- * Creates the Network Object
- *
- * @method Network
- *
- * @param {Web3EthereumProvider|HttpProvider|WebsocketProvider|IpcProvider|String} provider
- * @param {Net.Socket} net
- * @param {Object} options
- *
- * @returns {Network}
- */
-export function Network(provider, net = null, options = {}) {
-    return new NetworkModule(provider, new MethodFactory(Utils, formatters), Utils, formatters, options, null);
-}
+var core = require('conflux-web-core');
+var Method = require('conflux-web-core-method');
+var utils = require('conflux-web-utils');
+
+
+var Net = function () {
+    var _this = this;
+
+    // sets _requestmanager
+    core.packageInit(this, arguments);
+
+
+    [
+        new Method({
+            name: 'getId',
+            call: 'net_version',
+            params: 0,
+            outputFormatter: utils.hexToNumber
+        }),
+        new Method({
+            name: 'isListening',
+            call: 'net_listening',
+            params: 0
+        }),
+        new Method({
+            name: 'getPeerCount',
+            call: 'net_peerCount',
+            params: 0,
+            outputFormatter: utils.hexToNumber
+        })
+    ].forEach(function(method) {
+        method.attachToObject(_this);
+        method.setRequestManager(_this._requestManager);
+    });
+
+};
+
+core.addProviders(Net);
+
+
+module.exports = Net;
+
+

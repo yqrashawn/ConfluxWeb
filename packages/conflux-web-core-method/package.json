@@ -1,39 +1,18 @@
 {
-    "name": "conflux-web-core-method",
-    "version": "0.1.22-alpha.0",
-    "description": "Handles the JSON-RPC methods. This package is also internally used by ConfluxWeb.",
-    "repository": "https://github.com/Conflux-Chain/ConfluxWeb/tree/master/packages/conflux-web-core-method",
+    "name": "web3-core-method",
+    "version": "1.2.1",
+    "description": "Creates the methods on the web3 modules. This is an internal package.",
+    "repository": "https://github.com/ethereum/web3.js/tree/1.x/packages/web3-core-method",
     "license": "LGPL-3.0",
-    "main": "dist/conflux-web-core-method.cjs.js",
-    "module": "dist/conflux-web-core-method.esm.js",
-    "browser": "dist/conflux-web3-core-method.umd.js",
-    "scripts": {
-        "build": "rollup -c",
-        "dev": "rollup -c -w",
-        "test": "jest",
-        "test:watch": "jest --watchAll",
-        "dtslint": "dtslint types --onlyTestTsNext"
+    "engines": {
+        "node": ">=8.0.0"
     },
-    "types": "types/index.d.ts",
+    "main": "src/index.js",
     "dependencies": {
-        "@babel/runtime": "^7.3.1",
-        "conflux-web-core-subscriptions": "0.1.15-alpha.0",
-        "eventemitter3": "3.1.0",
-        "lodash": "^4.17.11",
-        "rxjs": "^6.4.0"
-    },
-    "devDependencies": {
-        "conflux-web-core": "0.1.22-alpha.0",
-        "conflux-web-core-helpers": "0.1.15-alpha.0",
-        "conflux-web-core-subscriptions": "*",
-        "conflux-web-providers": "0.1.15-alpha.0",
-        "conflux-web-utils": "0.1.15-alpha.0",
-        "definitelytyped-header-parser": "^1.0.1",
-        "dtslint": "0.4.2"
-    },
-    "files": [
-        "dist",
-        "types/index.d.ts"
-    ],
-    "gitHead": "5bd1d26ba861ce65bc21c652bb7ec28642a173a5"
+        "underscore": "1.9.1",
+        "web3-core-helpers": "1.2.1",
+        "web3-core-promievent": "1.2.1",
+        "web3-core-subscriptions": "1.2.1",
+        "web3-utils": "1.2.1"
+    }
 }

@@ -1,66 +1,24 @@
-<!---------------------------------------------------------------------------------------
+<!---
 
-Welcome to the Web3.js Issue Template!
+Steps before creating an issue: 
 
-If you're new around here, reading this will make sure you're helped ASAP.
-The more details you include, the better the community will be able to help you!
+1. I've read the documentation.
+2. I was looking for an solution on stackoverflow or something else.
+3. I was looking for an identical issue.
 
----------------------------------------------------------------------------------------->
-
-### Description <!-- In plain words, what happened -->
-
+-->
 
 #### Expected behavior
-<!---------------------------------------------------------------------
-    Example:
-    Calling `await web3.eth.getAccounts()` should return an array.
------------------------------------------------------------------------>
-
 
 #### Actual behavior
-<!---------------------------------------------------------------------
-    Example:
-    Calling `await web3.eth.getAccounts()` returns "monkey".
------------------------------------------------------------------------>
-
 
 #### Steps to reproduce the behavior
-<!---------------------------------------------------------------------
-    Example:
-    1. Import `web3`
-    2. Set the provider to `localhost`
-    3. Fetch latest block
 
-    Please use the code blocks Markdown does provide:
+1. [First step]
+2. [Second step]
+3. [and so on...]
 
-    ```js
-      
-        console.log('Pretty syntax!');
-    
-    ```
------------------------------------------------------------------------>
+#### Logs
 
-
-#### Error Logs 
-
-
-#### Gists
-<!---------------------------------------------------------------------
-    Including links to gists with:
-    * ABI JSON,
-    * working Solidity code, etc.
-
-    gist tutorial: https://help.github.com/en/articles/creating-gists
------------------------------------------------------------------------>
-
-
-### Versions 
-* web3.js:
-* nodejs:
-* browser:
-* ethereum node:
-
-
-<!---------------------------------------------------------------------
-                    Thanks for your cooperation!
------------------------------------------------------------------------>
+#### Versions
+[NPM, Node, Web3.js, OS, device...]
