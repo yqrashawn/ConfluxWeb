@@ -1,7 +1,7 @@
 
 <img src="https://github.com/ethereum/web3.js/raw/1.x/web3js.jpg" width=200 />
 
-# web3.js - Ethereum JavaScript API
+# Conflux - Conflux-Chain JavaScript API
 
 [![Join the chat at https://gitter.im/ethereum/web3.js](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/ethereum/web3.js?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
@@ -20,63 +20,62 @@ Please read the [documentation][docs] for more.
 ### Node
 
 ```bash
-npm install web3
+npm install conflux@1.2.1
 ```
 
 ### Yarn
 
 ```bash
-yarn add web3
+yarn add web3@1.2.1
 ```
 
-### Meteor
+~ ### Meteor ~
 
-*Note*: works only in the Browser for now. (PR welcome).
+~ *Note*: works only in the Browser for now. (PR welcome).~
 
 ```bash
-meteor add ethereum:web3
+~meteor add ethereum:web3~
 ```
 
 ### In the Browser
 
-Use the prebuild ``dist/web3.min.js``, or
-build using the [web3.js][repo] repository:
+Use the prebuild ``dist/conflux-web.min.js``, or
+build using the [conflux-web][repo] repository:
 
 ```bash
 npm run-script build
 ```
 
-Then include `dist/web3.js` in your html file.
-This will expose `Web3` on the window object.
+Then include `dist/conflux-web.js` in your html file.
+This will expose `ConfluxWeb` on the window object.
 
 ## Usage
 
 ```js
 // in node.js
-var Web3 = require('web3');
+var ConfluxWeb = require('conflux-web');
 
-var web3 = new Web3('ws://localhost:8546');
-console.log(web3);
+var conflux_web = new ConfluxWeb('ws://localhost:8546');
+console.log(conflux_web);
 > {
     eth: ... ,
-    shh: ... ,
     utils: ...,
     ...
 }
 ```
 
-Additionally you can set a provider using `web3.setProvider()` (e.g. WebsocketProvider)
+Additionally you can set a provider using `conflux_web.setProvider()` (e.g. WebsocketProvider)
 
 ```js
-web3.setProvider('ws://localhost:8546');
+conflux_web.setProvider('ws://localhost:8546');
 // or
-web3.setProvider(new Web3.providers.WebsocketProvider('ws://localhost:8546'));
+conflux_web.setProvider(new ConfluxWeb.providers.WebsocketProvider('ws://localhost:8546'));
 ```
 
 There you go, now you can use it:
 
 ```js
-web3.eth.getAccounts()
+conflux_web.cfx.getAccounts()
 .then(console.log);
 ```
 
@@ -85,16 +84,16 @@ web3.eth.getAccounts()
 Type definitions are maintained at [DefinitelyTyped](https://github.com/DefinitelyTyped/DefinitelyTyped) by others. You can install them with
 
 ```bash
-npm install --dev @types/web3.js
+npm install --dev @types/conflux-web
 ```
 
 You might need to install type definitions for `bignumber.js` and `lodash` too.
 
-And then use `web3.js` as follows:
+And then use `conflux-web` as follows:
 
 ```typescript
-import Web3 = require("web3"); // Note the special syntax! Copy this line when in doubt!
-const web3 = new Web3("ws://localhost:8546");
+import ConfluxWeb = require("conflux-web"); // Note the special syntax! Copy this line when in doubt!
+const conflxu_web = new ConfluxWeb("ws://localhost:8546");
 ```
 
 **Please note:** We do not support TypeScript ourselves. If you have any issue with TypeScript and `web3.js` do not create an issue here. Go over to DefinitelyTyped and do it there.
