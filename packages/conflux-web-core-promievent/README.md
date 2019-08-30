@@ -1,6 +1,6 @@
-# web3-core-promievent
+# conflux-web-core-promievent
 
-This is a sub package of [web3.js][repo]
+This is a sub package of [conflux-web][repo]
 
 This is the PromiEvent package is used to return a EventEmitter mixed with a Promise to allow multiple final states as well as chaining.
 Please read the [documentation][docs] for more.
@@ -10,29 +10,29 @@ Please read the [documentation][docs] for more.
 ### Node.js
 
 ```bash
-npm install web3-core-promievent
+npm install conflux-web-core-promievent
 ```
 
 ### In the Browser
 
-Build running the following in the [web3.js][repo] repository:
+Build running the following in the [conflux-web][repo] repository:
 
 ```bash
 npm run-script build-all
 ```
 
-Then include `dist/web3-core-promievent.js` in your html file.
-This will expose the `Web3PromiEvent` object on the window object.
+Then include `dist/conflux-web-core-promievent.js` in your html file.
+This will expose the `ConfluxWebPromiEvent` object on the window object.
 
 
 ## Usage
 
 ```js
 // in node.js
-var Web3PromiEvent = require('web3-core-promievent');
+var ConfluxWebPromiEvent = require('conflux-web-core-promievent');
 
 var myFunc = function(){
-    var promiEvent = Web3PromiEvent();
+    var promiEvent = ConfluxWebPromiEvent();
     
     setTimeout(function() {
         promiEvent.eventEmitter.emit('done', 'Hello!');
@@ -50,7 +50,7 @@ myFunc()
 ```
 
 
-[docs]: http://web3js.readthedocs.io/en/1.0/
-[repo]: https://github.com/ethereum/web3.js
+[docs]: https://phabricator.conflux-chain.org/w/javascript_api/
+[repo]: https://github.com/Conflux-Chain/ConfluxWeb/tree/conflux-web-1.2.1
 
 

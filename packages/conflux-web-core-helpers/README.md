@@ -1,8 +1,8 @@
-# web3-core-helpers
+# conflux-web-core-helpers
 
-This is a sub package of [web3.js][repo]
+This is a sub package of [conflux-web][repo]
 
-Helper functions used in [web3.js][repo] packages.
+Helper functions used in [conflux-web][repo] packages.
 Please read the [documentation][docs] for more.
 
 ## Installation
@@ -10,14 +10,14 @@ Please read the [documentation][docs] for more.
 ### Node.js
 
 ```bash
-npm install web3-core-helpers
+npm install conflux-web-core-helpers
 ```
 
 ## Usage
 
 ```js
 // in node.js
-var helpers = require('web3-core-helpers');
+var helpers = require('conflux-web-core-helpers');
 
 helpers.formatters;
 helpers.errors;
@@ -25,7 +25,7 @@ helpers.errors;
 ```
 
 
-[docs]: http://web3js.readthedocs.io/en/1.0/
-[repo]: https://github.com/ethereum/web3.js
+[docs]: https://phabricator.conflux-chain.org/w/javascript_api/
+[repo]: https://github.com/Conflux-Chain/ConfluxWeb/tree/conflux-web-1.2.1
 
 

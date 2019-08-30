@@ -1,8 +1,8 @@
-# web3-net
+# conflux-web-net
 
-This is a sub package of [web3.js][repo]
+This is a sub package of [conflux-web][repo]
 
-This is the net package to be used in other web3.js packages.
+This is the net package to be used in other conflux-web packages.
 Please read the [documentation][docs] for more.
 
 ## Installation
@@ -10,32 +10,32 @@ Please read the [documentation][docs] for more.
 ### Node.js
 
 ```bash
-npm install web3-net
+npm install conflux-web-net
 ```
 
 ### In the Browser
 
-Build running the following in the [web3.js][repo] repository:
+Build running the following in the [conflux-web][repo] repository:
 
 ```bash
 npm run-script build-all
 ```
 
-Then include `dist/web3-net.js` in your html file.
-This will expose the `Web3Net` object on the window object.
+Then include `dist/conflux-web-net.js` in your html file.
+This will expose the `ConfluxWebNet` object on the window object.
 
 
 ## Usage
 
 ```js
 // in node.js
-var Web3Net = require('web3-net');
+var ConfluxWebNet = require('conflux-web-net');
 
-var net = new Web3Net('ws://localhost:8546');
+var net = new ConfluxWebNet('ws://localhost:8546');
 ```
 
 
-[docs]: http://web3js.readthedocs.io/en/1.0/
-[repo]: https://github.com/ethereum/web3.js
+[docs]: https://phabricator.conflux-chain.org/w/javascript_api/
+[repo]: https://github.com/Conflux-Chain/ConfluxWeb/tree/conflux-web-1.2.1
 
 

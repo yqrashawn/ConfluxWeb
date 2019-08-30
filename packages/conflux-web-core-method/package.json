@@ -1,8 +1,8 @@
 {
-    "name": "web3-core-method",
+    "name": "conflux-web-core-method",
     "version": "1.2.1",
-    "description": "Creates the methods on the web3 modules. This is an internal package.",
-    "repository": "https://github.com/ethereum/web3.js/tree/1.x/packages/web3-core-method",
+    "description": "Creates the methods on the conflux-web modules. This is an internal package.",
+    "repository": "https://github.com/Conflux-Chain/ConfluxWeb/tree/conflux-web-1.2.1/package/conflux-web-core-method",
     "license": "LGPL-3.0",
     "engines": {
         "node": ">=8.0.0"
@@ -10,9 +10,9 @@
     "main": "src/index.js",
     "dependencies": {
         "underscore": "1.9.1",
-        "web3-core-helpers": "1.2.1",
-        "web3-core-promievent": "1.2.1",
-        "web3-core-subscriptions": "1.2.1",
-        "web3-utils": "1.2.1"
+        "conflux-web-core-helpers": "1.2.1",
+        "conflux-web-core-promievent": "1.2.1",
+        "conflux-web-core-subscriptions": "1.2.1",
+        "conflux-web-utils": "1.2.1"
     }
 }

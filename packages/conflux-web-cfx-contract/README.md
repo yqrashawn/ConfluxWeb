@@ -1,8 +1,8 @@
-# web3-eth-contract
+# conflux-web-cfx-contract
 
-This is a sub package of [web3.js][repo]
+This is a sub package of [conflux-web][repo]
 
-This is the contract package to be used in the `web3-eth` package.
+This is the contract package to be used in the `conflux-web-cfx` package.
 Please read the [documentation][docs] for more.
 
 ## Installation
@@ -10,7 +10,7 @@ Please read the [documentation][docs] for more.
 ### Node.js
 
 ```bash
-npm install web3-eth-contract
+npm install conflux_web-cfx-contract
 ```
 
 ### In the Browser
@@ -21,18 +21,18 @@ Build running the following in the [web3.js][repo] repository:
 npm run-script build-all
 ```
 
-Then include `dist/web3-eth-contract.js` in your html file.
-This will expose the `Web3EthContract` object on the window object.
+Then include `dist/conflux-web-cfx-contract.js` in your html file.
+This will expose the `ConfluxWebCfxContract` object on the window object.
 
 
 ## Usage
 
 ```js
 // in node.js
-var Web3EthContract = require('web3-eth-contract');
+var ConfluxWebCfxContract = require('conflux-web-cfx-contract');
 
 // set provider for all later instances to use
-Web3EthContract.setProvider('ws://localhost:8546');
+ConfluxWebCfxContract.setProvider('ws://localhost:8546');
 
 var contract = new Web3EthContract(jsonInterface, address);
 contract.methods.somFunc().send({from: ....})
@@ -42,7 +42,7 @@ contract.methods.somFunc().send({from: ....})
 ```
 
 
-[docs]: http://web3js.readthedocs.io/en/1.0/
-[repo]: https://github.com/ethereum/web3.js
+[docs]: https://phabricator.conflux-chain.org/w/javascript_api/
+[repo]: https://github.com/Conflux-Chain/ConfluxWeb/tree/conflux-web-1.2.1
 
 

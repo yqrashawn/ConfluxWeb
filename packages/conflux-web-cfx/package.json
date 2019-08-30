@@ -1,8 +1,8 @@
 {
-    "name": "web3-eth",
+    "name": "conflux-web-cfx",
     "version": "1.2.1",
-    "description": "Web3 module to interact with the Ethereum blockchain and smart contracts.",
-    "repository": "https://github.com/ethereum/web3.js/tree/1.x/packages/web3-eth",
+    "description": "conflux module to interact with the Ethereum blockchain and smart contracts.",
+    "repository": "https://github.com/Conflux-Chain/ConfluxWeb/tree/conflux-web-1.2.1/packages/conflux-web-cfx",
     "license": "LGPL-3.0",
     "engines": {
         "node": ">=8.0.0"
@@ -10,17 +10,15 @@
     "main": "src/index.js",
     "dependencies": {
         "underscore": "1.9.1",
-        "web3-core": "1.2.1",
-        "web3-core-helpers": "1.2.1",
-        "web3-core-method": "1.2.1",
-        "web3-core-subscriptions": "1.2.1",
-        "web3-eth-abi": "1.2.1",
-        "web3-eth-accounts": "1.2.1",
-        "web3-eth-contract": "1.2.1",
-        "web3-eth-ens": "1.2.1",
-        "web3-eth-iban": "1.2.1",
-        "web3-eth-personal": "1.2.1",
-        "web3-net": "1.2.1",
-        "web3-utils": "1.2.1"
+        "conflux-web-core": "1.2.1",
+        "conflux-web-core-helpers": "1.2.1",
+        "conflux-web-core-method": "1.2.1",
+        "conflux-web-core-subscriptions": "1.2.1",
+        "conflux-web-cfx-abi": "1.2.1",
+        "conflux-web-cfx-accounts": "1.2.1",
+        "conflux-web-cfx-contract": "1.2.1",
+        "conflux-web-cfx-iban": "1.2.1",
+        "conflux-web-net": "1.2.1",
+        "conflux-web-utils": "1.2.1"
     }
 }

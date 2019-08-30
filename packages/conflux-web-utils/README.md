@@ -1,6 +1,6 @@
-# web3-utils
+# conflux-web-utils
 
-This is a sub package of [web3.js][repo]
+This is a sub package of [conflux-web][repo]
 
 This contains useful utility functions for Dapp developers.   
 Please read the [documentation][docs] for more.
@@ -10,27 +10,27 @@ Please read the [documentation][docs] for more.
 ### Node.js
 
 ```bash
-npm install web3-utils
+npm install conflux-web-utils
 ```
 
 ### In the Browser
 
-Build running the following in the [web3.js][repo] repository:
+Build running the following in the [conflux-web][repo] repository:
 
 ```bash
 npm run-script build-all
 ```
 
-Then include `dist/web3-utils.js` in your html file.
-This will expose the `Web3Utils` object on the window object.
+Then include `dist/conflux-web-utils.js` in your html file.
+This will expose the `ConfluxWebUtils` object on the window object.
 
 
 ## Usage
 
 ```js
 // in node.js
-var Web3Utils = require('web3-utils');
-console.log(Web3Utils);
+var ConfluxWebUtils = require('conflux-web-utils');
+console.log(ConfluxWebUtils);
 {
     sha3: function(){},
     soliditySha3: function(){},
@@ -40,7 +40,7 @@ console.log(Web3Utils);
 ```
 
 
-[docs]: http://web3js.readthedocs.io/en/1.0/
-[repo]: https://github.com/ethereum/web3.js
+[docs]: https://phabricator.conflux-chain.org/w/javascript_api/
+[repo]: https://github.com/Conflux-Chain/ConfluxWeb/tree/conflux-web-1.2.1
 
 

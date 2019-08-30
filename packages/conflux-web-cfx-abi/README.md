@@ -1,8 +1,8 @@
-# web3-eth-abi
+# conflux-web-cfx-abi
 
-This is a sub package of [web3.js][repo]
+This is a sub package of [conflux-web][repo]
 
-This is the abi package to be used in the `web3-eth` package.
+This is the abi package to be used in the `conflux-web-cfx` package.
 Please read the [documentation][docs] for more.
 
 ## Installation
@@ -10,33 +10,33 @@ Please read the [documentation][docs] for more.
 ### Node.js
 
 ```bash
-npm install web3-eth-abi
+npm install conflux-web-cfx-abi
 ```
 
 ### In the Browser
 
-Build running the following in the [web3.js][repo] repository:
+Build running the following in the [conflux-web][repo] repository:
 
 ```bash
 npm run-script build-all
 ```
 
-Then include `dist/web3-eth-abi.js` in your html file.
-This will expose the `Web3EthAbi` object on the window object.
+Then include `dist/conflux-web-cfx-abi.js` in your html file.
+This will expose the `ConfluxWebCfxAbi` object on the window object.
 
 
 ## Usage
 
 ```js
 // in node.js
-var Web3EthAbi = require('web3-eth-abi');
+var ConfluxWebCfxAbi = require('conflux-web-cfx-abi');
 
-Web3EthAbi.encodeFunctionSignature('myMethod(uint256,string)');
+ConfluxWebCfxAbi.encodeFunctionSignature('myMethod(uint256,string)');
 > '0x24ee0097'
 ```
 
 
-[docs]: http://web3js.readthedocs.io/en/1.0/
-[repo]: https://github.com/ethereum/web3.js
+[docs]: https://phabricator.conflux-chain.org/w/javascript_api/
+[repo]: https://github.com/Conflux-Chain/ConfluxWeb
 
 

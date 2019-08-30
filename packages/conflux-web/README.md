@@ -1,13 +1,13 @@
-# web3
+# conflux-web
 
-This is a main package of [web3.js](https://github.com/ethereum/web3.js)
+This is a main package of [conflux-web.js](https://github.com/Conflux-Chain/ConfluxWeb/tree/conflux-web-1.2.1)
 
-Please read the main [readme](https://github.com/ethereum/web3.js) and [documentation](https://web3js.readthedocs.io) for more.
+Please read the main [readme](https://github.com/Conflux-Chain/ConfluxWeb/tree/conflux-web-1.2.1) and [documentation](https://phabricator.conflux-chain.org/w/javascript_api/) for more.
 
 ## Installation
 
 ### Node.js
 
 ```bash
-npm install web3
+npm install conflux-web@1.2.1
 ```

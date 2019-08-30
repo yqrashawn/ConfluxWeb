@@ -1,8 +1,8 @@
-# web3-core-subscriptions
+# conflux-web-core-subscriptions
 
-This is a sub package of [web3.js][repo]
+This is a sub package of [conflux-web][repo]
 
-The subscriptions package used within some [web3.js][repo] packages.
+The subscriptions package used within some [conflux-web][repo] packages.
 Please read the [documentation][docs] for more.
 
 ## Installation
@@ -10,30 +10,30 @@ Please read the [documentation][docs] for more.
 ### Node.js
 
 ```bash
-npm install web3-core-subscriptions
+npm install conflux-web-core-subscriptions
 ```
 
 ### In the Browser
 
-Build running the following in the [web3.js][repo] repository:
+Build running the following in the [conflux-web][repo] repository:
 
 ```bash
 npm run-script build-all
 ```
 
-Then include `dist/web3-core-subscriptions.js` in your html file.
-This will expose the `Web3Subscriptions` object on the window object.
+Then include `dist/conflux-web-core-subscriptions.js` in your html file.
+This will expose the `ConfluxWebSubscriptions` object on the window object.
 
 
 ## Usage
 
 ```js
 // in node.js
-var Web3Subscriptions = require('web3-core-subscriptions');
+var ConfluxWebSubscriptions = require('conflux-web-core-subscriptions');
 
-var sub = new Web3Subscriptions({
+var sub = new ConfluxWebSubscriptions({
     name: 'subscribe',
-    type: 'eth',
+    type: 'cfx,
     subscriptions: {
         'newBlockHeaders': {
             subscriptionName: 'newHeads',
@@ -52,7 +52,7 @@ myCoolLib.subscribe('newBlockHeaders', function(){ ... });
 ```
 
 
-[docs]: http://web3js.readthedocs.io/en/1.0/
-[repo]: https://github.com/ethereum/web3.js
+[docs]: https://phabricator.conflux-chain.org/w/javascript_api/
+[repo]: https://github.com/Conflux-Chain/ConfluxWeb/tree/conflux-web-1.2.1
 
 

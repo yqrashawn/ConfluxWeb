@@ -1,8 +1,8 @@
-# web3-providers-ipc
+# conflux-web-providers-ipc
 
-This is a sub package of [web3.js][repo]
+This is a sub package of [conflux-web.js][repo]
 
-This is a IPC provider for [web3.js][repo].   
+This is a IPC provider for [conflux-web.js][repo].   
 Please read the [documentation][docs] for more.
 
 ## Installation
@@ -10,33 +10,33 @@ Please read the [documentation][docs] for more.
 ### Node.js
 
 ```bash
-npm install web3-providers-ipc
+npm install conflux-web-providers-ipc
 ```
 
 ### In the Browser
 
-Build running the following in the [web3.js][repo] repository:
+Build running the following in the [conflux-web.js][repo] repository:
 
 ```bash
 npm run-script build-all
 ```
 
-Then include `dist/web3-providers-ipc.js` in your html file.
-This will expose the `Web3IpcProvider` object on the window object.
+Then include `dist/conflux-web-providers-ipc.js` in your html file.
+This will expose the `ConfluxWebIpcProvider` object on the window object.
 
 
 ## Usage
 
 ```js
 // in node.js
-var Web3IpcProvider = require('web3-providers-ipc');
+var ConfluxWebIpcProvider = require('conflux-web-providers-ipc');
 var net = require(net);
 
-var ipc = new Web3IpcProvider('/Users/me/Library/Ethereum/geth.ipc', net);
+var ipc = new ConfluxWebIpcProvider('/Users/me/Library/Ethereum/geth.ipc', net);
 ```
 
 
-[docs]: http://web3js.readthedocs.io/en/1.0/
-[repo]: https://github.com/ethereum/web3.js
+[docs]: https://phabricator.conflux-chain.org/w/javascript_api/
+[repo]: https://github.com/Conflux-Chain/ConfluxWeb/tree/conflux-web-1.2.1
 
 

@@ -1,8 +1,8 @@
-# web3-core-requestmanager
+# conflux-web-core-requestmanager
 
-This is a sub package of [web3.js][repo]
+This is a sub package of [conflux-web][repo]
 
-The requestmanager package is used by most [web3.js][repo] packages.
+The requestmanager package is used by most [conflux-web][repo] packages.
 Please read the [documentation][docs] for more.
 
 ## Installation
@@ -10,33 +10,33 @@ Please read the [documentation][docs] for more.
 ### Node.js
 
 ```bash
-npm install web3-core-requestmanager
+npm install conflux-web-core-requestmanager
 ```
 
 ### In the Browser
 
-Build running the following in the [web3.js][repo] repository:
+Build running the following in the [conflux-web][repo] repository:
 
 ```bash
 npm run-script build-all
 ```
 
-Then include `dist/web3-core-requestmanager.js` in your html file.
-This will expose the `Web3RequestManager` object on the window object.
+Then include `dist/conflux-web-core-requestmanager.js` in your html file.
+This will expose the `ConfluxWebRequestManager` object on the window object.
 
 
 ## Usage
 
 ```js
 // in node.js
-var Web3WsProvider = require('web3-providers-ws');
-var Web3RequestManager = require('web3-core-requestmanager');
+var ConfluxWebWsProvider = require('conflux-web-providers-ws');
+var ConfluxWebRequestManager = require('conflux-web-core-requestmanager');
 
-var requestManager = new Web3RequestManager(new Web3WsProvider('ws://localhost:8546'));
+var requestManager = new ConfluxWebRequestManager(new Web3WsProvider('ws://localhost:8546'));
 ```
 
 
-[docs]: http://web3js.readthedocs.io/en/1.0/
-[repo]: https://github.com/ethereum/web3.js
+[docs]: https://phabricator.conflux-chain.org/w/javascript_api/
+[repo]: https://github.com/Conflux-Chain/ConfluxWeb/tree/conflux-web-1.2.1
 
 

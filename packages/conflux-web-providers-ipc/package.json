@@ -1,8 +1,8 @@
 {
-    "name": "web3-providers-ipc",
+    "name": "conflux-web-providers-ipc",
     "version": "1.2.1",
-    "description": "Module to handle web3 RPC connections over IPC sockets.",
-    "repository": "https://github.com/ethereum/web3.js/tree/1.x/packages/web3-providers-ipc",
+    "description": "Module to handle conflux-web RPC connections over IPC sockets.",
+    "repository": "https://github.com/Conflux-Chain/ConfluxWeb/tree/conflux-web-1.2.1/packages/conflux-web-providers-ipc",
     "license": "LGPL-3.0",
     "engines": {
         "node": ">=8.0.0"
@@ -11,6 +11,6 @@
     "dependencies": {
         "oboe": "2.1.4",
         "underscore": "1.9.1",
-        "web3-core-helpers": "1.2.1"
+        "conflux-web-core-helpers": "1.2.1"
     }
 }

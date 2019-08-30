@@ -1,8 +1,8 @@
-# web3-core
+# conflux-web-core
 
-This is a sub package of [web3.js][repo]
+This is a sub package of [conflux-web][repo]
 
-The core package contains core functions for [web3.js][repo] packages.
+The core package contains core functions for [conflux-web][repo] packages.
 Please read the [documentation][docs] for more.
 
 ## Installation
@@ -10,7 +10,7 @@ Please read the [documentation][docs] for more.
 ### Node.js
 
 ```bash
-npm install web3-core
+npm install conflux-web-core
 ```
 
 
@@ -18,7 +18,7 @@ npm install web3-core
 
 ```js
 // in node.js
-var core = require('web3-core');
+var core = require('conflux-web-core');
 
 var CoolLib = function CoolLib() {
 
@@ -37,7 +37,7 @@ CoolLib.extend();
 ```
 
 
-[docs]: http://web3js.readthedocs.io/en/1.0/
-[repo]: https://github.com/ethereum/web3.js
+[docs]: https://phabricator.conflux-chain.org/w/javascript_api/
+[repo]: https://github.com/Conflux-Chain/ConfluxWeb/tree/conflux-web-1.2.1
 
 
