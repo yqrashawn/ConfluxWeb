@@ -25,13 +25,6 @@ npm install conflux@1.2.1
 yarn add web3@1.2.1
 ```
 
-~ ### Meteor ~
-
-~ *Note*: works only in the Browser for now. (PR welcome).~
-
-```bash
-~meteor add ethereum:web3~
-```
 
 ### In the Browser
 

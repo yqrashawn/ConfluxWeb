@@ -10,9 +10,9 @@
     "main": "src/index.js",
     "dependencies": {
         "underscore": "1.9.1",
-        "conflux-web-core-helpers": "1.2.1",
-        "conflux-web-providers-http": "1.2.1",
-        "conflux-web-providers-ipc": "1.2.1",
-        "conflux-web-providers-ws": "1.2.1"
+        "conflux-web-core-helpers": "../conflux-web-core-helpers",
+        "conflux-web-providers-http": "../conflux-web-providers-http",
+        "conflux-web-providers-ipc": "../conflux-web-providers-ipc",
+        "conflux-web-providers-ws": "../conflux-web-providers-ws"
     }
 }

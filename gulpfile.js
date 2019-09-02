@@ -22,88 +22,72 @@ var exec = require('child_process').exec;
 var DEST = path.join(__dirname, 'dist/');
 
 var packages = [{
-    fileName: 'web3',
-    expose: 'Web3',
-    src: './packages/web3/src/index.js',
+    fileName: 'conflux-web',
+    expose: 'ConfluxWeb',
+    src: './packages/conflux-web/src/index.js',
     ignore: ['xmlhttprequest']
 }, {
-    fileName: 'web3-utils',
-    expose: 'Web3Utils',
-    src: './packages/web3-utils/src/index.js'
+    fileName: 'conflux-web-utils',
+    expose: 'ConfluxWebUtils',
+    src: './packages/conflux-web-utils/src/index.js'
 }, {
-    fileName: 'web3-eth',
-    expose: 'Web3Eth',
-    src: './packages/web3-eth/src/index.js'
+    fileName: 'conflux-web-cfx',
+    expose: 'ConfluxWebCfx',
+    src: './packages/conflux-web-cfx/src/index.js'
 }, {
-    fileName: 'web3-eth-accounts',
-    expose: 'Web3EthAccounts',
-    src: './packages/web3-eth-accounts/src/index.js'
+    fileName: 'conflux-web-cfx-accounts',
+    expose: 'ConfluxWebCfxAccounts',
+    src: './packages/conflux-web-cfx-accounts/src/index.js'
 }, {
-    fileName: 'web3-eth-contract',
-    expose: 'Web3EthContract',
-    src: './packages/web3-eth-contract/src/index.js'
-}, {
-    fileName: 'web3-eth-personal',
-    expose: 'Web3EthPersonal',
-    src: './packages/web3-eth-personal/src/index.js'
-}, {
-    fileName: 'web3-eth-iban',
-    expose: 'Web3EthIban',
-    src: './packages/web3-eth-iban/src/index.js'
-}, {
-    fileName: 'web3-eth-abi',
-    expose: 'Web3EthAbi',
-    src: './packages/web3-eth-abi/src/index.js'
+    fileName: 'conflux-web-cfx-contract',
+    expose: 'ConfluxWebCfxContract',
+    src: './packages/conflux-web-cfx-contract/src/index.js'
 },{
-    fileName: 'web3-eth-ens',
-    expose: 'EthEns',
-    src: './packages/web3-eth-ens/src/index.js'
+    fileName: 'conflux-web-cfx-iban',
+    expose: 'ConfluxWebCfxIban',
+    src: './packages/conflux-web-cfx-iban/src/index.js'
+}, {
+    fileName: 'conflux-web-cfx-abi',
+    expose: 'ConfluxWebCfxAbi',
+    src: './packages/conflux-web-cfx-abi/src/index.js'
 },{
-    fileName: 'web3-net',
-    expose: 'Web3Net',
-    src: './packages/web3-net/src/index.js'
+    fileName: 'conflux-web-net',
+    expose: 'ConfluxWebNet',
+    src: './packages/conflux-web-net/src/index.js'
+},{
+    fileName: 'conflux-web-providers-ipc',
+    expose: 'ConfluxWebIpcProvider',
+    src: './packages/conflux-web-providers-ipc/src/index.js'
 }, {
-    fileName: 'web3-shh',
-    expose: 'Web3Shh',
-    src: './packages/web3-shh/src/index.js'
-}, {
-    fileName: 'web3-bzz',
-    expose: 'Web3Bzz',
-    src: './packages/web3-bzz/src/index.js'
-}, {
-    fileName: 'web3-providers-ipc',
-    expose: 'Web3IpcProvider',
-    src: './packages/web3-providers-ipc/src/index.js'
-}, {
-    fileName: 'web3-providers-http',
-    expose: 'Web3HttpProvider',
-    src: './packages/web3-providers-http/src/index.js',
+    fileName: 'conflux-web-providers-http',
+    expose: 'ConfluxWebHttpProvider',
+    src: './packages/conflux-web-providers-http/src/index.js',
     ignore: ['xmlhttprequest']
 }, {
-    fileName: 'web3-providers-ws',
-    expose: 'Web3WsProvider',
-    src: './packages/web3-providers-ws/src/index.js',
+    fileName: 'conflux-web-providers-ws',
+    expose: 'ConfluxWebWsProvider',
+    src: './packages/conflux-web-providers-ws/src/index.js',
 }, {
-    fileName: 'web3-core-subscriptions',
-    expose: 'Web3Subscriptions',
-    src: './packages/web3-core-subscriptions/src/index.js'
+    fileName: 'conflux-web-core-subscriptions',
+    expose: 'ConfluxWebSubscriptions',
+    src: './packages/conflux-web-core-subscriptions/src/index.js'
 }, {
-    fileName: 'web3-core-requestmanager',
-    expose: 'Web3RequestManager',
-    src: './packages/web3-core-requestmanager/src/index.js'
+    fileName: 'conflux-web-core-requestmanager',
+    expose: 'ConfluxWebRequestManager',
+    src: './packages/conflux-web-core-requestmanager/src/index.js'
 }, {
-    fileName: 'web3-core-promievent',
-    expose: 'Web3PromiEvent',
-    src: './packages/web3-core-promievent/src/index.js'
+    fileName: 'conflux-web-core-promievent',
+    expose: 'ConfluxWebPromiEvent',
+    src: './packages/conflux-web-core-promievent/src/index.js'
 }, {
-    fileName: 'web3-core-method',
-    expose: 'Web3Method',
-    src: './packages/web3-core-method/src/index.js'
+    fileName: 'conflux-web-core-method',
+    expose: 'ConfluxWebMethod',
+    src: './packages/conflux-web-core-method/src/index.js'
 }];
 
 var browserifyOptions = {
     debug: true,
-    // standalone: 'Web3',
+    // standalone: 'ConfluxWeb',
     derequire: true,
     insertGlobalVars: false, // jshint ignore:line
     detectGlobals: true,
@@ -198,7 +182,7 @@ gulp.task('publishTag', function () {
 });
 
 gulp.task('watch', function () {
-    gulp.watch(['./packages/web3/src/*.js'], gulp.series('lint', 'default'));
+    gulp.watch(['./packages/conflux-web/src/*.js'], gulp.series('lint', 'default'));
 });
 
 gulp.task('all', gulp.series('version', 'lint', 'clean', packages[packages.length - 1].fileName));

@@ -1,9 +1,9 @@
 /* jshint ignore:start */
 Package.describe({
     name: 'ethereum:web3',
-    version: '1.2.0',
-    summary: 'Ethereum JavaScript API, middleware to talk to a ethreum node over RPC',
-    git: 'https://github.com/ethereum/ethereum.js',
+    version: '1.2.1',
+    summary: 'Conflux-Chain JavaScript API, middleware to talk to a ethreum node over RPC',
+    git: 'https://github.com/Conflux-Chain/ConfluxWeb/tree/conflux-web-1.2.1',
     // By default, Meteor will default to using README.md for documentation.
     // To avoid submitting documentation, set this field to null.
     documentation: 'README.md'
@@ -17,7 +17,7 @@ Package.describe({
 Package.onUse(function(api) {
     api.versionsFrom('1.0.3.2');
 
-    api.addFiles('dist/web3.js', ['client']); // 'server'
+    api.addFiles('dist/conflux-web.js', ['client']); // 'server'
 });
 
 /* jshint ignore:end */

@@ -9,9 +9,9 @@
     },
     "main": "src/index.js",
     "dependencies": {
-        "conflux-web-core-helpers": "1.2.1",
-        "conflux-web-core-method": "1.2.1",
-        "conflux-web-core-requestmanager": "1.2.1",
-        "conflux-web-utils": "1.2.1"
+        "conflux-web-core-helpers": "../conflux-web-core-helpers",
+        "conflux-web-core-method": "../conflux-web-core-method",
+        "conflux-web-core-requestmanager": "../conflux-web-core-requestmanager",
+        "conflux-web-utils": "../conflux-web-utils"
     }
 }

@@ -9,7 +9,7 @@
     },
     "main": "src/index.js",
     "dependencies": {
-        "conflux-web-core-helpers": "1.2.1",
+        "conflux-web-core-helpers": "../conflux-web-core-helpers",
         "xhr2-cookies": "1.1.0"
     }
 }
