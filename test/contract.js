@@ -1,11 +1,11 @@
 var chai = require('chai');
 var assert = chai.assert;
-var Eth = require('../packages/web3-eth');
-var sha3 = require('../packages/web3-utils').sha3;
+var Cfx = require('../packages/conflux-web-cfx');
+var sha3 = require('../packages/conflux-web-utils').sha3;
 var FakeIpcProvider = require('./helpers/FakeIpcProvider');
 var FakeHttpProvider = require('./helpers/FakeHttpProvider');
 var Promise = require('bluebird');
-var StandAloneContract = require('../packages/web3-eth-contract');
+var StandAloneContract = require('../packages/conflux-web-cfx-contract');
 
 
 var abi = [{
@@ -217,7 +217,7 @@ var getStandAloneContractInstance = function(abi, address, options, provider) {
     return new StandAloneContract(abi, address, options);
 }
 
-var getEthContractInstance = function(abi, address, options, provider) {
+var getCfxContractInstance = function(abi, address, options, provider) {
 
     // if no address supplied
     if (address && typeof address != 'string') {
@@ -239,9 +239,9 @@ var getEthContractInstance = function(abi, address, options, provider) {
         options = undefined;
     }
 
-    var eth = new Eth(provider);
-    eth.setProvider(provider);
-    return new eth.Contract(abi, address, options);
+    var cfx = new Cfx(provider);
+    cfx.setProvider(provider);
+    return new cfx.Contract(abi, address, options);
 }
 
 var account = {
@@ -513,7 +513,7 @@ var runTests = function(contractFactory) {
             var signature = sha3('mySend(address,uint256)').slice(0, 10);
 
             provider.injectValidation(function (payload) {
-                assert.equal(payload.method, 'eth_sendTransaction');
+                assert.equal(payload.method, 'cfx_sendTransaction');
                 assert.deepEqual(payload.params, [{
                     data: signature +'000000000000000000000000'+ addressLowercase.replace('0x','') +'000000000000000000000000000000000000000000000000000000000000000a',
                     from: address2,
@@ -524,7 +524,7 @@ var runTests = function(contractFactory) {
             provider.injectResult('0x1234000000000000000000000000000000000000000000000000000000056789');
 
             provider.injectValidation(function (payload) {
-                assert.equal(payload.method, 'eth_getTransactionReceipt');
+                assert.equal(payload.method, 'cfx_getTransactionReceipt');
                 assert.deepEqual(payload.params, ['0x1234000000000000000000000000000000000000000000000000000000056789']);
             });
             // with instant seal we get the receipt right away
@@ -580,7 +580,7 @@ var runTests = function(contractFactory) {
             var signature = sha3('mySend(address,uint256)').slice(0, 10);
 
             provider.injectValidation(function (payload) {
-                assert.equal(payload.method, 'eth_sendTransaction');
+                assert.equal(payload.method, 'cfx_sendTransaction');
                 assert.deepEqual(payload.params, [{
                     data: signature +'000000000000000000000000'+ addressLowercase.replace('0x','') +'000000000000000000000000000000000000000000000000000000000000000a',
                     from: address2,
@@ -591,20 +591,20 @@ var runTests = function(contractFactory) {
             provider.injectResult('0x1234000000000000000000000000000000000000000000000000000000056789');
 
             provider.injectValidation(function (payload) {
-                assert.equal(payload.method, 'eth_getTransactionReceipt');
+                assert.equal(payload.method, 'cfx_getTransactionReceipt');
                 assert.deepEqual(payload.params, ['0x1234000000000000000000000000000000000000000000000000000000056789']);
             });
             provider.injectResult(null);
 
             provider.injectValidation(function (payload) {
-                assert.equal(payload.method, 'eth_subscribe');
+                assert.equal(payload.method, 'cfx_subscribe');
                 assert.deepEqual(payload.params, ['newHeads']);
             });
             provider.injectResult('0x1234567');
 
             // fake newBlock
             provider.injectNotification({
-                method: 'eth_subscription',
+                method: 'cfx_subscription',
                 params: {
                     subscription: '0x1234567',
                     result: {
@@ -614,7 +614,7 @@ var runTests = function(contractFactory) {
             });
 
             provider.injectValidation(function (payload) {
-                assert.equal(payload.method, 'eth_getTransactionReceipt');
+                assert.equal(payload.method, 'cfx_getTransactionReceipt');
                 assert.deepEqual(payload.params, ['0x1234000000000000000000000000000000000000000000000000000000056789']);
             });
             provider.injectResult({
@@ -626,7 +626,7 @@ var runTests = function(contractFactory) {
                 gasUsed: '0x0'
             });
             provider.injectValidation(function (payload) {
-                assert.equal(payload.method, 'eth_unsubscribe');
+                assert.equal(payload.method, 'cfx_unsubscribe');
                 assert.deepEqual(payload.params, ['0x1234567']);
             });
             provider.injectResult('0x321');
@@ -674,7 +674,7 @@ var runTests = function(contractFactory) {
             var signature = sha3('balance(address)').slice(0, 10);
 
             provider.injectValidation(function (payload) {
-                assert.equal(payload.method, 'eth_call');
+                assert.equal(payload.method, 'cfx_call');
                 assert.deepEqual(payload.params, [{
                     data: signature + '000000000000000000000000'+ addressLowercase.replace('0x',''),
                     from: address2,
@@ -722,7 +722,7 @@ var runTests = function(contractFactory) {
             var signature = 'Changed(address,uint256,uint256,uint256)';
             provider.injectValidation(function (payload) {
                 assert.equal(payload.jsonrpc, '2.0');
-                assert.equal(payload.method, 'eth_subscribe');
+                assert.equal(payload.method, 'cfx_subscribe');
                 assert.deepEqual(payload.params[1], {
                     topics: [
                         sha3(signature),
@@ -735,13 +735,13 @@ var runTests = function(contractFactory) {
             provider.injectResult('0x123');
             provider.injectValidation(function (payload) {
                 assert.equal(payload.jsonrpc, '2.0');
-                assert.equal(payload.method, 'eth_unsubscribe');
+                assert.equal(payload.method, 'cfx_unsubscribe');
                 done();
 
             });
 
             provider.injectNotification({
-                method: 'eth_subscription',
+                method: 'cfx_subscription',
                 params: {
                     subscription: '0x123',
                     result: {
@@ -780,7 +780,7 @@ var runTests = function(contractFactory) {
 
             provider.injectValidation(function (payload) {
                 assert.equal(payload.jsonrpc, '2.0');
-                assert.equal(payload.method, 'eth_getLogs');
+                assert.equal(payload.method, 'cfx_getLogs');
             });
             provider.injectResult([{
                     address: addressLowercase,
@@ -813,7 +813,7 @@ var runTests = function(contractFactory) {
 
             provider.injectValidation(function (payload) {
                 assert.equal(payload.jsonrpc, '2.0');
-                assert.equal(payload.method, 'eth_subscribe');
+                assert.equal(payload.method, 'cfx_subscribe');
                 assert.deepEqual(payload.params[1], {
                     topics: [
                         sha3(signature),
@@ -827,13 +827,13 @@ var runTests = function(contractFactory) {
 
             provider.injectValidation(function (payload) {
                 assert.equal(payload.jsonrpc, '2.0');
-                assert.equal(payload.method, 'eth_unsubscribe');
+                assert.equal(payload.method, 'cfx_unsubscribe');
                 done();
             });
             provider.injectResult(true);
 
             provider.injectNotification({
-                method: 'eth_subscription',
+                method: 'cfx_subscription',
                 params: {
                     subscription: '0x321',
                     result: {
@@ -892,7 +892,7 @@ var runTests = function(contractFactory) {
 
             provider.injectValidation(function (payload) {
                 assert.equal(payload.jsonrpc, '2.0');
-                assert.equal(payload.method, 'eth_subscribe');
+                assert.equal(payload.method, 'cfx_subscribe');
                 assert.deepEqual(payload.params[1], {
                     topics: [
                         sha3(signature),
@@ -906,13 +906,13 @@ var runTests = function(contractFactory) {
 
             provider.injectValidation(function (payload) {
                 assert.equal(payload.jsonrpc, '2.0');
-                assert.equal(payload.method, 'eth_unsubscribe');
+                assert.equal(payload.method, 'cfx_unsubscribe');
                 done();
             });
             provider.injectResult(true);
 
             provider.injectNotification({
-                method: 'eth_subscription',
+                method: 'cfx_subscription',
                 params: {
                     subscription: '0x321',
                     result: {
@@ -949,7 +949,7 @@ var runTests = function(contractFactory) {
 
             provider.injectValidation(function (payload) {
                 assert.equal(payload.jsonrpc, '2.0');
-                assert.equal(payload.method, 'eth_subscribe');
+                assert.equal(payload.method, 'cfx_subscribe');
                 assert.deepEqual(payload.params[1], {
                     topics: [
                         sha3(signature),
@@ -963,13 +963,13 @@ var runTests = function(contractFactory) {
 
             provider.injectValidation(function (payload) {
                 assert.equal(payload.jsonrpc, '2.0');
-                assert.equal(payload.method, 'eth_unsubscribe');
+                assert.equal(payload.method, 'cfx_unsubscribe');
                 done();
             });
             provider.injectResult(true);
 
             provider.injectNotification({
-                method: 'eth_subscription',
+                method: 'cfx_subscription',
                 params: {
                     subscription: '0x321',
                     result: {
@@ -1006,7 +1006,7 @@ var runTests = function(contractFactory) {
 
             provider.injectValidation(function (payload) {
                 assert.equal(payload.jsonrpc, '2.0');
-                assert.equal(payload.method, 'eth_subscribe');
+                assert.equal(payload.method, 'cfx_subscribe');
                 assert.deepEqual(payload.params[1], {
                     topics: [
                         sha3(signature),
@@ -1020,12 +1020,12 @@ var runTests = function(contractFactory) {
 
             provider.injectValidation(function (payload) {
                 assert.equal(payload.jsonrpc, '2.0');
-                assert.equal(payload.method, 'eth_unsubscribe');
+                assert.equal(payload.method, 'cfx_unsubscribe');
             });
             provider.injectResult(true);
 
             provider.injectNotification({
-                method: 'eth_subscription',
+                method: 'cfx_subscription',
                 params: {
                     subscription: '0x321',
                     result: {
@@ -1046,7 +1046,7 @@ var runTests = function(contractFactory) {
             });
 
             provider.injectNotification({
-                method: 'eth_subscription',
+                method: 'cfx_subscription',
                 params: {
                     subscription: '0x321',
                     result: {
@@ -1088,7 +1088,7 @@ var runTests = function(contractFactory) {
 
             provider.injectValidation(function (payload) {
                 assert.equal(payload.jsonrpc, '2.0');
-                assert.equal(payload.method, 'eth_subscribe');
+                assert.equal(payload.method, 'cfx_subscribe');
                 assert.deepEqual(payload.params[1], {
                     topics: [
                         sha3(signature),
@@ -1102,12 +1102,12 @@ var runTests = function(contractFactory) {
 
             provider.injectValidation(function (payload) {
                 assert.equal(payload.jsonrpc, '2.0');
-                assert.equal(payload.method, 'eth_unsubscribe');
+                assert.equal(payload.method, 'cfx_unsubscribe');
             });
             provider.injectResult(true);
 
             provider.injectNotification({
-                method: 'eth_subscription',
+                method: 'cfx_subscription',
                 params: {
                     subscription: '0x321',
                     result: {
@@ -1128,7 +1128,7 @@ var runTests = function(contractFactory) {
             });
 
             provider.injectNotification({
-                method: 'eth_subscription',
+                method: 'cfx_subscription',
                 params: {
                     subscription: '0x321',
                     result: {
@@ -1177,7 +1177,7 @@ var runTests = function(contractFactory) {
 
             provider.injectValidation(function (payload) {
                 assert.equal(payload.jsonrpc, '2.0');
-                assert.equal(payload.method, 'eth_subscribe');
+                assert.equal(payload.method, 'cfx_subscribe');
                 assert.deepEqual(payload.params[1], {
                     topics: [
                         sha3(signature),
@@ -1191,12 +1191,12 @@ var runTests = function(contractFactory) {
 
             provider.injectValidation(function (payload) {
                 assert.equal(payload.jsonrpc, '2.0');
-                assert.equal(payload.method, 'eth_unsubscribe');
+                assert.equal(payload.method, 'cfx_unsubscribe');
             });
             provider.injectResult(true);
 
             provider.injectNotification({
-                method: 'eth_subscription',
+                method: 'cfx_subscription',
                 params: {
                     subscription: '0x321',
                     result: {
@@ -1217,7 +1217,7 @@ var runTests = function(contractFactory) {
             });
 
             provider.injectNotification({
-                method: 'eth_subscription',
+                method: 'cfx_subscription',
                 params: {
                     subscription: '0x321',
                     result: {
@@ -1271,7 +1271,7 @@ var runTests = function(contractFactory) {
 
             provider.injectValidation(function (payload) {
                 assert.equal(payload.jsonrpc, '2.0');
-                assert.equal(payload.method, 'eth_subscribe');
+                assert.equal(payload.method, 'cfx_subscribe');
                 assert.deepEqual(payload.params[1], {
                     topics: [],
                     address: addressLowercase
@@ -1281,7 +1281,7 @@ var runTests = function(contractFactory) {
 
             provider.injectValidation(function (payload) {
                 assert.equal(payload.jsonrpc, '2.0');
-                assert.equal(payload.method, 'eth_unsubscribe');
+                assert.equal(payload.method, 'cfx_unsubscribe');
                 done();
             });
             provider.injectResult(true);
@@ -1311,7 +1311,7 @@ var runTests = function(contractFactory) {
 
 
             provider.injectNotification({
-                method: 'eth_subscription',
+                method: 'cfx_subscription',
                 params: {
                     subscription: '0x333',
                     result: {
@@ -1333,7 +1333,7 @@ var runTests = function(contractFactory) {
 
 
             provider.injectNotification({
-                method: 'eth_subscription',
+                method: 'cfx_subscription',
                 params: {
                     subscription: '0x333',
                     result: {
@@ -1361,7 +1361,7 @@ var runTests = function(contractFactory) {
             var contract = contractFactory(abi, address, provider);
 
             provider.injectValidation(function (payload) {
-                assert.equal(payload.method, 'eth_call');
+                assert.equal(payload.method, 'cfx_call');
                 assert.deepEqual(payload.params, [{
                     data: sha3(signature).slice(0, 10) + '000000000000000000000000'+ addressLowercase.replace('0x',''),
                     to: addressLowercase,
@@ -1375,7 +1375,7 @@ var runTests = function(contractFactory) {
             contract.options.address = address2;
 
             provider.injectValidation(function (payload) {
-                assert.equal(payload.method, 'eth_call');
+                assert.equal(payload.mcfxod, 'cfx_call');
                 assert.deepEqual(payload.params, [{
                     data: sha3(signature).slice(0, 10) + '000000000000000000000000'+ addressLowercase.replace('0x',''),
                     to: address2,
@@ -1466,7 +1466,7 @@ var runTests = function(contractFactory) {
             var signature = 'balance(address)';
 
             provider.injectValidation(function (payload) {
-                assert.equal(payload.method, 'eth_estimateGas');
+                assert.equal(payload.method, 'cfx_estimateGas');
                 assert.deepEqual(payload.params, [{
                     data: sha3(signature).slice(0, 10) + '000000000000000000000000'+ addressLowercase.replace('0x',''),
                     to: addressLowercase
@@ -1487,7 +1487,7 @@ var runTests = function(contractFactory) {
             var signature = 'balance(address)';
 
             provider.injectValidation(function (payload) {
-                assert.equal(payload.method, 'eth_estimateGas');
+                assert.equal(payload.method, 'cfx_estimateGas');
                 assert.deepEqual(payload.params, [{
                     data: '0x1234000000000000000000000000'+ addressLowercase.replace('0x','') +'0000000000000000000000000000000000000000000000000000000000000032'
                 }]);
@@ -1508,7 +1508,7 @@ var runTests = function(contractFactory) {
             var provider = new FakeIpcProvider();
 
             provider.injectValidation(function (payload) {
-                assert.equal(payload.method, 'eth_call');
+                assert.equal(payload.method, 'cfx_call');
                 assert.deepEqual(payload.params, [{
                     data: '0x8708f4a12454534500000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000006000000000000000000000000000000000000000000000000000000000000000a0000000000000000000000000000000000000000000000000000000000000000c30786666323435343533343500000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000004ff24545345000000000000000000000000000000000000000000000000000000534500000000000000000000000000000000000000000000000000000000000045450000000000000000000000000000000000000000000000000000000000004533450000000000000000000000000000000000000000000000000000000000',
                     to: addressLowercase
@@ -1528,7 +1528,7 @@ var runTests = function(contractFactory) {
             var provider = new FakeIpcProvider();
 
             provider.injectValidation(function (payload) {
-                assert.equal(payload.method, 'eth_call');
+                assert.equal(payload.method, 'cfx_call');
                 assert.deepEqual(payload.params, [{
                     data: '0xbb853481',
                     to: addressLowercase
@@ -1547,7 +1547,7 @@ var runTests = function(contractFactory) {
             var provider = new FakeIpcProvider();
 
             provider.injectValidation(function (payload) {
-                assert.equal(payload.method, 'eth_call');
+                assert.equal(payload.method, 'cfx_call');
                 assert.deepEqual(payload.params, [{
                     data: '0x533678270000000000000000000000000000000000000000000000000000000000000006',
                     to: addressLowercase
@@ -1568,7 +1568,7 @@ var runTests = function(contractFactory) {
             var signature = 'balance(address)';
 
             provider.injectValidation(function (payload) {
-                assert.equal(payload.method, 'eth_call');
+                assert.equal(payload.method, 'cfx_call');
                 assert.deepEqual(payload.params, [{
                     data: sha3(signature).slice(0, 10) + '000000000000000000000000'+ addressLowercase.replace('0x',''),
                     to: addressLowercase
@@ -1589,7 +1589,7 @@ var runTests = function(contractFactory) {
             var signature = 'balance(address)';
 
             provider.injectValidation(function (payload) {
-                assert.equal(payload.method, 'eth_call');
+                assert.equal(payload.method, 'cfx_call');
                 assert.deepEqual(payload.params, [{
                     data: sha3(signature).slice(0, 10) + '000000000000000000000000'+ addressLowercase.replace('0x',''),
                     to: addressLowercase
@@ -1610,7 +1610,7 @@ var runTests = function(contractFactory) {
             var provider = new FakeIpcProvider();
 
             provider.injectValidation(function (payload) {
-                assert.equal(payload.method, 'eth_call');
+                assert.equal(payload.method, 'cfx_call');
                 assert.deepEqual(payload.params, [{
                     data: sha3('balance(address)').slice(0, 10) + '000000000000000000000000'+ addressLowercase.replace('0x',''),
                     to: addressLowercase
@@ -1618,7 +1618,7 @@ var runTests = function(contractFactory) {
             });
             provider.injectResult('0x000000000000000000000000000000000000000000000000000000000000000a');
             provider.injectValidation(function (payload) {
-                assert.equal(payload.method, 'eth_call');
+                assert.equal(payload.method, 'cfx_call');
                 assert.deepEqual(payload.params, [{
                     data: sha3('owner()').slice(0, 10),
                     to: addressLowercase
@@ -1626,7 +1626,7 @@ var runTests = function(contractFactory) {
             });
             provider.injectResult('0x00000000000000000000000011f4d0a3c12e86b4b5f39b213f7e19d048276dae');
             provider.injectValidation(function (payload) {
-                assert.equal(payload.method, 'eth_call');
+                assert.equal(payload.method, 'cfx_call');
                 assert.deepEqual(payload.params, [{
                     data: sha3('getStr()').slice(0, 10),
                     to: addressLowercase
@@ -1657,7 +1657,7 @@ var runTests = function(contractFactory) {
             var contract = contractFactory(abi, address, provider);
 
             provider.injectValidation(function (payload) {
-                assert.equal(payload.method, 'eth_call');
+                assert.equal(payload.method, 'cfx_call');
                 assert.deepEqual(payload.params, [{
                     data: sha3(signature).slice(0, 10),
                     to: addressLowercase,
@@ -1682,7 +1682,7 @@ var runTests = function(contractFactory) {
             var contract = contractFactory(abi, address, provider);
 
             provider.injectValidation(function (payload) {
-                assert.equal(payload.method, 'eth_call');
+                assert.equal(payload.method, 'cfx_call');
                 assert.deepEqual(payload.params, [{
                     data: sha3(signature).slice(0, 10),
                     to: addressLowercase,
@@ -1704,7 +1704,7 @@ var runTests = function(contractFactory) {
             var signature = sha3('mySend(address,uint256)').slice(0, 10);
 
             provider.injectValidation(function (payload) {
-                assert.equal(payload.method, 'eth_sendTransaction');
+                assert.equal(payload.method, 'cfx_sendTransaction');
                 assert.deepEqual(payload.params, [{
                     data: signature +'000000000000000000000000'+ addressLowercase.replace('0x','') +'000000000000000000000000000000000000000000000000000000000000000a',
                     from: address2,
@@ -1715,20 +1715,20 @@ var runTests = function(contractFactory) {
             provider.injectResult('0x1234000000000000000000000000000000000000000000000000000000056789');
 
             provider.injectValidation(function (payload) {
-                assert.equal(payload.method, 'eth_getTransactionReceipt');
+                assert.equal(payload.method, 'cfx_getTransactionReceipt');
                 assert.deepEqual(payload.params, ['0x1234000000000000000000000000000000000000000000000000000000056789']);
             });
             provider.injectResult(null);
 
             provider.injectValidation(function (payload) {
-                assert.equal(payload.method, 'eth_subscribe');
+                assert.equal(payload.method, 'cfx_subscribe');
                 assert.deepEqual(payload.params, ['newHeads']);
             });
             provider.injectResult('0x1234567');
 
             // fake newBlock
             provider.injectNotification({
-                method: 'eth_subscription',
+                method: 'cfx_subscription',
                 params: {
                     subscription: '0x1234567',
                     result: {
@@ -1738,7 +1738,7 @@ var runTests = function(contractFactory) {
             });
 
             provider.injectValidation(function (payload) {
-                assert.equal(payload.method, 'eth_getTransactionReceipt');
+                assert.equal(payload.method, 'cfx_getTransactionReceipt');
                 assert.deepEqual(payload.params, ['0x1234000000000000000000000000000000000000000000000000000000056789']);
             });
             provider.injectResult({
@@ -1779,7 +1779,7 @@ var runTests = function(contractFactory) {
                 }]
             });
             provider.injectValidation(function (payload) {
-                assert.equal(payload.method, 'eth_unsubscribe');
+                assert.equal(payload.method, 'cfx_unsubscribe');
                 assert.deepEqual(payload.params, ['0x1234567']);
             });
             provider.injectResult('0x321');
@@ -1869,7 +1869,7 @@ var runTests = function(contractFactory) {
             var signature = sha3('mySend(address,uint256)').slice(0, 10);
 
             provider.injectValidation(function (payload) {
-                assert.equal(payload.method, 'eth_sendTransaction');
+                assert.equal(payload.method, 'cfx_sendTransaction');
                 assert.deepEqual(payload.params, [{
                     data: signature +'000000000000000000000000'+ addressLowercase.replace('0x','') +'000000000000000000000000000000000000000000000000000000000000000a',
                     from: address2,
@@ -1880,20 +1880,20 @@ var runTests = function(contractFactory) {
             provider.injectResult('0x1234000000000000000000000000000000000000000000000000000000056789');
 
             provider.injectValidation(function (payload) {
-                assert.equal(payload.method, 'eth_getTransactionReceipt');
+                assert.equal(payload.method, 'cfx_getTransactionReceipt');
                 assert.deepEqual(payload.params, ['0x1234000000000000000000000000000000000000000000000000000000056789']);
             });
             provider.injectResult(null);
 
             provider.injectValidation(function (payload) {
-                assert.equal(payload.method, 'eth_subscribe');
+                assert.equal(payload.method, 'cfx_subscribe');
                 assert.deepEqual(payload.params, ['newHeads']);
             });
             provider.injectResult('0x1234567');
 
             // fake newBlock
             provider.injectNotification({
-                method: 'eth_subscription',
+                method: 'cfx_subscription',
                 params: {
                     subscription: '0x1234567',
                     result: {
@@ -1903,7 +1903,7 @@ var runTests = function(contractFactory) {
             });
 
             provider.injectValidation(function (payload) {
-                assert.equal(payload.method, 'eth_getTransactionReceipt');
+                assert.equal(payload.method, 'cfx_getTransactionReceipt');
                 assert.deepEqual(payload.params, ['0x1234000000000000000000000000000000000000000000000000000000056789']);
             });
             provider.injectResult({
@@ -1945,7 +1945,7 @@ var runTests = function(contractFactory) {
                 }]
             });
             provider.injectValidation(function (payload) {
-                assert.equal(payload.method, 'eth_unsubscribe');
+                assert.equal(payload.method, 'cfx_unsubscribe');
                 assert.deepEqual(payload.params, ['0x1234567']);
             });
             provider.injectResult('0x321');
@@ -2035,7 +2035,7 @@ var runTests = function(contractFactory) {
             var signature = sha3('mySend(address,uint256)').slice(0, 10);
 
             provider.injectValidation(function (payload) {
-                assert.equal(payload.method, 'eth_sendTransaction');
+                assert.equal(payload.method, 'cfx_sendTransaction');
                 assert.deepEqual(payload.params, [{
                     data: signature +'000000000000000000000000'+ addressLowercase.replace('0x','') +'000000000000000000000000000000000000000000000000000000000000000a',
                     from: address2,
@@ -2046,14 +2046,14 @@ var runTests = function(contractFactory) {
             provider.injectResult('0x1234000000000000000000000000000000000000000000000000000000056789');
 
             provider.injectValidation(function (payload) {
-                assert.equal(payload.method, 'eth_getTransactionReceipt');
+                assert.equal(payload.method, 'cfx_getTransactionReceipt');
                 assert.deepEqual(payload.params, ['0x1234000000000000000000000000000000000000000000000000000000056789']);
             });
             provider.injectResult(null);
 
 
             provider.injectValidation(function (payload) {
-                assert.equal(payload.method, 'eth_getTransactionReceipt');
+                assert.equal(payload.method, 'cfx_getTransactionReceipt');
                 assert.deepEqual(payload.params, ['0x1234000000000000000000000000000000000000000000000000000000056789']);
             });
             provider.injectResult({
@@ -2094,7 +2094,7 @@ var runTests = function(contractFactory) {
                 }]
             });
             provider.injectValidation(function (payload) {
-                assert.equal(payload.method, 'eth_unsubscribe');
+                assert.equal(payload.method, 'cfx_unsubscribe');
                 assert.deepEqual(payload.params, ['0x1234567']);
             });
             provider.injectResult('0x321');
@@ -2184,7 +2184,7 @@ var runTests = function(contractFactory) {
             var signature = sha3('mySend(address,uint256)').slice(0, 10);
 
             provider.injectValidation(function (payload) {
-                assert.equal(payload.method, 'eth_sendTransaction');
+                assert.equal(payload.method, 'cfx_sendTransaction');
                 assert.deepEqual(payload.params, [{
                     data: signature +'000000000000000000000000'+ addressLowercase.replace('0x','') +'000000000000000000000000000000000000000000000000000000000000000a',
                     from: address2,
@@ -2195,7 +2195,7 @@ var runTests = function(contractFactory) {
             provider.injectResult('0x1234000000000000000000000000000000000000000000000000000000056789');
 
             provider.injectValidation(function (payload) {
-                assert.equal(payload.method, 'eth_getTransactionReceipt');
+                assert.equal(payload.method, 'cfx_getTransactionReceipt');
                 assert.deepEqual(payload.params, ['0x1234000000000000000000000000000000000000000000000000000000056789']);
             });
 
@@ -2211,7 +2211,7 @@ var runTests = function(contractFactory) {
             });
 
             provider.injectValidation(function (payload) {
-                assert.equal(payload.method, 'eth_subscribe');
+                assert.equal(payload.method, 'cfx_subscribe');
                 assert.deepEqual(payload.params, ['newHeads']);
             });
             provider.injectResult('0x1234567');
@@ -2255,7 +2255,7 @@ var runTests = function(contractFactory) {
 
             // fake newBlocks
             provider.injectNotification({
-                method: 'eth_subscription',
+                method: 'cfx_subscription',
                 params: {
                     subscription: '0x1234567',
                     result: {
@@ -2265,7 +2265,7 @@ var runTests = function(contractFactory) {
             });
 
             provider.injectNotification({
-                method: 'eth_subscription',
+                method: 'cfx_subscription',
                 params: {
                     subscription: '0x1234567',
                     result: {
@@ -2280,7 +2280,7 @@ var runTests = function(contractFactory) {
             var signature = 'mySend(address,uint256)';
 
             provider.injectValidation(function (payload) {
-                assert.equal(payload.method, 'eth_sendTransaction');
+                assert.equal(payload.method, 'cfx_sendTransaction');
                 assert.deepEqual(payload.params, [{
                     data: sha3(signature).slice(0, 10) +
                     '000000000000000000000000'+ addressLowercase.replace('0x','') +
@@ -2320,7 +2320,7 @@ var runTests = function(contractFactory) {
             var signature = 'myDisallowedSend(address,uint256)';
 
             provider.injectValidation(function (payload) {
-                assert.equal(payload.method, 'eth_sendTransaction');
+                assert.equal(payload.method, 'cfx_sendTransaction');
                 assert.deepEqual(payload.params, [{
                     data: sha3(signature).slice(0, 10) +
                     '000000000000000000000000'+ addressLowercase.replace('0x','') +
@@ -2355,7 +2355,7 @@ var runTests = function(contractFactory) {
             var signature = sha3('mySend(address,uint256)').slice(0, 10);
 
             provider.injectValidation(function (payload) {
-                assert.equal(payload.method, 'eth_sendTransaction');
+                assert.equal(payload.method, 'cfx_sendTransaction');
                 assert.deepEqual(payload.params, [{
                     data: signature +
                     '000000000000000000000000'+ addressLowercase.replace('0x','') +
@@ -2376,7 +2376,7 @@ var runTests = function(contractFactory) {
             var signature = sha3('mySend(address,uint256)').slice(0, 10);
 
             provider.injectValidation(function (payload) {
-                assert.equal(payload.method, 'eth_sendTransaction');
+                assert.equal(payload.method, 'cfx_sendTransaction');
                 assert.deepEqual(payload.params, [{
                     data: signature +
                     '000000000000000000000000'+ addressLowercase.replace('0x','') +
@@ -2397,7 +2397,7 @@ var runTests = function(contractFactory) {
             var signature = 'mySend(address,uint256)';
 
             provider.injectValidation(function (payload) {
-                assert.equal(payload.method, 'eth_sendTransaction');
+                assert.equal(payload.method, 'cfx_sendTransaction');
                 assert.deepEqual(payload.params, [{
                     data: sha3(signature).slice(0, 10) +
                     '000000000000000000000000'+ addressLowercase.replace('0x','') +
@@ -2431,7 +2431,7 @@ var runTests = function(contractFactory) {
                 count++;
                 if(count > 1) return;
 
-                assert.equal(payload.method, 'eth_call');
+                assert.equal(payload.method, 'cfx_call');
                 assert.deepEqual(payload.params, [{
                     data: sha3(signature).slice(0, 10) + '000000000000000000000000'+ addressLowercase.replace('0x',''),
                     to: addressLowercase,
@@ -2456,7 +2456,7 @@ var runTests = function(contractFactory) {
             var signature = 'balance(address)';
 
             provider.injectValidation(function (payload) {
-                assert.equal(payload.method, 'eth_call');
+                assert.equal(payload.method, 'cfx_call');
                 assert.deepEqual(payload.params, [{
                     data: sha3(signature).slice(0, 10) + '000000000000000000000000'+ addressLowercase.replace('0x',''),
                     to: addressLowercase,
@@ -2481,7 +2481,7 @@ var runTests = function(contractFactory) {
             var signature = 'balance(address)';
 
             provider.injectValidation(function (payload) {
-                assert.equal(payload.method, 'eth_call');
+                assert.equal(payload.method, 'cfx_call');
                 assert.deepEqual(payload.params, [{
                     data: sha3(signature).slice(0, 10) + '000000000000000000000000'+ addressLowercase.replace('0x',''),
                     to: addressLowercase,
@@ -2506,7 +2506,7 @@ var runTests = function(contractFactory) {
             var signature = 'mySend(address,uint256)';
 
             provider.injectValidation(function (payload) {
-                assert.equal(payload.method, 'eth_sendTransaction');
+                assert.equal(payload.method, 'cfx_sendTransaction');
                 assert.deepEqual(payload.params, [{
                     data: sha3(signature).slice(0, 10) +
                         '000000000000000000000000'+ addressLowercase.replace('0x','') +
@@ -2531,7 +2531,7 @@ var runTests = function(contractFactory) {
             var signature = 'mySend(address,uint256)';
 
             provider.injectValidation(function (payload) {
-                assert.equal(payload.method, 'eth_gasPrice');
+                assert.equal(payload.method, 'cfx_gasPrice');
                 assert.deepEqual(payload.params, []);
             });
 
@@ -2539,7 +2539,7 @@ var runTests = function(contractFactory) {
 
 
             provider.injectValidation(function (payload) {
-                assert.equal(payload.method, 'eth_sendTransaction');
+                assert.equal(payload.method, 'cfx_sendTransaction');
                 assert.deepEqual(payload.params, [{
                     data: sha3(signature).slice(0, 10) +
                     '000000000000000000000000'+ addressLowercase.replace('0x','') +
@@ -2562,7 +2562,7 @@ var runTests = function(contractFactory) {
             var signature = 'mySend(address,uint256)';
 
             provider.injectValidation(function (payload) {
-                assert.equal(payload.method, 'eth_sendTransaction');
+                assert.equal(payload.method, 'cfx_sendTransaction');
                 assert.deepEqual(payload.params, [{
                     data: sha3(signature).slice(0, 10) +
                         '000000000000000000000000'+ addressLowercase.replace('0x','') +
@@ -2589,7 +2589,7 @@ var runTests = function(contractFactory) {
 
             provider.injectValidation(function (payload) {
 
-                assert.equal(payload.method, 'eth_sendTransaction');
+                assert.equal(payload.method, 'cfx_sendTransaction');
                 assert.deepEqual(payload.params, [{
                     data: sha3(signature).slice(0, 10) +
                         '000000000000000000000000'+ addressLowercase.replace('0x','') +
@@ -2615,7 +2615,7 @@ var runTests = function(contractFactory) {
             var signature = 'mySend(address,uint256)';
 
             provider.injectValidation(function (payload) {
-                assert.equal(payload.method, 'eth_estimateGas');
+                assert.equal(payload.method, 'cfx_estimateGas');
                 assert.deepEqual(payload.params, [{
                     data: sha3(signature).slice(0, 10) +
                         '000000000000000000000000' + addressLowercase.replace('0x','') +
@@ -2638,7 +2638,7 @@ var runTests = function(contractFactory) {
             var signature = 'testArr(int[])';
 
             provider.injectValidation(function (payload) {
-                assert.equal(payload.method, 'eth_getLogs');
+                assert.equal(payload.method, 'cfx_getLogs');
                 assert.deepEqual(payload.params, [{
                     address: addressLowercase,
                     topics: [
@@ -2750,7 +2750,7 @@ var runTests = function(contractFactory) {
             var signature = 'testArr(int[])';
 
             provider.injectValidation(function (payload) {
-                assert.equal(payload.method, 'eth_call');
+                assert.equal(payload.method, 'cfx_call');
                 assert.deepEqual(payload.params, [{
                     data: sha3(signature).slice(0, 10) +
                         '0000000000000000000000000000000000000000000000000000000000000020' +
@@ -2778,7 +2778,7 @@ var runTests = function(contractFactory) {
             var signature = 'testArr(int[])';
 
             provider.injectValidation(function (payload) {
-                assert.equal(payload.method, 'eth_call');
+                assert.equal(payload.method, 'cfx_call');
                 assert.deepEqual(payload.params, [{
                     data: sha3(signature).slice(0, 10) +
                         '0000000000000000000000000000000000000000000000000000000000000020' +
@@ -2806,7 +2806,7 @@ var runTests = function(contractFactory) {
 
 
             provider.injectValidation(function (payload) {
-                assert.equal(payload.method, 'eth_call');
+                assert.equal(payload.method, 'cfx_call');
                 assert.deepEqual(payload.params, [{
                     data: sha3(signature).slice(0, 10),
                     to: addressLowercase
@@ -2830,7 +2830,7 @@ var runTests = function(contractFactory) {
             var provider = new FakeIpcProvider();
 
             provider.injectValidation(function (payload) {
-                assert.equal(payload.method, 'eth_call');
+                assert.equal(payload.method, 'cfx_call');
                 assert.deepEqual(payload.params, [{
                     data: '0x2a4aedd50000000000000000000000009cc9a2c777605af16872e0997b3aeb91d96d5d8c',
                     to: addressLowercase
@@ -2857,7 +2857,7 @@ var runTests = function(contractFactory) {
             var provider = new FakeIpcProvider();
 
             provider.injectValidation(function (payload) {
-                assert.equal(payload.method, 'eth_sendTransaction');
+                assert.equal(payload.method, 'cfx_sendTransaction');
                 assert.deepEqual(payload.params, [{
                     data: '0x814a4d160000000000000000000000000000000000000000000000000000000000000001',
                     from: addressLowercase,
@@ -2885,7 +2885,7 @@ var runTests = function(contractFactory) {
             provider.injectResult('0x1234567');
 
             provider.injectValidation(function (payload) {
-                assert.equal(payload.method, 'eth_sendTransaction');
+                assert.equal(payload.method, 'cfx_sendTransaction');
                 assert.deepEqual(payload.params, [{
                     data: '0x1234567000000000000000000000000555456789012345678901234567890123456789100000000000000000000000000000000000000000000000000000000000000c8' ,
                     from: addressLowercase,
@@ -2915,7 +2915,7 @@ var runTests = function(contractFactory) {
 
             provider.injectValidation(function (payload) {
 
-                assert.equal(payload.method, 'eth_sendTransaction');
+                assert.equal(payload.method, 'cfx_sendTransaction');
                 assert.deepEqual(payload.params, [{
                     data: '0x1234567000000000000000000000000'+ addressLowercase.replace('0x','') +'00000000000000000000000000000000000000000000000000000000000000c8' ,
                     from: addressLowercase,
@@ -2927,21 +2927,21 @@ var runTests = function(contractFactory) {
             provider.injectResult('0x5550000000000000000000000000000000000000000000000000000000000032');
 
             provider.injectValidation(function (payload) {
-                assert.equal(payload.method, 'eth_getTransactionReceipt');
+                assert.equal(payload.method, 'cfx_getTransactionReceipt');
                 assert.deepEqual(payload.params, ['0x5550000000000000000000000000000000000000000000000000000000000032']);
             });
             provider.injectResult(null);
 
 
             provider.injectValidation(function (payload) {
-                assert.equal(payload.method, 'eth_subscribe');
+                assert.equal(payload.method, 'cfx_subscribe');
                 assert.deepEqual(payload.params, ['newHeads']);
             });
             provider.injectResult('0x1234567');
 
             // fake newBlock
             provider.injectNotification({
-                method: 'eth_subscription',
+                method: 'cfx_subscription',
                 params: {
                     subscription: '0x1234567',
                     result: {
@@ -2951,7 +2951,7 @@ var runTests = function(contractFactory) {
             });
 
             provider.injectValidation(function (payload) {
-                assert.equal(payload.method, 'eth_getTransactionReceipt');
+                assert.equal(payload.method, 'cfx_getTransactionReceipt');
                 assert.deepEqual(payload.params, ['0x5550000000000000000000000000000000000000000000000000000000000032']);
             });
             provider.injectResult({
@@ -2959,7 +2959,7 @@ var runTests = function(contractFactory) {
                 blockHash: '0xffdd'
             });
             provider.injectValidation(function (payload) {
-                assert.equal(payload.method, 'eth_getCode');
+                assert.equal(payload.method, 'cfx_getCode');
                 assert.deepEqual(payload.params, [addressLowercase, 'latest']);
             });
             provider.injectResult('0x321');
@@ -3001,13 +3001,13 @@ var runTests = function(contractFactory) {
 }
 
 describe('typical usage', function() {
-    runTests(getEthContractInstance);
+    runTests(getCfxContractInstance);
 
     it('should update contract instance provider when assigned a provider to eth instance that contract instance came from', function () {
         var provider1 = new FakeIpcProvider();
         var provider2 = new FakeHttpProvider();
 
-        var eth = new Eth(provider1);
+        var eth = new Cfx(provider1);
         var contract = new eth.Contract(abi, address);
         assert.deepEqual(contract.currentProvider, provider1);
         assert.deepEqual(eth.currentProvider, provider1);
@@ -3019,7 +3019,7 @@ describe('typical usage', function() {
 
     it('should deploy a contract, sign transaction, and return contract instance', function (done) {
         var provider = new FakeIpcProvider();
-        var eth = new Eth(provider);
+        var eth = new Cfx(provider);
         eth.accounts.wallet.add(account.privateKey);
 
         provider.injectValidation(function (payload) {
@@ -3032,7 +3032,7 @@ describe('typical usage', function() {
                 nonce: '0x1',
             }).then(function (tx) {
                 const expected = tx.rawTransaction;
-                assert.equal(payload.method, 'eth_sendRawTransaction');
+                assert.equal(payload.method, 'cfx_sendRawTransaction');
                 assert.deepEqual(payload.params, [expected]);
             });
         });
@@ -3040,20 +3040,20 @@ describe('typical usage', function() {
         provider.injectResult('0x5550000000000000000000000000000000000000000000000000000000000032');
 
         provider.injectValidation(function (payload) {
-            assert.equal(payload.method, 'eth_getTransactionReceipt');
+            assert.equal(payload.method, 'cfx_getTransactionReceipt');
             assert.deepEqual(payload.params, ['0x5550000000000000000000000000000000000000000000000000000000000032']);
         });
         provider.injectResult(null);
 
         provider.injectValidation(function (payload) {
-            assert.equal(payload.method, 'eth_subscribe');
+            assert.equal(payload.method, 'cfx_subscribe');
             assert.deepEqual(payload.params, ['newHeads']);
         });
         provider.injectResult('0x1234567');
 
         // fake newBlock
         provider.injectNotification({
-            method: 'eth_subscription',
+            method: 'cfx_subscription',
             params: {
                 subscription: '0x1234567',
                 result: {
@@ -3063,7 +3063,7 @@ describe('typical usage', function() {
         });
 
         provider.injectValidation(function (payload) {
-            assert.equal(payload.method, 'eth_getTransactionReceipt');
+            assert.equal(payload.method, 'cfx_getTransactionReceipt');
             assert.deepEqual(payload.params, ['0x5550000000000000000000000000000000000000000000000000000000000032']);
         });
 
@@ -3072,7 +3072,7 @@ describe('typical usage', function() {
             blockHash: '0xffdd'
         });
         provider.injectValidation(function (payload) {
-            assert.equal(payload.method, 'eth_getCode');
+            assert.equal(payload.method, 'cfx_getCode');
             assert.deepEqual(payload.params, [addressLowercase, 'latest']);
         });
         provider.injectResult('0x321');

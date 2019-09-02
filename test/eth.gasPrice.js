@@ -1,7 +1,7 @@
 var testMethod = require('./helpers/test.method.js');
 
 var method = 'getGasPrice';
-var methodCall = 'eth_gasPrice';
+var methodCall = 'cfx_gasPrice';
 
 var tests = [{
     result: '0x15f90',

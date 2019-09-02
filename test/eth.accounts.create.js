@@ -1,9 +1,9 @@
-var Accounts = require("./../packages/web3-eth-accounts");
+var Accounts = require("./../packages/conflux-web-cfx-accounts");
 var ethers = require('ethers');
 var chai = require('chai');
 var assert = chai.assert;
-var Web3 = require('../packages/web3');
-var web3 = new Web3();
+var ConfluxWeb = require('../packages/conflux-web');
+var web3 = new ConfluxWeb();
 
 var tests = [];
 for (var i = 0; i < 1000; i++) {
@@ -11,11 +11,11 @@ for (var i = 0; i < 1000; i++) {
 }
 
 
-describe("eth", function () {
+describe("cfx", function () {
     describe("accounts", function () {
 
         tests.forEach(function (test, i) {
-            it("create eth.account, and compare to ethers wallet", function() {
+            it("create cfx.account, and compare to ethers wallet", function() {
                 var ethAccounts = new Accounts();
 
                 // create account

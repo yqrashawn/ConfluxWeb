@@ -33,8 +33,8 @@ var tests = [{
     }, '0xb'],
     result: '0x31981',
     formattedResult: '0x31981',
-    call: 'eth_'+ method
+    call: 'cfx_'+ method
 }];
 
-testMethod.runTests('eth', method, tests);
+testMethod.runTests('cfx', method, tests);
 

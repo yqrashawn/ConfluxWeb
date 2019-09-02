@@ -1,3 +1,5 @@
+//  conflux-chain not supported bzz  yet!
+/*
 var chai = require('chai');
 var assert = chai.assert;
 
@@ -33,4 +35,4 @@ describe('Web3.providers.givenProvider', function () {
 
     });
 });
-
+*/

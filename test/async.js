@@ -1,6 +1,6 @@
 var chai = require('chai');
 var assert = chai.assert;
-var Web3 = require('../packages/web3');
+var Web3 = require('../packages/conflux-web');
 var FakeHttpProvider = require('./helpers/FakeIpcProvider');
 
 var web3 = new Web3();
@@ -19,7 +19,7 @@ var tests = [{
     }, 'latest'],
     result: '0xb',
     formattedResult: '0xb',
-    call: 'eth_'+ method
+    call: 'cfx_'+ method
 }];
 
 describe('async', function () {
@@ -37,7 +37,7 @@ describe('async', function () {
             });
 
             // when
-            web3.eth[method](test.input, function(error, result){
+            web3.cfx[method](test.input, function(error, result){
 
                 // then
                 assert.isNull(error);
@@ -61,7 +61,7 @@ describe('async', function () {
             });
 
             // when
-            web3.eth[method](test.input)
+            web3.cfx[method](test.input)
             .then(function(result){
 
                 // then
@@ -88,7 +88,7 @@ describe('async', function () {
             });
 
             // when
-            web3.eth[method](test.input, function(error, result){
+            web3.cfx[method](test.input, function(error, result){
 
                 // then
                 assert.isUndefined(result);
@@ -117,7 +117,7 @@ describe('async', function () {
             });
 
             // when
-            web3.eth[method](test.input)
+            web3.cfx[method](test.input)
             .catch(function(error){
 
                 // then

@@ -1,6 +1,6 @@
 var chai = require('chai');
 var assert = chai.assert;
-var Abi = require('../packages/web3-eth-abi');
+var Abi = require('../packages/conflux-web-cfx-abi');
 
 var tests = [{
     params: ['uint256', '2345675643'],

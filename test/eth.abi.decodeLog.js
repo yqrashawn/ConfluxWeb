@@ -1,6 +1,6 @@
 var chai = require('chai');
 var assert = chai.assert;
-var Web3Abi = require('../packages/web3-eth-abi');
+var ConfluxWebAbi = require('../packages/conflux-web-cfx-abi');
 
 var tests = [{
     params: [[{
@@ -145,7 +145,7 @@ var tests = [{
 describe('decodeLog', function () {
     tests.forEach(function (test) {
         it('should convert correctly', function () {
-            assert.deepEqual(Web3Abi.decodeLog.apply(Web3Abi, test.params), test.result);
+            assert.deepEqual(ConfluxWebAbi.decodeLog.apply(ConfluxWebAbi, test.params), test.result);
         });
     });
 });

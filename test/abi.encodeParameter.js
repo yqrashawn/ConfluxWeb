@@ -1,6 +1,6 @@
 var chai = require('chai');
 var assert = chai.assert;
-var coder = require('../packages/web3-eth-abi');
+var coder = require('../packages/conflux-web-cfx-abi');
 
 
 describe('lib/solidity/coder', function () {

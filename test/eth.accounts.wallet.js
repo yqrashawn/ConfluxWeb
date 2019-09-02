@@ -1,7 +1,7 @@
-var Accounts = require("./../packages/web3-eth-accounts");
+var Accounts = require("./../packages/conflux-web-cfx-accounts");
 var chai = require('chai');
 var assert = chai.assert;
-var Web3 = require('../packages/web3');
+var Web3 = require('../packages/conflux-web');
 var web3 = new Web3();
 
 var tests = [
@@ -21,7 +21,7 @@ var tests = [
 ];
 
 
-describe("eth", function () {
+describe("cfx", function () {
     describe("accounts.wallet", function () {
 
         tests.forEach(function (test, i) {

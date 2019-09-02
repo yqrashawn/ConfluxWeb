@@ -1,9 +1,9 @@
-var Accounts = require("./../packages/web3-eth-accounts/src/index.js");
+var Accounts = require("./../packages/conflux-web-cfx-accounts/src/index.js");
 var ethers = require('ethers');
 var chai = require('chai');
 var assert = chai.assert;
-var Web3 = require('../packages/web3');
-var web3 = new Web3();
+var ConfluxWeb = require('../packages/conflux-web');
+var web3 = new ConfluxWeb();
 
 var tests = [];
 for (var i = 0; i < 50; i++) {
@@ -111,11 +111,11 @@ var staticTests = [{
         "priv": "81c29e8142bb6a81bef5a92bda7a8328a5c85bb2f9542e76f9b0f94fc018"
 }];
 
-describe("eth", function () {
+describe("cfx", function () {
     describe("accounts", function () {
 
         tests.forEach(function (test, i) {
-            it("encrypt eth.account, and compare to ethers wallet", async () => {
+            it("encrypt cfx.account, and compare to ethers wallet", async () => {
                 var ethAccounts = new Accounts();
 
                 // create account
@@ -144,7 +144,7 @@ describe("eth", function () {
                 assert.deepEqual(encrypt, ethWallEncrypt);
             });
 
-            it("encrypt eth.account, and decrypt with ethers wallet", async () => {
+            it("encrypt cfx.account, and decrypt with ethers wallet", async () => {
                 var ethAccounts = new Accounts();
 
                 // create account
