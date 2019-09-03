@@ -1,8 +1,8 @@
 var chai = require('chai');
 var assert = chai.assert;
-var Method = require('../packages/web3-core-method');
+var Method = require('../packages/conflux-web-core-method');
 
-describe('lib/web3/method', function () {
+describe('lib/conflux-web/method', function () {
     describe('formatOutput', function () {
         it('should format plain output', function () {
 
@@ -12,7 +12,7 @@ describe('lib/web3/method', function () {
             };
 
             var method = new Method({
-                name: 'something', call: 'eth_something',
+                name: 'something', call: 'cfx_something',
                 outputFormatter: formatter
             });
             var args = '1';
@@ -33,7 +33,7 @@ describe('lib/web3/method', function () {
             };
 
             var method = new Method({
-                name: 'something', call: 'eth_something',
+                name: 'something', call: 'cfx_something',
                 outputFormatter: formatter
             });
             var args = '1';
@@ -54,7 +54,7 @@ describe('lib/web3/method', function () {
             };
 
             var method = new Method({
-                name: 'something', call: 'eth_something',
+                name: 'something', call: 'cfx_something',
                 outputFormatter: formatter
             });
             var args = ['1','2','3'];
@@ -70,7 +70,7 @@ describe('lib/web3/method', function () {
         it('should do nothing if there is no formatter', function () {
 
             // given
-            var method = new Method({name: 'something', call: 'eth_something'});
+            var method = new Method({name: 'something', call: 'cfx_something'});
             var args = [1,2,3];
 
             // when

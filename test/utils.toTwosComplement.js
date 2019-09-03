@@ -3,7 +3,7 @@
  */
 var chai = require('chai');
 var assert = chai.assert;
-var utils = require('../packages/web3-utils/');
+var utils = require('../packages/conflux-web-utils/');
 var BigNumber = require('bignumber.js');
 
 var tests = [

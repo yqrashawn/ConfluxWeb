@@ -1,3 +1,4 @@
+/*
 var testSubscription = require('./helpers/test.subscription.js');
 
 // TODO discuss the whisper in and outputs with vlad!
@@ -56,4 +57,4 @@ testSubscription.runTests('shh', tests);
 
 
 
-
+*/

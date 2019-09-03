@@ -1,7 +1,7 @@
 var chai = require('chai');
 var assert = chai.assert;
-var Method = require('../packages/web3-core-method');
-var errors = require('../packages/web3-core-helpers/src/errors');
+var Method = require('../packages/conflux-web-core-method');
+var errors = require('../packages/conflux-web-core-helpers/src/errors');
 
 describe('lib/web3/method', function () {
     describe('validateArgs', function () {
@@ -9,7 +9,7 @@ describe('lib/web3/method', function () {
 
             // given
             var method = new Method({
-                name: 'something', call: 'eth_something',
+                name: 'something', call: 'cfx_something',
                 params: 1
             });
 
@@ -30,7 +30,7 @@ describe('lib/web3/method', function () {
             // given
             var method = new Method({
                 name: 'something',
-                call: 'eth_something',
+                call: 'cfx_something',
                 params: 2
             });
 

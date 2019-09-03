@@ -2,10 +2,10 @@ var chai = require('chai');
 var assert = chai.assert;
 var u = require('./helpers/test.utils.js');
 
-var Eth = require('../packages/web3-eth');
+var Eth = require('../packages/conflux-web-cfx');
 var eth = new Eth();
 
-describe('eth', function() {
+describe('cfx', function() {
     describe('methods', function() {
         u.methodExists(eth, 'getBalance');
         u.methodExists(eth, 'getStorageAt');
@@ -16,9 +16,7 @@ describe('eth', function() {
         u.methodExists(eth, 'call');
         u.methodExists(eth, 'getBlock');
         u.methodExists(eth, 'getTransaction');
-        u.methodExists(eth, 'getUncle');
         u.methodExists(eth, 'getBlockTransactionCount');
-        u.methodExists(eth, 'getBlockUncleCount');
         u.methodExists(eth, 'subscribe');
         u.methodExists(eth, 'Contract');
         u.methodExists(eth, 'Iban');
@@ -43,10 +41,6 @@ describe('eth', function() {
         u.methodExists(eth.net, 'isListening');
         u.methodExists(eth.net, 'getPeerCount');
 
-        u.propertyExists(eth, 'personal');
-        u.methodExists(eth.personal, 'sendTransaction');
-        u.methodExists(eth.personal, 'newAccount');
-        u.methodExists(eth.personal, 'unlockAccount');
     });
 });
 

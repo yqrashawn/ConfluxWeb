@@ -1,6 +1,6 @@
 var chai = require('chai');
 var assert = chai.assert;
-var Eth = require('../packages/conflux-web-eth');
+var Eth = require('../packages/conflux-web-cfx');
 
 var eth = new Eth();
 

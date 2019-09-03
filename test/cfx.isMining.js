@@ -1,7 +1,7 @@
 var testMethod = require('./helpers/test.method.js');
 
 var method = 'isMining';
-var call = 'eth_mining';
+var call = 'cfx_mining';
 
 var tests = [{
     result: true,
@@ -10,4 +10,4 @@ var tests = [{
 }];
 
 
-testMethod.runTests('eth', method, tests);
+testMethod.runTests('cfx', method, tests);

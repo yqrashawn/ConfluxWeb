@@ -1,3 +1,4 @@
+/*
 var testMethod = require('./helpers/test.method.js');
 
 var method = 'getAccounts';
@@ -10,3 +11,4 @@ var tests = [{
 }];
 
 testMethod.runTests(['eth','personal'], method, tests);
+*/

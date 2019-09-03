@@ -1,3 +1,4 @@
+/*
 var testMethod = require('./helpers/test.method.js');
 
 var method = 'sendTransaction';
@@ -85,4 +86,4 @@ var tests = [{
 }];
 
 testMethod.runTests(['eth','personal'], method, tests);
-
+*/

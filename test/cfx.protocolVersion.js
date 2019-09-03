@@ -1,7 +1,7 @@
 var testMethod = require('./helpers/test.method.js');
 
 var method = 'getProtocolVersion';
-var call = 'eth_protocolVersion';
+var call = 'cfx_protocolVersion';
 
 var tests = [{
     result: '12345',
@@ -10,4 +10,4 @@ var tests = [{
 }];
 
 
-testMethod.runTests('eth', method, tests);
+testMethod.runTests('cfx', method, tests);

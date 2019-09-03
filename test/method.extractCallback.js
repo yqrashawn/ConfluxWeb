@@ -1,8 +1,8 @@
 var chai = require('chai');
 var assert = chai.assert;
-var Method = require('../packages/web3-core-method');
+var Method = require('../packages/conflux-web-core-method');
 
-describe('lib/web3/method', function () {
+describe('lib/conflux-web/method', function () {
     describe('extractCallback', function () {
         it('should extract callback', function () {
 

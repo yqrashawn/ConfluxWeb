@@ -1,6 +1,6 @@
 var chai = require('chai');
 var assert = chai.assert;
-var Eth = require('../packages/web3-eth/');
+var Eth = require('../packages/conflux-web-cfx/');
 
 
 var name = 'event1';
@@ -211,7 +211,7 @@ var tests = [{
     }
 }];
 
-describe('lib/web3/event', function () {
+describe('lib/conflux-web/event', function () {
     describe('decode', function () {
         tests.forEach(function (test, index) {
             it('test no: ' + index, function () {

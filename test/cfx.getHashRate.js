@@ -6,9 +6,9 @@ var method = 'getHashrate';
 var tests = [{
     result: '0x788a8',
     formattedResult: 493736,
-    call: 'eth_hashrate'
+    call: 'cfx_hashrate'
 }];
 
 
-testMethod.runTests('eth', method, tests);
+testMethod.runTests('cfx', method, tests);
 

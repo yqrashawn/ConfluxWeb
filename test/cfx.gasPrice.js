@@ -10,5 +10,5 @@ var tests = [{
 }];
 
 
-testMethod.runTests('eth', method, tests);
+testMethod.runTests('cfx', method, tests);
 

@@ -9,4 +9,4 @@ var tests = [{
     call: 'net_peerCount'
 }];
 
-testMethod.runTests(['eth','net'], method, tests);
+testMethod.runTests(['cfx','net'], method, tests);

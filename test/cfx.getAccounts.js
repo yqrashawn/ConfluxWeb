@@ -1,7 +1,7 @@
 var testMethod = require('./helpers/test.method.js');
 
 var method = 'getAccounts';
-var call = 'eth_accounts';
+var call = 'cfx_accounts';
 
 var tests = [{
     result: ['0x47d33b27bb249a2dbab4c0612bf9caf4c1950855', '0x11f4d0a3c12e86b4b5f39b213f7e19d048276dae'],
@@ -15,5 +15,5 @@ var tests = [{
 }];
 
 
-testMethod.runTests('eth', method, tests);
+testMethod.runTests('cfx', method, tests);
 

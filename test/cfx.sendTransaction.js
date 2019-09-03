@@ -2,7 +2,7 @@ var testMethod = require('./helpers/test.method.js');
 var chai = require('chai');
 var assert = chai.assert;
 var FakeHttpProvider = require('./helpers/FakeHttpProvider');
-var Web3 = require('../packages/web3');
+var Web3 = require('../packages/conflux-web');
 
 var clone = function (object) { return object ? JSON.parse(JSON.stringify(object)) : []; };
 
@@ -26,7 +26,7 @@ var tests = [{
     result: '0x1234567',
     formattedResult: '0x1234567',
     notification: {
-        method: 'eth_subscription',
+        method: 'cfx_subscription',
         params: {
             subscription: '0x1234567',
             result: {
@@ -34,7 +34,7 @@ var tests = [{
             }
         }
     },
-    call: 'eth_'+ method
+    call: 'cfx_'+ method
 },
 // test with gasPrice missing
 {
@@ -44,7 +44,7 @@ var tests = [{
         value: '1234567654321'
     }],
     notification: {
-        method: 'eth_subscription',
+        method: 'cfx_subscription',
         params: {
             subscription: '0x1234567',
             result: {
@@ -52,12 +52,12 @@ var tests = [{
             }
         }
     },
-    call: 'eth_gasPrice',
+    call: 'cfx_gasPrice',
     formattedArgs: [],
     result: '0x1234567',
     formattedResult: '0x1234567',
 
-    call2: 'eth_'+ method,
+    call2: 'cfx_'+ method,
     formattedArgs2: [{
         from: "0xdbdbdb2cbd23b783741e8d7fcf51e459b497e4a6",
         to: "0xdbdbdb2cbd23b783741e8d7fcf51e459b497e4a6",
@@ -83,7 +83,7 @@ var tests = [{
     result: '0x12345678976543213456786543212345675432',
     formattedResult: '0x12345678976543213456786543212345675432',
     notification: {
-        method: 'eth_subscription',
+        method: 'cfx_subscription',
         params: {
             subscription: '0x12345678976543213456786543212345675432',
             result: {
@@ -91,7 +91,7 @@ var tests = [{
             }
         }
     },
-    call: 'eth_'+ method
+    call: 'cfx_'+ method
 },{
     args: [{
         from: 'XE7338O073KYGTWWZN0F2WZ0R8PX5ZPPZS', // iban address
@@ -108,7 +108,7 @@ var tests = [{
     result: '0x12345678976543213456786543212345675432',
     formattedResult: '0x12345678976543213456786543212345675432',
     notification: {
-        method: 'eth_subscription',
+        method: 'cfx_subscription',
         params: {
             subscription: '0x12345678976543213456786543212345675432',
             result: {
@@ -116,7 +116,7 @@ var tests = [{
             }
         }
     },
-    call: 'eth_'+ method
+    call: 'cfx_'+ method
 
 // using local wallet
 },{
@@ -135,7 +135,7 @@ var tests = [{
     result: '0x12345678976543213456786543212345675432',
     formattedResult: '0x12345678976543213456786543212345675432',
     notification: {
-        method: 'eth_subscription',
+        method: 'cfx_subscription',
         params: {
             subscription: '0x12345678976543213456786543212345675432',
             result: {
@@ -143,7 +143,7 @@ var tests = [{
             }
         }
     },
-    call: 'eth_sendRawTransaction'
+    call: 'cfx_sendRawTransaction'
 },{
     useLocalWallet: function (web3) {
         web3.eth.accounts.wallet.add('0xf7d364e720c129acb940439a84a99185dd55af6f6d105018a8acfb7f8c008142');
@@ -160,7 +160,7 @@ var tests = [{
     result: '0x12345678976543213456786543212345675432',
     formattedResult: '0x12345678976543213456786543212345675432',
     notification: {
-        method: 'eth_subscription',
+        method: 'cfx_subscription',
         params: {
             subscription: '0x12345678976543213456786543212345675432',
             result: {
@@ -168,7 +168,7 @@ var tests = [{
             }
         }
     },
-    call: 'eth_sendRawTransaction'
+    call: 'cfx_sendRawTransaction'
 },{
     useLocalWallet: function (web3) {
         web3.eth.accounts.wallet.add('0xa1d364e720c129acb940439a84a99185dd55af6f6d105018a8acfb7f8c008142');
@@ -188,7 +188,7 @@ var tests = [{
     result: '0x12345678976543213456786543212345675432',
     formattedResult: '0x12345678976543213456786543212345675432',
     notification: {
-        method: 'eth_subscription',
+        method: 'cfx_subscription',
         params: {
             subscription: '0x12345678976543213456786543212345675432',
             result: {
@@ -196,7 +196,7 @@ var tests = [{
             }
         }
     },
-    call: 'eth_sendRawTransaction'
+    call: 'cfx_sendRawTransaction'
 },{
     error: true, // only for testing
     args: [{
@@ -204,7 +204,7 @@ var tests = [{
         to: '0xdbdbdb2cbd23b783741e8d7fcf51e459b497e4a6',
         value: '1234567654321'
     }],
-    call: 'eth_'+ method
+    call: 'cfx_'+ method
 }];
 
 testMethod.runTests('eth', method, tests);
@@ -245,7 +245,7 @@ describe(method, function () {
 
             provider.injectResult(null);
             provider.injectValidation(function (payload) {
-                assert.equal(payload.method, 'eth_getTransactionReceipt');
+                assert.equal(payload.method, 'cfx_getTransactionReceipt');
             });
 
 
@@ -329,7 +329,7 @@ describe(method, function () {
 
             provider.injectResult(null);
             provider.injectValidation(function (payload) {
-                assert.equal(payload.method, 'eth_getTransactionReceipt');
+                assert.equal(payload.method, 'cfx_getTransactionReceipt');
             });
 
 

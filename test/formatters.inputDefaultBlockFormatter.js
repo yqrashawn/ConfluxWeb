@@ -1,6 +1,6 @@
 var chai = require('chai');
 var assert = chai.assert;
-var formatters = require('../packages/web3-core-helpers/src/formatters.js');
+var formatters = require('../packages/conflux-web-core-helpers/src/formatters.js');
 
 var tests = [
     { value: 'genesis', expected: '0x0' },
@@ -11,7 +11,7 @@ var tests = [
     { value: '0x1', expected: '0x1' }
 ];
 
-describe('lib/web3/formatters', function () {
+describe('lib/conflux-web/formatters', function () {
     describe('inputDefaultBlockNumberFormatter', function () {
         tests.forEach(function (test) {
             it('should turn ' + test.value + ' to ' + test.expected, function () {

@@ -1,6 +1,6 @@
 var chai = require('chai');
 var assert = chai.assert;
-var Eth = require('../packages/web3-eth');
+var Eth = require('../packages/conflux-web-cfx');
 var eth = new Eth();
 
 var tests = [
@@ -23,7 +23,7 @@ var tests = [
     }
 ];
 
-describe('eth', function () {
+describe('cfx', function () {
     describe('Iban', function () {
         tests.forEach(function (test) {
             it('toAddress() should transform iban to address: ' +  test.address, function () {

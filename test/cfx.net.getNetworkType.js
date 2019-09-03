@@ -1,7 +1,7 @@
 var chai = require('chai');
 var assert = chai.assert;
 var FakeHttpProvider = require('./helpers/FakeIpcProvider');
-var Web3 = require('../packages/web3');
+var Web3 = require('../packages/conflux-web');
 
 var tests = [{
     hash: '0xd4e56740f876aef8c010b86a40d5f56745a118d0906a34e69aec8c0db1cb8fa3',
@@ -48,7 +48,7 @@ describe('getNetworkType', function () {
             });
             provider.injectValidation(function (payload) {
                 assert.equal(payload.jsonrpc, '2.0');
-                assert.equal(payload.method, 'eth_getBlockByNumber');
+                assert.equal(payload.method, 'cfx_getBlockByNumber');
                 assert.deepEqual(payload.params, ['0x0', false]);
             });
 

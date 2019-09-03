@@ -1,3 +1,4 @@
+/*
 var testMethod = require('./helpers/test.method.js');
 
 var method = 'unlockAccount';
@@ -18,3 +19,4 @@ var tests = [{
 }];
 
 testMethod.runTests(['eth','personal'], method, tests);
+*/

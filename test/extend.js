@@ -1,18 +1,18 @@
 var chai = require('chai');
 var assert = chai.assert;
 var FakeHttpProvider = require('./helpers/FakeIpcProvider');
-var Web3 = require('../packages/web3');
+var Web3 = require('../packages/conflux-web');
 var web3 = new Web3();
 
 
 var tests = [{
     methods: [{
         name: 'getGasPrice2',
-        call: 'eth_gasPrice',
+        call: 'cfx_gasPrice',
         outputFormatter: web3.extend.formatters.outputBigNumberFormatter
     },{
         name: 'getBalance',
-        call: 'eth_getBalance',
+        call: 'cfx_getBalance',
         params: 2,
         inputFormatter: [web3.utils.toChecksumAddress, web3.extend.formatters.inputDefaultBlockNumberFormatter],
         outputFormatter: web3.extend.formatters.outputBigNumberFormatter
@@ -21,11 +21,11 @@ var tests = [{
     property: 'admin',
     methods: [{
         name: 'getGasPrice3',
-        call: 'eth_gasPrice',
+        call: 'cfx_gasPrice',
         outputFormatter: web3.extend.formatters.outputBigNumberFormatter
     },{
         name: 'getBalance',
-        call: 'eth_getBalance',
+        call: 'cfx_getBalance',
         params: 2,
         inputFormatter: [web3.utils.toChecksumAddress, web3.extend.formatters.inputDefaultBlockNumberFormatter],
         outputFormatter: web3.extend.formatters.outputBigNumberFormatter
@@ -39,7 +39,7 @@ var tests = [{
 },{
     error: true,
     methods: [{
-        call: 'eth_gasPrice',
+        call: 'cfx_gasPrice',
         outputFormatter: web3.extend.formatters.outputBigNumberFormatter
     }]
 }];
