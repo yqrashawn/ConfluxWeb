@@ -679,7 +679,7 @@ var runTests = function(contractFactory) {
                     data: signature + '000000000000000000000000'+ addressLowercase.replace('0x',''),
                     from: address2,
                     to: addressLowercase
-                }, 'latest']);
+                }, 'latest_state']);
             });
             provider.injectResult('0x000000000000000000000000000000000000000000000000000000000000000a');
 
@@ -1366,7 +1366,7 @@ var runTests = function(contractFactory) {
                     data: sha3(signature).slice(0, 10) + '000000000000000000000000'+ addressLowercase.replace('0x',''),
                     to: addressLowercase,
                     from: address2
-                }, 'latest']);
+                }, 'latest_state']);
             });
 
             contract.methods.balance(address).call({from: address2});
@@ -1380,7 +1380,7 @@ var runTests = function(contractFactory) {
                     data: sha3(signature).slice(0, 10) + '000000000000000000000000'+ addressLowercase.replace('0x',''),
                     to: address2,
                     from: addressLowercase
-                }, 'latest']);
+                }, 'latest_state']);
             });
 
             contract.methods.balance(address).call({from: address});
@@ -1512,7 +1512,7 @@ var runTests = function(contractFactory) {
                 assert.deepEqual(payload.params, [{
                     data: '0x8708f4a12454534500000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000006000000000000000000000000000000000000000000000000000000000000000a0000000000000000000000000000000000000000000000000000000000000000c30786666323435343533343500000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000004ff24545345000000000000000000000000000000000000000000000000000000534500000000000000000000000000000000000000000000000000000000000045450000000000000000000000000000000000000000000000000000000000004533450000000000000000000000000000000000000000000000000000000000',
                     to: addressLowercase
-                }, 'latest']);
+                }, 'latest_state']);
             });
             provider.injectResult('0x000000000000000000000000'+ addressLowercase.replace('0x',''));
 
@@ -1532,7 +1532,7 @@ var runTests = function(contractFactory) {
                 assert.deepEqual(payload.params, [{
                     data: '0xbb853481',
                     to: addressLowercase
-                }, 'latest']);
+                }, 'latest_state']);
             });
             provider.injectResult('0x0000000000000000000000000000000000000000000000000000000000000005');
 
@@ -1551,7 +1551,7 @@ var runTests = function(contractFactory) {
                 assert.deepEqual(payload.params, [{
                     data: '0x533678270000000000000000000000000000000000000000000000000000000000000006',
                     to: addressLowercase
-                }, 'latest']);
+                }, 'latest_state']);
             });
             provider.injectResult('0x0000000000000000000000000000000000000000000000000000000000000006');
 
@@ -1572,7 +1572,7 @@ var runTests = function(contractFactory) {
                 assert.deepEqual(payload.params, [{
                     data: sha3(signature).slice(0, 10) + '000000000000000000000000'+ addressLowercase.replace('0x',''),
                     to: addressLowercase
-                }, 'latest']);
+                }, 'latest_state']);
             });
             provider.injectResult('0x0000000000000000000000000000000000000000000000000000000000000032');
 
@@ -1614,7 +1614,7 @@ var runTests = function(contractFactory) {
                 assert.deepEqual(payload.params, [{
                     data: sha3('balance(address)').slice(0, 10) + '000000000000000000000000'+ addressLowercase.replace('0x',''),
                     to: addressLowercase
-                }, 'latest']);
+                }, 'latest_state']);
             });
             provider.injectResult('0x000000000000000000000000000000000000000000000000000000000000000a');
             provider.injectValidation(function (payload) {
@@ -1622,7 +1622,7 @@ var runTests = function(contractFactory) {
                 assert.deepEqual(payload.params, [{
                     data: sha3('owner()').slice(0, 10),
                     to: addressLowercase
-                }, 'latest']);
+                }, 'latest_state']);
             });
             provider.injectResult('0x00000000000000000000000011f4d0a3c12e86b4b5f39b213f7e19d048276dae');
             provider.injectValidation(function (payload) {
@@ -1630,7 +1630,7 @@ var runTests = function(contractFactory) {
                 assert.deepEqual(payload.params, [{
                     data: sha3('getStr()').slice(0, 10),
                     to: addressLowercase
-                }, 'latest']);
+                }, 'latest_state']);
             });
             provider.injectResult('0x0000000000000000000000000000000000000000000000000000000000000020000000000000000000000000000000000000000000000000000000000000000848656c6c6f212521000000000000000000000000000000000000000000000000');
 
@@ -1662,7 +1662,7 @@ var runTests = function(contractFactory) {
                     data: sha3(signature).slice(0, 10),
                     to: addressLowercase,
                     from: address2
-                }, 'latest']);
+                }, 'latest_state']);
             });
 
             provider.injectResult('0x');
@@ -1687,7 +1687,7 @@ var runTests = function(contractFactory) {
                     data: sha3(signature).slice(0, 10),
                     to: addressLowercase,
                     from: address2
-                }, 'latest']);
+                }, 'latest_state']);
             });
 
             provider.injectResult('0x00000000000000000000000000000000000000000000000000000000000000200000000000000000000000000000000000000000000000000000000000000000');
@@ -2437,7 +2437,7 @@ var runTests = function(contractFactory) {
                     to: addressLowercase,
                     from: addressLowercase,
                     gas: '0xc350'
-                }, 'latest']);
+                }, 'latest_state']);
             });
             provider.injectResult('0x0000000000000000000000000000000000000000000000000000000000000032');
 
@@ -2462,7 +2462,7 @@ var runTests = function(contractFactory) {
                     to: addressLowercase,
                     from: addressLowercase,
                     gas: '0xc350'
-                }, 'latest']);
+                }, 'latest_state']);
             });
             provider.injectResult('0x0000000000000000000000000000000000000000000000000000000000000032');
 
@@ -2758,7 +2758,7 @@ var runTests = function(contractFactory) {
                         '0000000000000000000000000000000000000000000000000000000000000003',
                     to: addressLowercase
                 },
-                'latest'
+                'latest_state'
                 ]);
             });
 
@@ -2786,7 +2786,7 @@ var runTests = function(contractFactory) {
                         '0000000000000000000000000000000000000000000000000000000000000003',
                     to: addressLowercase
                 },
-                'latest'
+                'latest_state'
                 ]);
             });
             provider.injectResult('0x0000000000000000000000000000000000000000000000000000000000000005');
@@ -2811,7 +2811,7 @@ var runTests = function(contractFactory) {
                     data: sha3(signature).slice(0, 10),
                     to: addressLowercase
                 },
-                    'latest'
+                    'latest_state'
                 ]);
             });
             provider.injectResult('0x000000000000000000000000'+ addressLowercase.replace('0x',''));
@@ -2835,7 +2835,7 @@ var runTests = function(contractFactory) {
                     data: '0x2a4aedd50000000000000000000000009cc9a2c777605af16872e0997b3aeb91d96d5d8c',
                     to: addressLowercase
                 },
-                    'latest'
+                    'latest_state'
                 ]);
             });
 
@@ -2960,7 +2960,7 @@ var runTests = function(contractFactory) {
             });
             provider.injectValidation(function (payload) {
                 assert.equal(payload.method, 'cfx_getCode');
-                assert.deepEqual(payload.params, [addressLowercase, 'latest']);
+                assert.deepEqual(payload.params, [addressLowercase, 'latest_state']);
             });
             provider.injectResult('0x321');
 
@@ -3073,7 +3073,7 @@ describe('typical usage', function() {
         });
         provider.injectValidation(function (payload) {
             assert.equal(payload.method, 'cfx_getCode');
-            assert.deepEqual(payload.params, [addressLowercase, 'latest']);
+            assert.deepEqual(payload.params, [addressLowercase, 'latest_state']);
         });
         provider.injectResult('0x321');
 

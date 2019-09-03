@@ -52,7 +52,7 @@ describe('getNetworkType', function () {
                 assert.deepEqual(payload.params, ['0x0', false]);
             });
 
-            web3.eth.net.getNetworkType()
+            web3.cfx.net.getNetworkType()
             .then(function(res) {
                 assert.equal(res, test.result);
                 done();

@@ -14,7 +14,7 @@ var tests = [{
         data: '0x23455654',
         gas: '0xb',
         gasPrice: '0xb'
-    }, 'latest'],
+    }, 'latest_state'],
     result: '0x31981',
     formattedResult: '0x31981',
     call: 'eth_'+ method

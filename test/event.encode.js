@@ -141,13 +141,13 @@ var tests = [{
         filter: {
             a: 1
         },
-        fromBlock: 'latest',
-        toBlock: 'pending'
+        fromBlock: 'latest_state',
+        toBlock: 'latest_mined'
     },
     expected: {
         address: address,
-        fromBlock: 'latest',
-        toBlock: 'pending',
+        fromBlock: 'latest_state',
+        toBlock: 'latest_mined',
         topics: [
             signature,
             '0x0000000000000000000000000000000000000000000000000000000000000001'

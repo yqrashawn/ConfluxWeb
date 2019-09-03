@@ -17,7 +17,7 @@ describe('lib/conflux-web/method', function () {
                 name: 'call',
                 call: 'cfx_call',
                 params: 2,
-                inputFormatter: [formatters.inputCallFormatter, formatters.inputDefaultBlockNumberFormatter.bind({defaultBlock: 'latest'})]
+                inputFormatter: [formatters.inputCallFormatter, formatters.inputDefaultBlockNumberFormatter.bind({defaultBlock: 'latest_state'})]
             });
             method.setRequestManager(eth._requestManager);
 
@@ -31,7 +31,7 @@ describe('lib/conflux-web/method', function () {
                     from: '0x11f4d0a3c12e86b4b5f39b213f7e19d048276dae',
                     to: '0x11f4d0a3c12e86b4b5f39b213f7e19d048276dae',
                     data: '0xa123456'
-                }, "latest"]);
+                }, "latest_state"]);
             });
             provider.injectResult('0x1234567453543456321456321'); // tx hash
 
@@ -54,7 +54,7 @@ describe('lib/conflux-web/method', function () {
                 name: 'call',
                 call: 'cfx_call',
                 params: 2,
-                inputFormatter: [formatters.inputCallFormatter, formatters.inputDefaultBlockNumberFormatter.bind({defaultBlock: 'latest'})]
+                inputFormatter: [formatters.inputCallFormatter, formatters.inputDefaultBlockNumberFormatter.bind({defaultBlock: 'latest_state'})]
             });
             method.setRequestManager(eth._requestManager);
 
@@ -68,7 +68,7 @@ describe('lib/conflux-web/method', function () {
                     from: '0x11f4d0a3c12e86b4b5f39b213f7e19d048276dae',
                     to: '0x11f4d0a3c12e86b4b5f39b213f7e19d048276dae',
                     data: '0xa123456'
-                },"latest"]);
+                },"latest_state"]);
             });
             provider.injectError({
                 message: 'Wrong!',
@@ -99,7 +99,7 @@ describe('lib/conflux-web/method', function () {
                 name: 'call',
                 call: 'cfx_call',
                 params: 2,
-                inputFormatter: [formatters.inputCallFormatter, formatters.inputDefaultBlockNumberFormatter.bind({defaultBlock: 'latest'})],
+                inputFormatter: [formatters.inputCallFormatter, formatters.inputDefaultBlockNumberFormatter.bind({defaultBlock: 'latest_state'})],
                 outputFormatter: function (result) {
                     return new Error('Error!');
                 }
@@ -116,7 +116,7 @@ describe('lib/conflux-web/method', function () {
                     from: '0x11f4d0a3c12e86b4b5f39b213f7e19d048276dae',
                     to: '0x11f4d0a3c12e86b4b5f39b213f7e19d048276dae',
                     data: '0xa123456'
-                }, "latest"]);
+                }, "latest_state"]);
             });
             provider.injectResult('0x1234567453543456321456321'); // tx hash
 
@@ -141,7 +141,7 @@ describe('lib/conflux-web/method', function () {
                 name: 'call',
                 call: 'cfx_call',
                 params: 2,
-                inputFormatter: [formatters.inputCallFormatter, formatters.inputDefaultBlockNumberFormatter.bind({defaultBlock: 'latest'})],
+                inputFormatter: [formatters.inputCallFormatter, formatters.inputDefaultBlockNumberFormatter.bind({defaultBlock: 'latest_state'})],
                 outputFormatter: function (result) {
                     throw new Error('Error!');
                 }
@@ -158,7 +158,7 @@ describe('lib/conflux-web/method', function () {
                     from: '0x11f4d0a3c12e86b4b5f39b213f7e19d048276dae',
                     to: '0x11f4d0a3c12e86b4b5f39b213f7e19d048276dae',
                     data: '0xa123456'
-                }, "latest"]);
+                }, "latest_state"]);
             });
             provider.injectResult('0x1234567453543456321456321'); // tx hash
 
@@ -404,7 +404,7 @@ describe('lib/conflux-web/method', function () {
             });
             provider.injectValidation(function (payload) {
                 assert.equal(payload.method, 'cfx_getCode');
-                assert.deepEqual(payload.params, [address, 'latest']);
+                assert.deepEqual(payload.params, [address, 'latest_state']);
             });
             // code result
             provider.injectResult('0x321');
@@ -522,7 +522,7 @@ describe('lib/conflux-web/method', function () {
             });
             provider.injectValidation(function (payload) {
                 assert.equal(payload.method, 'cfx_getCode');
-                assert.deepEqual(payload.params, [address, 'latest']);
+                assert.deepEqual(payload.params, [address, 'latest_state']);
             });
             // code result
             provider.injectResult('0x');

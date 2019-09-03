@@ -1,12 +1,12 @@
 var chai = require('chai');
 var assert = chai.assert;
 var FakeHttpProvider = require('./helpers/FakeIpcProvider');
-var requestManager = require('../packages/web3-core-requestmanager');
+var requestManager = require('../packages/conflux-web-core-requestmanager');
 
 // TODO: handling errors!
 // TODO: validation of params!
 
-describe('lib/web3/requestmanager', function () {
+describe('lib/conflux-web/requestmanager', function () {
     describe('send', function () {
         it('should return expected result asynchronously', function (done) {
             var provider = new FakeHttpProvider();

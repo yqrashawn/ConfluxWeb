@@ -11,7 +11,7 @@ describe('web3.eth', function () {
     describe('defaultAccount', function () {
         it('should check if defaultAccount is set to proper value', function () {
             assert.equal(eth.defaultAccount, null);
-            assert.equal(eth.personal.defaultAccount, null);
+            //assert.equal(eth.personal.defaultAccount, null);
             assert.equal(eth.Contract.defaultAccount, null);
             assert.equal(eth.getCode.method.defaultAccount, null);
         });
@@ -19,7 +19,7 @@ describe('web3.eth', function () {
             eth.defaultAccount = setValue;
 
             assert.equal(eth.defaultAccount, setValue);
-            assert.equal(eth.personal.defaultAccount, setValue);
+            //assert.equal(eth.personal.defaultAccount, setValue);
             assert.equal(eth.Contract.defaultAccount, setValue);
             assert.equal(eth.getCode.method.defaultAccount, setValue);
         });

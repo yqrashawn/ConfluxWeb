@@ -121,7 +121,7 @@ var tests = [{
 // using local wallet
 },{
     useLocalWallet: function (web3) {
-        web3.eth.accounts.wallet.add('0xd7d364e720c129acb940439a84a99185dd55af6f6d105018a8acfb7f8c008142');
+        web3.cfx.accounts.wallet.add('0xd7d364e720c129acb940439a84a99185dd55af6f6d105018a8acfb7f8c008142');
     },
     walletFrom: '0x5af0838657202f865A4547b5eD28a64f799960DC',
     args: [{
@@ -146,7 +146,7 @@ var tests = [{
     call: 'cfx_sendRawTransaction'
 },{
     useLocalWallet: function (web3) {
-        web3.eth.accounts.wallet.add('0xf7d364e720c129acb940439a84a99185dd55af6f6d105018a8acfb7f8c008142');
+        web3.cfx.accounts.wallet.add('0xf7d364e720c129acb940439a84a99185dd55af6f6d105018a8acfb7f8c008142');
     },
     walletFrom: '0xE2873A6bE9Bc50E70dE4295d968459d4aCF515C0',
     args: [{
@@ -171,7 +171,7 @@ var tests = [{
     call: 'cfx_sendRawTransaction'
 },{
     useLocalWallet: function (web3) {
-        web3.eth.accounts.wallet.add('0xa1d364e720c129acb940439a84a99185dd55af6f6d105018a8acfb7f8c008142');
+        web3.cfx.accounts.wallet.add('0xa1d364e720c129acb940439a84a99185dd55af6f6d105018a8acfb7f8c008142');
     },
     walletFrom: '0xF65a29341Fd9F8357e060f2e21Bf3407062f2A46',
     args: [{
@@ -207,7 +207,7 @@ var tests = [{
     call: 'cfx_'+ method
 }];
 
-testMethod.runTests('eth', method, tests);
+testMethod.runTests('cfx', method, tests);
 
 
 // Test HTTPProvider with interval
@@ -267,14 +267,14 @@ describe(method, function () {
 
             if(test.error) {
 
-                assert.throws(function(){ web3.eth[method].apply(web3, args); });
+                assert.throws(function(){ web3.cfx[method].apply(web3, args); });
                 done();
 
 
             } else {
 
 
-                result = web3.eth[method].apply(web3, args);
+                result = web3.cfx[method].apply(web3, args);
 
                 result.then(function(result){
                     if(test.notification) {
@@ -350,7 +350,7 @@ describe(method, function () {
             var args = clone(test.args);
 
             if(test.error) {
-                assert.throws(function(){ web3.eth[method].apply(web3, args); });
+                assert.throws(function(){ web3.cfx[method].apply(web3, args); });
 
                 done();
 
@@ -362,7 +362,7 @@ describe(method, function () {
                     done();
                 });
 
-                web3.eth[method].apply(web3, args);
+                web3.cfx[method].apply(web3, args);
             }
         });
     });

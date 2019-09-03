@@ -16,7 +16,7 @@ var tests = [{
     formattedInput: [{
         'from': '0x00c5496aee77c1ba1f0854206a26dda82a81d6d8',
         'to': '0x00c5496aee77c1ba1f0854206a26dda82a81d6d8'
-    }, 'latest'],
+    }, 'latest_state'],
     result: '0xb',
     formattedResult: '0xb',
     call: 'cfx_'+ method

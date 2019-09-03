@@ -53,7 +53,7 @@ var Method = function Method(options) {
     // reference to eth.accounts
     this.accounts = options.accounts;
 
-    this.defaultBlock = options.defaultBlock || 'latest';
+    this.defaultBlock = options.defaultBlock || 'latest_state';
     this.defaultAccount = options.defaultAccount || null;
 };
 

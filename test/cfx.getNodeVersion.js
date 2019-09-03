@@ -12,3 +12,4 @@ var tests = [{
 
 
 testMethod.runTests('eth', method, tests);
+*/

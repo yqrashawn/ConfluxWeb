@@ -5,7 +5,7 @@ var FakeIpcProvider = require('./helpers/FakeIpcProvider');
 
 
 
-describe('lib/web3/batch', function () {
+describe('lib/conflux-web/batch', function () {
     describe('execute', function () {
         it('should execute batch request', function (done) {
 
@@ -35,14 +35,14 @@ describe('lib/web3/batch', function () {
                 var second = payload[1];
 
                 assert.equal(first.method, 'cfx_getBalance');
-                assert.deepEqual(first.params, ['0x0000000000000000000000000000000000000000', 'latest']);
+                assert.deepEqual(first.params, ['0x0000000000000000000000000000000000000000', 'latest_state']);
                 assert.equal(second.method, 'cfx_getBalance');
-                assert.deepEqual(second.params, ['0x0000000000000000000000000000000000000005', 'latest']);
+                assert.deepEqual(second.params, ['0x0000000000000000000000000000000000000005', 'latest_state']);
             });
 
             var batch = new web3.BatchRequest();
-            batch.add(web3.cfx.getBalance.request('0x0000000000000000000000000000000000000000', 'latest', callback));
-            batch.add(web3.cfx.getBalance.request('0x0000000000000000000000000000000000000005', 'latest', callback2));
+            batch.add(web3.cfx.getBalance.request('0x0000000000000000000000000000000000000000', 'latest_state', callback));
+            batch.add(web3.cfx.getBalance.request('0x0000000000000000000000000000000000000005', 'latest_state', callback2));
             batch.execute();
         });
 
@@ -131,14 +131,14 @@ describe('lib/web3/batch', function () {
 
 
                 assert.equal(payload[0].method, 'cfx_getBalance');
-                assert.deepEqual(payload[0].params, ['0x0000000000000000000000000000000000000022', 'latest']);
+                assert.deepEqual(payload[0].params, ['0x0000000000000000000000000000000000000022', 'latest_state']);
 
                 assert.equal(payload[1].method, 'cfx_call');
                 assert.deepEqual(payload[1].params, [{
                     'to': '0x1000000000000000000000000000000000000001',
                     'data': '0xe3d670d70000000000000000000000001000000000000000000000000000000000000001'
                 },
-                    'latest' // default block
+                    'latest_state' // default block
                 ]);
 
                 assert.equal(payload[2].method, 'cfx_call');
@@ -147,7 +147,7 @@ describe('lib/web3/batch', function () {
                     'from': '0x1000000000000000000000000000000000000002',
                     'data': '0xe3d670d70000000000000000000000001000000000000000000000000000000000000001'
                 },
-                    'latest' // default block
+                    'latest_state' // default block
                 ]);
 
                 assert.equal(payload[3].method, 'cfx_call');
@@ -170,7 +170,7 @@ describe('lib/web3/batch', function () {
 
 
             var batch = new web3.BatchRequest();
-            batch.add(web3.cfx.getBalance.request('0x0000000000000000000000000000000000000022', 'latest', callback));
+            batch.add(web3.cfx.getBalance.request('0x0000000000000000000000000000000000000022', 'latest_state', callback));
             batch.add(new web3.cfx.Contract(abi, address).methods.balance(address).call.request(callback2));
             batch.add(new web3.cfx.Contract(abi, address).methods.balance(address).call.request({from: '0x1000000000000000000000000000000000000002'}, callback2));
             batch.add(new web3.cfx.Contract(abi, address).methods.balance(address).call.request({from: '0x1000000000000000000000000000000000000003'}, 10, callback2));
@@ -221,7 +221,7 @@ describe('lib/web3/batch', function () {
                 var second = payload[1];
 
                 assert.equal(first.method, 'cfx_getBalance');
-                assert.deepEqual(first.params, ['0x0000000000000000000000000000000000000000', 'latest']);
+                assert.deepEqual(first.params, ['0x0000000000000000000000000000000000000000', 'latest_state']);
                 assert.equal(second.method, 'cfx_call');
                 assert.deepEqual(second.params, [{
                     'to': '0x1000000000000000000000000000000000000001',
@@ -232,7 +232,7 @@ describe('lib/web3/batch', function () {
             });
 
             var batch = new web3.BatchRequest();
-            batch.add(web3.cfx.getBalance.request('0x0000000000000000000000000000000000000000', 'latest', callback));
+            batch.add(web3.cfx.getBalance.request('0x0000000000000000000000000000000000000000', 'latest_state', callback));
             batch.add(new web3.cfx.Contract(abi, address).methods.balance(address).call.request({from: '0x0000000000000000000000000000000000000000'}, 10, callback2));
             provider.injectBatchResults([result, result2], true); // injects error
             batch.execute();
@@ -267,7 +267,7 @@ describe('lib/web3/batch', function () {
                     to: '0x1000000000000000000000000000000000000001',
                     data: '0x95d89b41'
                 },
-                'latest']);
+                'latest_state']);
             });
 
             const batch = new web3.BatchRequest();

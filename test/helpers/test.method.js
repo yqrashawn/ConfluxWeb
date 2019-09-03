@@ -2,7 +2,7 @@ var _ = require('underscore');
 var chai = require('chai');
 var assert = chai.assert;
 var FakeIpcProvider = require('./FakeIpcProvider');
-var Web3 = require('../../packages/web3');
+var Web3 = require('../../packages/conflux-web');
 
 var clone = function (object) { return object ? JSON.parse(JSON.stringify(object)) : []; };
 
@@ -20,8 +20,8 @@ var useLocalWallet = function (test, provider, web3) {
     provider.injectResult('0xa');
     provider.injectValidation(function (payload) {
         assert.equal(payload.jsonrpc, '2.0');
-        assert.equal(payload.method, 'eth_getTransactionCount');
-        assert.deepEqual(payload.params, [test.walletFrom, "latest"]);
+        assert.equal(payload.method, 'cfx_getTransactionCount');
+        assert.deepEqual(payload.params, [test.walletFrom, "latest_state"]);
     });
 };
 
@@ -36,7 +36,7 @@ var runTests = function (obj, method, tests) {
         objName = obj;
     }
 
-    var testName = objName ? 'web3.' + objName : 'web3';
+    var testName = objName ? 'conflux-web.' + objName : 'conflux-web';
 
     describe(testName, function () {
         describe(method, function () {
@@ -76,7 +76,7 @@ var runTests = function (obj, method, tests) {
                     if(test.notification) {
                         provider.injectResult(null);
                         provider.injectValidation(function (payload) {
-                            assert.equal(payload.method, 'eth_getTransactionReceipt');
+                            assert.equal(payload.method, 'cfx_getTransactionReceipt');
                         });
 
                         provider.injectResult(clone(test.result));

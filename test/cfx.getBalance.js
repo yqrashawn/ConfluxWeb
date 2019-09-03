@@ -62,19 +62,19 @@ var tests = [{
     call: 'cfx_'+ method
 }, {
     args: ['0x000000000000000000000000000000000000012d'],
-    formattedArgs: ['0x000000000000000000000000000000000000012d', 'latest'],
+    formattedArgs: ['0x000000000000000000000000000000000000012d', 'latest_state'],
     result: '0x31981',
     formattedResult: '203137',
     call: 'cfx_'+ method
 }, {
     args: ['000000000000000000000000000000000000012d'],
-    formattedArgs: ['0x000000000000000000000000000000000000012d', 'latest'],
+    formattedArgs: ['0x000000000000000000000000000000000000012d', 'latest_state'],
     result: '0x31981',
     formattedResult: '203137',
     call: 'cfx_'+ method
 }, {
     args: ['XE7338O073KYGTWWZN0F2WZ0R8PX5ZPPZS'], // iban address
-    formattedArgs: ['0x00c5496aee77c1ba1f0854206a26dda82a81d6d8', 'latest'],
+    formattedArgs: ['0x00c5496aee77c1ba1f0854206a26dda82a81d6d8', 'latest_state'],
     result: '0x31981',
     formattedResult: '203137',
     call: 'cfx_'+ method

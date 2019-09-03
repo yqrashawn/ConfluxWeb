@@ -442,7 +442,7 @@ describe("eth", function () {
                     provider.injectValidation(function (payload) {
                         assert.equal(payload.jsonrpc, '2.0');
                         assert.equal(payload.method, 'cfx_getTransactionCount');
-                        assert.deepEqual(payload.params, [test.address, "latest"]);
+                        assert.deepEqual(payload.params, [test.address, "latest_state"]);
                     });
 
                     var ethAccounts = new Accounts(web3);
@@ -535,7 +535,7 @@ describe("eth", function () {
                     provider.injectValidation(function (payload) {
                         assert.equal(payload.jsonrpc, '2.0');
                         assert.equal(payload.method, 'cfx_getTransactionCount');
-                        assert.deepEqual(payload.params, [test.address, "latest"]);
+                        assert.deepEqual(payload.params, [test.address, "latest_state"]);
                     });
 
                     var ethAccounts = new Accounts(web3);

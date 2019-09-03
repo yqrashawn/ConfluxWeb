@@ -66,7 +66,7 @@ var ConfluxWeb = function ConfluxWeb() {
 ConfluxWeb.version = version;
 ConfluxWeb.utils = utils;
 ConfluxWeb.modules = {
-    Eth: Eth,
+    Cfx: Cfx,
     Net: Net,
     //Personal: Personal,
     //Shh: Shh,

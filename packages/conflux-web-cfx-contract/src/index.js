@@ -179,7 +179,7 @@ var Contract = function Contract(jsonInterface, address, options) {
 
     // get default account from the Class
     var defaultAccount = this.constructor.defaultAccount;
-    var defaultBlock = this.constructor.defaultBlock || 'latest';
+    var defaultBlock = this.constructor.defaultBlock || 'latest_state';
 
     Object.defineProperty(this, 'defaultAccount', {
         get: function () {

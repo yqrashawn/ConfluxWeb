@@ -22,8 +22,8 @@ var tests = [{
     formattedResult: 11,
     call: 'cfx_getBlockTransactionCountByNumber'
 },{
-    args: ['pending'],
-    formattedArgs: ['pending'],
+    args: ['latest_mined'],
+    formattedArgs: ['latest_mined'],
     result: '0xb',
     formattedResult: 11,
     call: 'cfx_getBlockTransactionCountByNumber'

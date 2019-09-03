@@ -90,7 +90,7 @@ var Accounts = function Accounts() {
                 } else {
                     throw new Error('Address '+ address +' is not a valid address to get the "transactionCount".');
                 }
-            }, function () { return 'latest'; }]
+            }, function () { return 'latest_state'; }]
         })
     ];
     // attach methods to this._ethereumCall
@@ -248,7 +248,7 @@ Accounts.prototype.recoverTransaction = function recoverTransaction(rawTx) {
 Accounts.prototype.hashMessage = function hashMessage(data) {
     var message = utils.isHexStrict(data) ? utils.hexToBytes(data) : data;
     var messageBuffer = Buffer.from(message);
-    var preamble = "\x19Conflux Signed Message:\n" + message.length;
+    var preamble = "\x19Ethereum Signed Message:\n" + message.length;
     var preambleBuffer = Buffer.from(preamble);
     var ethMessage = Buffer.concat([preambleBuffer, messageBuffer]);
     return Hash.keccak256s(ethMessage);
