@@ -73,13 +73,13 @@ describe('lib/conflux-web/batch', function () {
 
                 assert.equal(first.method, 'cfx_accounts');
                 assert.deepEqual(first.params, []);
-                assert.equal(second.method, 'shh_post');
-                assert.deepEqual(second.params, [{}]);
+                //assert.equal(second.method, 'shh_post');
+                //assert.deepEqual(second.params, [{}]);
             });
 
             var batch = new web3.BatchRequest();
             batch.add(web3.cfx.getAccounts.request(callback));
-            batch.add(web3.shh.post.request({}, callback2));
+            //batch.add(web3.shh.post.request({}, callback2));
             batch.execute();
         });
 

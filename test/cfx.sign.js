@@ -14,7 +14,7 @@ var tests = [{
     call: 'cfx_'+ method
 },{
     useLocalWallet: function (web3) {
-        web3.eth.accounts.wallet.add('0xbe6383dad004f233317e46ddb46ad31b16064d14447a95cc1d8c8d4bc61c3728');
+        web3.cfx.accounts.wallet.add('0xbe6383dad004f233317e46ddb46ad31b16064d14447a95cc1d8c8d4bc61c3728');
     },
     args: ['Hello World!$*', '0xeb014f8c8b418db6b45774c326a0e64c78914dc0'],
     formattedArgs: ['0xeb014f8c8b418db6b45774c326a0e64c78914dc0', '0x48656c6c6f20576f726c6421242a'],
@@ -29,7 +29,7 @@ var tests = [{
     call: 'cfx_'+ method
 },{
     useLocalWallet: function (web3) {
-        web3.eth.accounts.wallet.add('0xbe6383dad004f233317e46ddb46ad31b16064d14447a95cc1d8c8d4bc61c3728');
+        web3.cfx.accounts.wallet.add('0xbe6383dad004f233317e46ddb46ad31b16064d14447a95cc1d8c8d4bc61c3728');
     },
     args: ['Hello Wolrd!$*', '0xeb014f8c8b418db6b45774c326a0e64c78914dc0'],
     formattedArgs: ['0xeb014f8c8b418db6b45774c326a0e64c78914dc0', '0x48656c6c6f20576f6c726421242a'],

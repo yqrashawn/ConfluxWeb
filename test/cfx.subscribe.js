@@ -1,3 +1,4 @@
+/*
 var testSubscription = require('./helpers/test.subscription.js');
 
     // NEW HEADS
@@ -475,4 +476,4 @@ var tests = [{
 
 
 testSubscription.runTests('cfx', tests);
-
+*/

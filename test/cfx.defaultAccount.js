@@ -41,11 +41,11 @@ describe('web3.eth', function () {
         it('should have different values for two Web3 instances', function () {
 
             var web31 = new Web3();
-            web31.eth.defaultAccount = setValue;
-            assert.equal(web31.eth.defaultAccount, setValue);
+            web31.cfx.defaultAccount = setValue;
+            assert.equal(web31.cfx.defaultAccount, setValue);
 
             var web32 = new Web3();
-            assert.equal(web32.eth.defaultAccount, null);
+            assert.equal(web32.cfx.defaultAccount, null);
 
         });
     });

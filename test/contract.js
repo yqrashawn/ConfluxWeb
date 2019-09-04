@@ -1375,7 +1375,7 @@ var runTests = function(contractFactory) {
             contract.options.address = address2;
 
             provider.injectValidation(function (payload) {
-                assert.equal(payload.mcfxod, 'cfx_call');
+                assert.equal(payload.method, 'cfx_call');
                 assert.deepEqual(payload.params, [{
                     data: sha3(signature).slice(0, 10) + '000000000000000000000000'+ addressLowercase.replace('0x',''),
                     to: address2,

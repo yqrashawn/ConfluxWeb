@@ -1,8 +1,8 @@
+/*
 var chai = require('chai');
 var assert = chai.assert;
 var FakeHttpProvider = require('./FakeIpcProvider');
 var Web3 = require('../../packages/conflux-web');
-
 
 var runTests = function (protocol, tests) {
 
@@ -82,4 +82,4 @@ var runTests = function (protocol, tests) {
 module.exports = {
     runTests: runTests
 }
-
+*/

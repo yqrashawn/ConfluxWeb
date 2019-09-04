@@ -50,67 +50,67 @@ describe('lib/conflux-web/setProvider', function () {
         var lib = new Web3(provider1);
         var lib2 = new Web3(provider3);
 
-        assert.equal(lib.eth.currentProvider.constructor.name, provider1.constructor.name);
-        assert.equal(lib.eth.net.currentProvider.constructor.name, provider1.constructor.name);
-        assert.equal(lib.eth.personal.currentProvider.constructor.name, provider1.constructor.name);
-        assert.equal(lib.eth.Contract.currentProvider.constructor.name, provider1.constructor.name);
-        assert.equal(lib.eth.accounts.currentProvider.constructor.name, provider1.constructor.name);
+        assert.equal(lib.cfx.currentProvider.constructor.name, provider1.constructor.name);
+        assert.equal(lib.cfx.net.currentProvider.constructor.name, provider1.constructor.name);
+        //assert.equal(lib.cfx.personal.currentProvider.constructor.name, provider1.constructor.name);
+        assert.equal(lib.cfx.Contract.currentProvider.constructor.name, provider1.constructor.name);
+        assert.equal(lib.cfx.accounts.currentProvider.constructor.name, provider1.constructor.name);
         //assert.equal(lib.shh.currentProvider.constructor.name, provider1.constructor.name);
         //assert.equal(lib.bzz.currentProvider, provider1.bzz);
 
-        assert.equal(lib.eth._requestManager.provider.constructor.name, provider1.constructor.name);
-        assert.equal(lib.eth.net._requestManager.provider.constructor.name, provider1.constructor.name);
-        assert.equal(lib.eth.personal._requestManager.provider.constructor.name, provider1.constructor.name);
-        assert.equal(lib.eth.Contract._requestManager.provider.constructor.name, provider1.constructor.name);
-        assert.equal(lib.eth.accounts._requestManager.provider.constructor.name, provider1.constructor.name);
+        assert.equal(lib.cfx._requestManager.provider.constructor.name, provider1.constructor.name);
+        assert.equal(lib.cfx.net._requestManager.provider.constructor.name, provider1.constructor.name);
+        //assert.equal(lib.eth.personal._requestManager.provider.constructor.name, provider1.constructor.name);
+        assert.equal(lib.cfx.Contract._requestManager.provider.constructor.name, provider1.constructor.name);
+        assert.equal(lib.cfx.accounts._requestManager.provider.constructor.name, provider1.constructor.name);
         //assert.equal(lib.shh._requestManager.provider.constructor.name, provider1.constructor.name);
 
-        assert.equal(lib2.eth.currentProvider.constructor.name, provider3.constructor.name);
-        assert.equal(lib2.eth.net.currentProvider.constructor.name, provider3.constructor.name);
-        assert.equal(lib2.eth.personal.currentProvider.constructor.name, provider3.constructor.name);
-        assert.equal(lib2.eth.Contract.currentProvider.constructor.name, provider3.constructor.name);
-        assert.equal(lib2.eth.accounts.currentProvider.constructor.name, provider3.constructor.name);
+        assert.equal(lib2.cfx.currentProvider.constructor.name, provider3.constructor.name);
+        assert.equal(lib2.cfx.net.currentProvider.constructor.name, provider3.constructor.name);
+        //assert.equal(lib2.eth.personal.currentProvider.constructor.name, provider3.constructor.name);
+        assert.equal(lib2.cfx.Contract.currentProvider.constructor.name, provider3.constructor.name);
+        assert.equal(lib2.cfx.accounts.currentProvider.constructor.name, provider3.constructor.name);
         //assert.equal(lib2.shh.currentProvider.constructor.name, provider3.constructor.name);
         //assert.equal(lib2.bzz.currentProvider, provider3.bzz);
 
-        assert.equal(lib2.eth._requestManager.provider.constructor.name, provider3.constructor.name);
-        assert.equal(lib2.eth.net._requestManager.provider.constructor.name, provider3.constructor.name);
-        assert.equal(lib2.eth.personal._requestManager.provider.constructor.name, provider3.constructor.name);
-        assert.equal(lib2.eth.Contract._requestManager.provider.constructor.name, provider3.constructor.name);
-        assert.equal(lib2.eth.accounts._requestManager.provider.constructor.name, provider3.constructor.name);
+        assert.equal(lib2.cfx._requestManager.provider.constructor.name, provider3.constructor.name);
+        assert.equal(lib2.cfx.net._requestManager.provider.constructor.name, provider3.constructor.name);
+        //assert.equal(lib2.eth.personal._requestManager.provider.constructor.name, provider3.constructor.name);
+        assert.equal(lib2.cfx.Contract._requestManager.provider.constructor.name, provider3.constructor.name);
+        assert.equal(lib2.cfx.accounts._requestManager.provider.constructor.name, provider3.constructor.name);
         //assert.equal(lib2.shh._requestManager.provider.constructor.name, provider3.constructor.name);
 
 
         lib.setProvider(provider2);
 
-        assert.equal(lib.eth.currentProvider.constructor.name, provider2.constructor.name);
-        assert.equal(lib.eth.net.currentProvider.constructor.name, provider2.constructor.name);
-        assert.equal(lib.eth.personal.currentProvider.constructor.name, provider2.constructor.name);
-        assert.equal(lib.eth.Contract.currentProvider.constructor.name, provider2.constructor.name);
-        assert.equal(lib.eth.accounts.currentProvider.constructor.name, provider2.constructor.name);
+        assert.equal(lib.cfx.currentProvider.constructor.name, provider2.constructor.name);
+        assert.equal(lib.cfx.net.currentProvider.constructor.name, provider2.constructor.name);
+        //assert.equal(lib.eth.personal.currentProvider.constructor.name, provider2.constructor.name);
+        assert.equal(lib.cfx.Contract.currentProvider.constructor.name, provider2.constructor.name);
+        assert.equal(lib.cfx.accounts.currentProvider.constructor.name, provider2.constructor.name);
         //assert.equal(lib.shh.currentProvider.constructor.name, provider2.constructor.name);
         //assert.equal(lib.bzz.currentProvider, provider2.bzz);
 
-        assert.equal(lib.eth._requestManager.provider.constructor.name, provider2.constructor.name);
-        assert.equal(lib.eth.net._requestManager.provider.constructor.name, provider2.constructor.name);
-        assert.equal(lib.eth.personal._requestManager.provider.constructor.name, provider2.constructor.name);
-        assert.equal(lib.eth.Contract._requestManager.provider.constructor.name, provider2.constructor.name);
-        assert.equal(lib.eth.accounts._requestManager.provider.constructor.name, provider2.constructor.name);
+        assert.equal(lib.cfx._requestManager.provider.constructor.name, provider2.constructor.name);
+        assert.equal(lib.cfx.net._requestManager.provider.constructor.name, provider2.constructor.name);
+        //assert.equal(lib.eth.personal._requestManager.provider.constructor.name, provider2.constructor.name);
+        assert.equal(lib.cfx.Contract._requestManager.provider.constructor.name, provider2.constructor.name);
+        assert.equal(lib.cfx.accounts._requestManager.provider.constructor.name, provider2.constructor.name);
         //assert.equal(lib.shh._requestManager.provider.constructor.name, provider2.constructor.name);
 
-        assert.equal(lib2.eth.currentProvider.constructor.name, provider3.constructor.name);
-        assert.equal(lib2.eth.net.currentProvider.constructor.name, provider3.constructor.name);
-        assert.equal(lib2.eth.personal.currentProvider.constructor.name, provider3.constructor.name);
-        assert.equal(lib2.eth.Contract.currentProvider.constructor.name, provider3.constructor.name);
-        assert.equal(lib2.eth.accounts.currentProvider.constructor.name, provider3.constructor.name);
+        assert.equal(lib2.cfx.currentProvider.constructor.name, provider3.constructor.name);
+        assert.equal(lib2.cfx.net.currentProvider.constructor.name, provider3.constructor.name);
+        //assert.equal(lib2.eth.personal.currentProvider.constructor.name, provider3.constructor.name);
+        assert.equal(lib2.cfx.Contract.currentProvider.constructor.name, provider3.constructor.name);
+        assert.equal(lib2.cfx.accounts.currentProvider.constructor.name, provider3.constructor.name);
         //assert.equal(lib2.shh.currentProvider.constructor.name, provider3.constructor.name);
         //assert.equal(lib2.bzz.currentProvider, provider3.bzz);
 
-        assert.equal(lib2.eth._requestManager.provider.constructor.name, provider3.constructor.name);
-        assert.equal(lib2.eth.net._requestManager.provider.constructor.name, provider3.constructor.name);
-        assert.equal(lib2.eth.personal._requestManager.provider.constructor.name, provider3.constructor.name);
-        assert.equal(lib2.eth.Contract._requestManager.provider.constructor.name, provider3.constructor.name);
-        assert.equal(lib2.eth.accounts._requestManager.provider.constructor.name, provider3.constructor.name);
+        assert.equal(lib2.cfx._requestManager.provider.constructor.name, provider3.constructor.name);
+        assert.equal(lib2.cfx.net._requestManager.provider.constructor.name, provider3.constructor.name);
+        //assert.equal(lib2.cfx.personal._requestManager.provider.constructor.name, provider3.constructor.name);
+        assert.equal(lib2.cfx.Contract._requestManager.provider.constructor.name, provider3.constructor.name);
+        assert.equal(lib2.cfx.accounts._requestManager.provider.constructor.name, provider3.constructor.name);
         //assert.equal(lib2.shh._requestManager.provider.constructor.name, provider3.constructor.name);
 
 
