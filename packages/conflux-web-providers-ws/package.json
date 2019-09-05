@@ -10,7 +10,7 @@
     "main": "src/index.js",
     "dependencies": {
         "underscore": "1.9.1",
-        "conflux-web-core-helpers": "../conflux-web-core-helpers",
+        "conflux-web-core-helpers": "1.2.1",
         "websocket": "github:web3-js/WebSocket-Node#polyfill/globalThis"
     }
 }

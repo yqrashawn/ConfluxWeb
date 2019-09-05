@@ -11,6 +11,6 @@
     "dependencies": {
         "ethers": "4.0.0-beta.3",
         "underscore": "1.9.1",
-        "conflux-web-utils": "../conflux-web-utils"
+        "conflux-web-utils": "1.2.1"
     }
 }

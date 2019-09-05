@@ -61,7 +61,13 @@
             "name": "Jeffery Wilcke",
             "email": "jeffrey.wilcke@ethereum.org",
             "url": "https://github.com/obscuren"
+        },
+        {
+             "name": "ping.li",
+            "email": "ping.li@conflux-chain.org",
+            "homepage": "https://github.com/liuis"
         }
+ 
     ],
     "devDependencies": {
         "@types/bignumber.js": "^4.0.2",

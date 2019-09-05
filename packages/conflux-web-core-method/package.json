@@ -10,9 +10,9 @@
     "main": "src/index.js",
     "dependencies": {
         "underscore": "1.9.1",
-        "conflux-web-core-helpers": "../conflux-web-core-helpers",
-        "conflux-web-core-promievent": "../conflux-web-core-promievent",
-        "conflux-web-core-subscriptions": "../conflux-web-core-subscriptions",
-        "conflux-web-utils": "../conflux-web-utils"
+        "conflux-web-core-helpers": "1.2.1",
+        "conflux-web-core-promievent": "1.2.1",
+        "conflux-web-core-subscriptions": "1.2.1",
+        "conflux-web-utils": "1.2.1"
     }
 }

@@ -11,6 +11,6 @@
     "dependencies": {
         "oboe": "2.1.4",
         "underscore": "1.9.1",
-        "conflux-web-core-helpers": "../conflux-web-core-helpers"
+        "conflux-web-core-helpers": "1.2.1"
     }
 }

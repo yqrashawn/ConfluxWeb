@@ -10,7 +10,7 @@
     "main": "src/index.js",
     "dependencies": {
         "underscore": "1.9.1",
-        "conflux-web-cfx-iban": "../conflux-web-cfx-iban",
-        "conflux-web-utils": "../conflux-web-utils"
+        "conflux-web-cfx-iban": "1.2.1",
+        "conflux-web-utils": "1.2.1"
     }
 }

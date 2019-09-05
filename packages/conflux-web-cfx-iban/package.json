@@ -10,6 +10,6 @@
     "main": "src/index.js",
     "dependencies": {
         "bn.js": "4.11.8",
-        "conflux-web-utils": "../conflux-web-utils"
+        "conflux-web-utils": "1.2.1"
     }
 }
