@@ -17,7 +17,7 @@ var tests = [{
     }, 'latest_state'],
     result: '0x31981',
     formattedResult: '0x31981',
-    call: 'eth_'+ method
+    call: 'cfx_'+ method
 },{
     args: [{
         to: '0xa94f5374fce5edbc8e2a8697c15331677e6ebf0b',

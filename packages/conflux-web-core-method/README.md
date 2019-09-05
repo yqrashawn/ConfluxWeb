@@ -33,7 +33,7 @@ var ConfluxWebMethod = require('conflux-web-core-method');
 
 var method = new ConfluxWebMethod({
     name: 'sendTransaction',
-    call: 'eth_sendTransaction',
+    call: 'cfx_sendTransaction',
     params: 1,
     inputFormatter: [inputTransactionFormatter]
 });
