@@ -1,6 +1,6 @@
 /* jshint ignore:start */
 Package.describe({
-    name: 'ethereum:web3',
+    name: 'conflux-chain:conflux-web',
     version: '1.2.1',
     summary: 'Conflux-Chain JavaScript API, middleware to talk to a ethreum node over RPC',
     git: 'https://github.com/Conflux-Chain/ConfluxWeb/tree/conflux-web-1.2.1',
