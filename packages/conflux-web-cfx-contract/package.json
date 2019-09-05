@@ -1,6 +1,6 @@
 {
     "name": "conflux-web-cfx-contract",
-    "version": "1.2.1",
+    "version": "1.2.2-alpha.0",
     "description": "Conflux module to interact with Ethereum smart contracts.",
     "repository": "https://github.com/Conflux-Chain/ConfluxWeb/tree/conflux-web-1.2.1/packages/conflux-web-cfx-contract",
     "license": "LGPL-3.0",
@@ -9,13 +9,13 @@
     },
     "main": "src/index.js",
     "dependencies": {
-        "underscore": "1.9.1",
-        "conflux-web-core": "1.2.1",
-        "conflux-web-core-helpers": "1.2.1",
-        "conflux-web-core-method": "1.2.1",
-        "conflux-web-core-promievent": "1.2.1",
-        "conflux-web-core-subscriptions": "1.2.1",
-        "conflux-web-cfx-abi": "1.2.1",
-        "conflux-web-utils": "1.2.1"
+        "conflux-web-cfx-abi": "1.2.2-alpha.0",
+        "conflux-web-core": "1.2.2-alpha.0",
+        "conflux-web-core-helpers": "1.2.2-alpha.0",
+        "conflux-web-core-method": "1.2.2-alpha.0",
+        "conflux-web-core-promievent": "1.2.2-alpha.0",
+        "conflux-web-core-subscriptions": "1.2.2-alpha.0",
+        "conflux-web-utils": "1.2.2-alpha.0",
+        "underscore": "1.9.1"
     }
 }

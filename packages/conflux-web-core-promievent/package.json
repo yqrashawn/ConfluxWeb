@@ -1,6 +1,6 @@
 {
     "name": "conflux-web-core-promievent",
-    "version": "1.2.1",
+    "version": "1.2.2-alpha.0",
     "description": "This package extends eventEmitters with promises to allow chaining as well as multiple final states of a function.",
     "repository": "https://github.com/Conflux-Chain/ConfluxWeb/tree/conflux-web-1.2.1/packages/conflux-web-core-promievent",
     "license": "LGPL-3.0",
