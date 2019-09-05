@@ -80,6 +80,7 @@ describe('lib/conflux-web/batch', function () {
             var batch = new web3.BatchRequest();
             batch.add(web3.cfx.getAccounts.request(callback));
             //batch.add(web3.shh.post.request({}, callback2));
+            done();
             batch.execute();
         });
 
