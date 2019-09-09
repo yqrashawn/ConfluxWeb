@@ -1,7 +1,7 @@
 {
   "namespace": "conflux-chain",
   "name": "conflux-web",
-  "version": "1.2.1",
+  "version": "1.2.2-alpha.0",
   "description": "conflux-chain JavaScript API",
   "license": "LGPL-3.0",
   "main": [

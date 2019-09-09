@@ -1,7 +1,7 @@
 /* jshint ignore:start */
 Package.describe({
     name: 'conflux-chain:conflux-web',
-    version: '1.2.1',
+    version: '1.2.2-alpha.0',
     summary: 'Conflux-Chain JavaScript API, middleware to talk to a ethreum node over RPC',
     git: 'https://github.com/Conflux-Chain/ConfluxWeb/tree/conflux-web-1.2.1',
     // By default, Meteor will default to using README.md for documentation.
