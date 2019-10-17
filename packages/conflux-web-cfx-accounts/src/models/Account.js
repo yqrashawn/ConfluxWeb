@@ -65,7 +65,7 @@ export default class Account {
         }
 
         const messageBuffer = Buffer.from(data);
-        const preamble = `\u0019Conflux Signed Message:\n${data.length}`;
+        const preamble = `\u0019Ethereum Signed Message:\n${data.length}`;
         const preambleBuffer = Buffer.from(preamble);
         const cfxMessage = Buffer.concat([preambleBuffer, messageBuffer]);
         const hash = Hash.keccak256s(cfxMessage);

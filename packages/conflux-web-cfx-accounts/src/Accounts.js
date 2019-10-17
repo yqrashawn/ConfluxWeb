@@ -118,7 +118,7 @@ export default class Accounts extends AbstractConfluxWebModule {
         }
 
         const messageBuffer = Buffer.from(data);
-        const preambleBuffer = Buffer.from(`\u0019Conflux Signed Message:\n${data.length}`);
+        const preambleBuffer = Buffer.from(`\u0019Ethereum Signed Message:\n${data.length}`);
         const cfxMessage = Buffer.concat([preambleBuffer, messageBuffer]);
 
         return Hash.keccak256s(cfxMessage);
