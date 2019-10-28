@@ -75,7 +75,7 @@ export default class Account {
         return {
             message: data,
             messageHash: hash,
-            v: vrs[0],
+            v: vrs[0] === '0x' ? '0x00' : vrs[0],
             r: vrs[1],
             s: vrs[2],
             signature
