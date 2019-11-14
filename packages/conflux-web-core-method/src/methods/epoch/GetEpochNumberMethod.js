@@ -26,7 +26,17 @@ export default class GetEpochNumberMethod extends AbstractMethod {
      * @constructor
      */
     constructor(utils, formatters, moduleInstance) {
-        super('cfx_epochNumber', 0, utils, formatters, moduleInstance);
+        super('cfx_epochNumber', 1, utils, formatters, moduleInstance);
+    }
+
+    beforeExecution(moduleInstance) {
+        if (this.parameters[0] === undefined) {
+            this.parameters[0] = 'latest_mined';
+        }
+
+        if (!this.formatters.isPredefinedEpochNumber(this.parameters[0])) {
+            throw new Error('The epoch field must be predefined epoch number.');
+        }
     }
 
     /**

@@ -20,7 +20,7 @@ describe('GetEpochNumberMethodTest', () => {
 
         expect(method.rpcMethod).toEqual('cfx_epochNumber');
 
-        expect(method.parametersAmount).toEqual(0);
+        expect(method.parametersAmount).toEqual(1);
 
         expect(method.utils).toEqual(Utils);
 
