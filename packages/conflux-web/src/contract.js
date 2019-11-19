@@ -23,7 +23,7 @@ class Called {
    * @return {Promise<PendingTransaction>} The PendingTransaction object.
    */
   sendTransaction(options) {
-    return this.method.client.sendTransaction({
+    return this.method.cfx.sendTransaction({
       to: this.to,
       data: this.data,
       ...options,
@@ -39,7 +39,7 @@ class Called {
    * @return {Promise<number>} The used gas for the simulated call/transaction.
    */
   estimateGas(options) {
-    return this.method.client.estimateGas({
+    return this.method.cfx.estimateGas({
       to: this.to,
       data: this.data,
       ...options,
@@ -54,11 +54,11 @@ class Called {
    * > Note: Can not alter the smart contract state.
    *
    * @param options {object} - See `Transaction.callOptions`.
-   * @param epochNumber {string|number} - See `Client.call`.
+   * @param epochNumber {string|number} - See `Conflux.call`.
    * @return {Promise<*>} Decoded contact call return.
    */
   async call(options, epochNumber) {
-    const result = await this.method.client.call(
+    const result = await this.method.cfx.call(
       {
         to: this.to,
         data: this.data,
@@ -80,9 +80,9 @@ class Called {
 }
 
 class Method extends Function {
-  constructor(client, { contract, abi }) {
+  constructor(cfx, { contract, abi }) {
     super();
-    this.client = client;
+    this.cfx = cfx;
     this.contract = contract;
     this.abi = abi;
     this.code = web3Abi.encodeFunctionSignature(this.abi);
@@ -117,8 +117,8 @@ class Method extends Function {
 }
 
 class Constructor extends Method {
-  constructor(client, { code, ...rest }) {
-    super(client, rest);
+  constructor(cfx, { code, ...rest }) {
+    super(cfx, rest);
     this.code = code;
   }
 
@@ -146,7 +146,7 @@ class Constructor extends Method {
 class Contract {
   /**
    *
-   * @param client {Client} - Client instance.
+   * @param cfx {Conflux} - Conflux instance.
    * @param options {object}
    * @param options.abi {array} - The json interface for the contract to instantiate
    * @param [options.address] {string} - The address of the smart contract to call, can be added later using `contract.address = '0x1234...'`
@@ -154,7 +154,7 @@ class Contract {
    * @return {object}
    *
    * @example
-   * > const contract = client.Contract({ abi, code });
+   * > const contract = cfx.Contract({ abi, code });
    * > contract instanceof Contract;
    true
 
@@ -169,7 +169,7 @@ class Contract {
    "0xc3ed1a06471be1d3bcd014051fbe078387ec0ad8"
 
    * @example
-   * > const contract = client.Contract({ abi, address });
+   * > const contract = cfx.Contract({ abi, address });
    * > contract.address
    "0xc3ed1a06471be1d3bcd014051fbe078387ec0ad8"
 
@@ -199,7 +199,7 @@ class Contract {
    * > await contract.count(); // data in block chain changed by transaction.
    BigNumber { _hex: '0x65' }
    */
-  constructor(client, { abi: contractABI, address, code }) {
+  constructor(cfx, { abi: contractABI, address, code }) {
     this.abi = contractABI; // XXX: Create a method named `abi` in solidity is a `Warning`.
     this.address = address; // XXX: Create a method named `address` in solidity is a `ParserError`
 
@@ -207,11 +207,11 @@ class Contract {
       switch (methodABI.type) {
         case 'constructor':
           // cover this.constructor
-          this.constructor = new Constructor(client, { contract: this, abi: methodABI, code });
+          this.constructor = new Constructor(cfx, { contract: this, abi: methodABI, code });
           break;
 
         case 'function':
-          this[methodABI.name] = new Method(client, { contract: this, abi: methodABI });
+          this[methodABI.name] = new Method(cfx, { contract: this, abi: methodABI });
           break;
 
         case 'event':

@@ -2,7 +2,7 @@ const lodash = require('lodash');
 const BigNumber = require('bignumber.js');
 const { Hex } = require('conflux-web-utils/src/type');
 
-const Client = require('../index');
+const Conflux = require('../index');
 const MockProvider = require('./__mocks__/provider');
 
 const ADDRESS = '0xa000000000000000000000000000000000000001';
@@ -10,36 +10,36 @@ const BLOCK_HASH = '0xe1b0000000000000000000000000000000000000000000000000000000
 const TX_HASH = '0xb0a0000000000000000000000000000000000000000000000000000000000000';
 
 // ----------------------------------------------------------------------------
-const client = new Client();
-client.provider = new MockProvider();
+const cfx = new Conflux();
+cfx.provider = new MockProvider();
 
 test('gasPrice', async () => {
-  const gasPrice = await client.gasPrice();
+  const gasPrice = await cfx.gasPrice();
 
   expect(Number.isInteger(gasPrice)).toBe(true);
 });
 
 test('epochNumber', async () => {
-  const epochNumber = await client.epochNumber();
+  const epochNumber = await cfx.epochNumber();
 
   expect(Number.isInteger(epochNumber)).toBe(true);
 });
 
 test('getBalance', async () => {
-  const balance = await client.getBalance(ADDRESS);
+  const balance = await cfx.getBalance(ADDRESS);
 
   expect(BigNumber.isBigNumber(balance)).toBe(true);
   expect(balance.isInteger()).toBe(true);
 });
 
 test('getTransactionCount', async () => {
-  const txCount = await client.getTransactionCount(ADDRESS);
+  const txCount = await cfx.getTransactionCount(ADDRESS);
 
   expect(Number.isInteger(txCount)).toBe(true);
 });
 
 test('getBlocksByEpoch', async () => {
-  const blockHashArray = await client.getBlocksByEpoch(0);
+  const blockHashArray = await cfx.getBlocksByEpoch(0);
 
   expect(Array.isArray(blockHashArray)).toBe(true);
   blockHashArray.forEach((txHash) => {
@@ -48,7 +48,7 @@ test('getBlocksByEpoch', async () => {
 });
 
 test('getBlockByHash', async () => {
-  const block = await client.getBlockByHash(BLOCK_HASH);
+  const block = await cfx.getBlockByHash(BLOCK_HASH);
 
   expect(Hex.isHex32(block.hash)).toBe(true);
   expect(Hex.isHex20(block.miner)).toBe(true);
@@ -74,7 +74,7 @@ test('getBlockByHash', async () => {
     expect(Hex.isHex32(txHash)).toBe(true);
   });
 
-  const blockDetail = await client.getBlockByHash(BLOCK_HASH, true);
+  const blockDetail = await cfx.getBlockByHash(BLOCK_HASH, true);
   expect(Array.isArray(blockDetail.transactions)).toBe(true);
   blockDetail.transactions.forEach((tx) => {
     expect(lodash.isPlainObject(tx)).toBe(true);
@@ -82,12 +82,12 @@ test('getBlockByHash', async () => {
 });
 
 test('getBlockByEpochNumber', async () => {
-  const block = await client.getBlockByEpochNumber(1);
+  const block = await cfx.getBlockByEpochNumber(1);
   expect(block.epochNumber).toBe(1);
 });
 
 test('getBlockByHashWithPivotAssumption', async () => {
-  const block = await client.getBlockByHashWithPivotAssumption(
+  const block = await cfx.getBlockByHashWithPivotAssumption(
     '0xe1b0000000000000000000000000000000000000000000000000000000000000',
     '0xe1b0000000000000000000000000000000000000000000000000000000000001',
     1,
@@ -97,7 +97,7 @@ test('getBlockByHashWithPivotAssumption', async () => {
 });
 
 test('getTransactionByHash', async () => {
-  const transaction = await client.getTransactionByHash(TX_HASH);
+  const transaction = await cfx.getTransactionByHash(TX_HASH);
 
   expect(Hex.isHex32(transaction.blockHash)).toBe(true);
   expect(Hex.isHex32(transaction.hash)).toBe(true);
@@ -117,7 +117,7 @@ test('getTransactionByHash', async () => {
 });
 
 test('getTransactionReceipt', async () => {
-  const receipt = await client.getTransactionReceipt(TX_HASH);
+  const receipt = await cfx.getTransactionReceipt(TX_HASH);
 
   expect(Hex.isHex32(receipt.blockHash)).toBe(true);
   expect(Hex.isHex32(receipt.transactionHash)).toBe(true);
@@ -134,7 +134,7 @@ test('getTransactionReceipt', async () => {
 });
 
 test('sendTransaction by address', async () => {
-  const promise = client.sendTransaction({
+  const promise = cfx.sendTransaction({
     nonce: 0,
     from: ADDRESS,
     gasPrice: 100,

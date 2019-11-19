@@ -1,11 +1,11 @@
 
 ----------
-# client
+# conflux
 
-A client of conflux node.
+A sdk of conflux.
 
 
-## Client.constructor
+## Conflux.constructor
 
 
 
@@ -13,7 +13,7 @@ A client of conflux node.
 
 Name                    | Type                    | Required | Default                  | Description
 ------------------------|-------------------------|----------|--------------------------|---------------------------------------------------------------
-options                 | object                  | false    |                          | Client and Provider constructor options.
+options                 | object                  | false    |                          | Conflux and Provider constructor options.
 options.url             | string                  | false    | ''                       | Url of provider to create.
 options.defaultEpoch    | string,number           | false    | EpochNumber.LATEST_STATE | Default epochNumber.
 options.defaultGasPrice | string,number,BigNumber | false    |                          | The default gas price in drip to use for transactions.
@@ -26,16 +26,16 @@ options.defaultGas      | string,number,BigNumber | false    |                  
 ### Example
 
 ```
-> const client = new Client({url:'http://testnet-jsonrpc.conflux-chain.org:12537'});
+> const Conflux = require('conflux-web');> const cfx = new Conflux({url:'http://testnet-jsonrpc.conflux-chain.org:12537'});
 ```
 
 ```
-> const client = new Client({  url: 'http://localhost:8000',  defaultGasPrice: 100,  defaultGas: 100000,  logger: console,});
+> const cfx = new Conflux({  url: 'http://localhost:8000',  defaultGasPrice: 100,  defaultGas: 100000,  logger: console,});
 ```
 
-## Client.setProvider
+## Conflux.setProvider
 
-Create and set `provider` for client.
+Create and set `provider`.
 
 ### Parameters
 
@@ -51,12 +51,12 @@ options | object | false    |         | Provider constructor options.
 ### Example
 
 ```
-> client.provider;
+> cfx.provider;
    HttpProvider {
      url: 'http://testnet-jsonrpc.conflux-chain.org:12537',
      timeout: 30000,
      ...
-   }> client.setProvider('http://localhost:8000');> client.provider; // Options will be reset to default.
+   }> cfx.setProvider('http://localhost:8000');> cfx.provider; // Options will be reset to default.
    HttpProvider {
      url: 'http://testnet-jsonrpc.conflux-chain.org:12537',
      timeout: 60000,
@@ -64,9 +64,9 @@ options | object | false    |         | Provider constructor options.
    }
 ```
 
-## Client.Contract
+## Conflux.Contract
 
-A shout cut for `new Contract(client, options);`
+A shout cut for `new Contract(cfx, options);`
 
 ### Parameters
 
@@ -79,9 +79,9 @@ options | object | true     |         | See `Contract.constructor`
 `Contract` 
 
 
-## Client.close
+## Conflux.close
 
-close client connection.
+close connection.
 
 ### Parameters
 
@@ -94,10 +94,10 @@ close client connection.
 ### Example
 
 ```
-> client.close();
+> cfx.close();
 ```
 
-## Client.gasPrice
+## Conflux.gasPrice
 
 Returns the current gas price oracle. The gas price is determined by the last few blocks median gas price.
 
@@ -112,11 +112,11 @@ Returns the current gas price oracle. The gas price is determined by the last fe
 ### Example
 
 ```
-> await client.gasPrice();
+> await cfx.gasPrice();
    0
 ```
 
-## Client.epochNumber
+## Conflux.epochNumber
 
 Returns the current epochNumber the client is on.
 
@@ -133,11 +133,11 @@ epochNumber | string,number | false    |         | The end epochNumber to count 
 ### Example
 
 ```
-> await client.epochNumber();
+> await cfx.epochNumber();
    200109
 ```
 
-## Client.getLogs
+## Conflux.getLogs
 
 Gets past logs, matching the given options.
 
@@ -146,8 +146,8 @@ Gets past logs, matching the given options.
 Name              | Type                  | Required | Default | Description
 ------------------|-----------------------|----------|---------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 options           | object                | false    |         |
-options.fromEpoch | string,number         | false    |         | The number of the earliest block
-options.toEpoch   | string,number         | false    |         | The number of the latest block
+options.fromEpoch | string,number         | false    |         | The number of the earliest block. (>=)
+options.toEpoch   | string,number         | false    |         | The number of the latest block.(<=)
 options.address   | string,Array.<string> | false    |         | An address or a list of addresses to only get logs from particular account(s).
 options.topics    | array                 | false    |         | An array of values which must each appear in the log entries. The order is important, if you want to leave topics out use null, e.g. [null, '0x12...']. You can also pass an array for each topic with options for that topic e.g. [null, ['option1', 'option2']]
 
@@ -158,14 +158,14 @@ options.topics    | array                 | false    |         | An array of val
 ### Example
 
 ```
-> await client.getPastLogs({
+> await cfx.getPastLogs({
       fromEpoch: 0,
       toEpoch: 'latest_mined',
       address: '0x169a10a431130B2F4853294A4a966803668af385'
     });
 ```
 
-## Client.getBalance
+## Conflux.getBalance
 
 Get the balance of an address at a given epochNumber.
 
@@ -183,13 +183,13 @@ epochNumber | string,number | false    | this.defaultEpoch | The end epochNumber
 ### Example
 
 ```
-> let balance = await client.getBalance("0xbbd9e9be525ab967e633bcdaeac8bd5723ed4d6b");> balance;
+> let balance = await cfx.getBalance("0xbbd9e9be525ab967e633bcdaeac8bd5723ed4d6b");> balance;
    BigNumber { s: 1, e: 18, c: [ 17936, 36034970586632 ] }> Drip.toCFX(balance).toString(10);
-   1.793636034970586632> balance = await client.getBalance("0xbbd9e9be525ab967e633bcdaeac8bd5723ed4d6b", 0);> balance.toString(10);
+   1.793636034970586632> balance = await cfx.getBalance("0xbbd9e9be525ab967e633bcdaeac8bd5723ed4d6b", 0);> balance.toString(10);
    0
 ```
 
-## Client.getTransactionCount
+## Conflux.getTransactionCount
 
 Get the numbers of transactions sent from this address.
 
@@ -207,12 +207,12 @@ epochNumber | string,number | false    | this.defaultEpoch | The end epochNumber
 ### Example
 
 ```
-> await client.getTransactionCount("0xbbd9e9be525ab967e633bcdaeac8bd5723ed4d6b");
-   61> await client.getTransactionCount("0xbbd9e9be525ab967e633bcdaeac8bd5723ed4d6b", EpochNumber.EARLIEST);
+> await cfx.getTransactionCount("0xbbd9e9be525ab967e633bcdaeac8bd5723ed4d6b");
+   61> await cfx.getTransactionCount("0xbbd9e9be525ab967e633bcdaeac8bd5723ed4d6b", EpochNumber.EARLIEST);
    0
 ```
 
-## Client.getBlocksByEpoch
+## Conflux.getBlocksByEpoch
 
 Get block hash array of a epochNumber.
 
@@ -229,15 +229,15 @@ epochNumber | string,number | true     |         | EpochNumber or string in ["la
 ### Example
 
 ```
-> await client.getBlocksByEpoch(EpochNumber.EARLIEST); // same as `client.getBlocksByEpoch(0)`
-   ['0x2da120ad267319c181b12136f9e36be9fba59e0d818f6cc789f04ee937b4f593']> await client.getBlocksByEpoch(449);
+> await cfx.getBlocksByEpoch(EpochNumber.EARLIEST); // same as `cfx.getBlocksByEpoch(0)`
+   ['0x2da120ad267319c181b12136f9e36be9fba59e0d818f6cc789f04ee937b4f593']> await cfx.getBlocksByEpoch(449);
    [
    '0x3d8b71208f81fb823f4eec5eaf2b0ec6b1457d381615eff2fbe24605ea333c39',
    '0x59339ff28bc235cceac9fa588ebafcbf61316e6a8c86c7a1d7239b9445d98e40'
    ]
 ```
 
-## Client.getBlockByHash
+## Conflux.getBlockByHash
 
 Returns a block matching the block hash.
 
@@ -275,7 +275,7 @@ detail    | boolean | false    | false   | `true` return transaction object, `fa
 ### Example
 
 ```
-> await client.getBlockByHash('0x59339ff28bc235cceac9fa588ebafcbf61316e6a8c86c7a1d7239b9445d98e40');
+> await cfx.getBlockByHash('0x59339ff28bc235cceac9fa588ebafcbf61316e6a8c86c7a1d7239b9445d98e40');
    {
     "miner": "0x0000000000000000000000000000000000000015",
     "hash": "0x59339ff28bc235cceac9fa588ebafcbf61316e6a8c86c7a1d7239b9445d98e40",
@@ -315,7 +315,7 @@ detail    | boolean | false    | false   | `true` return transaction object, `fa
 ```
 
 ```
-> await client.getBlockByHash('0x59339ff28bc235cceac9fa588ebafcbf61316e6a8c86c7a1d7239b9445d98e40', true);
+> await cfx.getBlockByHash('0x59339ff28bc235cceac9fa588ebafcbf61316e6a8c86c7a1d7239b9445d98e40', true);
    {
     "hash": "0x59339ff28bc235cceac9fa588ebafcbf61316e6a8c86c7a1d7239b9445d98e40",
     "transactions": [
@@ -341,7 +341,7 @@ detail    | boolean | false    | false   | `true` return transaction object, `fa
    }
 ```
 
-## Client.getBlockByEpochNumber
+## Conflux.getBlockByEpochNumber
 
 Get the epochNumber pivot block info.
 
@@ -359,14 +359,14 @@ detail      | boolean       | false    | false   | `true` return transaction obj
 ### Example
 
 ```
-> await client.getBlockByEpochNumber(449);
+> await cfx.getBlockByEpochNumber(449);
    {
      hash: '0x59339ff28bc235cceac9fa588ebafcbf61316e6a8c86c7a1d7239b9445d98e40',
      ...
    }
 ```
 
-## Client.getBlockByHashWithPivotAssumption
+## Conflux.getBlockByHashWithPivotAssumption
 
 Get block by `blockHash` if pivot block of `epochNumber` is `pivotBlockHash`.
 
@@ -385,14 +385,14 @@ epochNumber    | number | true     |         | EpochNumber or string in ["latest
 ### Example
 
 ```
-> await client.getBlockByHashWithPivotAssumption('0x3d8b71208f81fb823f4eec5eaf2b0ec6b1457d381615eff2fbe24605ea333c39','0x59339ff28bc235cceac9fa588ebafcbf61316e6a8c86c7a1d7239b9445d98e40'449,);
+> await cfx.getBlockByHashWithPivotAssumption('0x3d8b71208f81fb823f4eec5eaf2b0ec6b1457d381615eff2fbe24605ea333c39','0x59339ff28bc235cceac9fa588ebafcbf61316e6a8c86c7a1d7239b9445d98e40'449,);
    {
      hash: '0x3d8b71208f81fb823f4eec5eaf2b0ec6b1457d381615eff2fbe24605ea333c39',
      ...
    }
 ```
 
-## Client.getTransactionByHash
+## Conflux.getTransactionByHash
 
 Returns a transaction matching the given transaction hash.
 
@@ -424,7 +424,7 @@ txHash | string | true     |         | The transaction hash.
 ### Example
 
 ```
-> await client.getTransactionByHash('0xbe007c3eca92d01f3917f33ae983f40681182cf618defe75f490a65aac016914');
+> await cfx.getTransactionByHash('0xbe007c3eca92d01f3917f33ae983f40681182cf618defe75f490a65aac016914');
    {
       "blockHash": "0x59339ff28bc235cceac9fa588ebafcbf61316e6a8c86c7a1d7239b9445d98e40",
       "transactionIndex": 0,
@@ -444,7 +444,7 @@ txHash | string | true     |         | The transaction hash.
     }
 ```
 
-## Client.getTransactionReceipt
+## Conflux.getTransactionReceipt
 
 Returns the receipt of a transaction by transaction hash.
 
@@ -477,7 +477,7 @@ txHash | string | true     |         | The transaction hash.
 ### Example
 
 ```
-> await client.getTransactionReceipt('0xbe007c3eca92d01f3917f33ae983f40681182cf618defe75f490a65aac016914');
+> await cfx.getTransactionReceipt('0xbe007c3eca92d01f3917f33ae983f40681182cf618defe75f490a65aac016914');
    {
     "outcomeStatus": 0,
     "stateRoot": "0x3854f64be6c124dffd0ddca57270846f0f43a119ea681b4e5d022ade537d9f07",
@@ -494,7 +494,7 @@ txHash | string | true     |         | The transaction hash.
    }
 ```
 
-## Client.sendTransaction
+## Conflux.sendTransaction
 
 Creates new message call transaction or a contract creation, if the data field contains code.
 
@@ -517,7 +517,7 @@ options | object | true     |         | See `Transaction.callOptions`
 ```
 
 ```
-> const account = client.wallet.add(KEY);> await client.sendTransaction({
+> const account = cfx.wallet.add(KEY);> await cfx.sendTransaction({
       from: account, // from account instance will sign by local.
       to: ADDRESS,
       value: Drip.fromCFX(0.023),
@@ -526,7 +526,7 @@ options | object | true     |         | See `Transaction.callOptions`
 ```
 
 ```
-> await client.sendTransaction({
+> await cfx.sendTransaction({
       from: account,
       to: account, // to account instance
       value: Drip.fromCFX(0.03),
@@ -547,7 +547,7 @@ options | object | true     |         | See `Transaction.callOptions`
 ```
 
 ```
-> const promise = client.sendTransaction({ // Not await here, just get promise
+> const promise = cfx.sendTransaction({ // Not await here, just get promise
       from: account1,
       to: ADDRESS1,
       value: Drip.fromCFX(0.007),
@@ -581,7 +581,7 @@ options | object | true     |         | See `Transaction.callOptions`
    }
 ```
 
-## Client.sendRawTransaction
+## Conflux.sendRawTransaction
 
 Signs a transaction. This account needs to be unlocked.
 
@@ -598,11 +598,11 @@ hex  | string,Buffer | true     |         | Raw transaction string.
 ### Example
 
 ```
-> await client.sendRawTransaction('0xf85f800382520894bbd9e9b...');
+> await cfx.sendRawTransaction('0xf85f800382520894bbd9e9b...');
    "0xbe007c3eca92d01f3917f33ae983f40681182cf618defe75f490a65aac016914"
 ```
 
-## Client.getCode
+## Conflux.getCode
 
 Get the code at a specific address.
 
@@ -620,11 +620,11 @@ epochNumber | string,number | false    | this.defaultEpoch | EpochNumber or stri
 ### Example
 
 ```
-> await client.getCode('0xb385b84f08161f92a195953b980c8939679e906a');
+> await cfx.getCode('0xb385b84f08161f92a195953b980c8939679e906a');
    "0x6080604052348015600f57600080fd5b506004361060325760003560e01c806306661abd1460375780638..."
 ```
 
-## Client.call
+## Conflux.call
 
 Executes a message call transaction, which is directly executed in the VM of the node,
 but never mined into the block chain.
@@ -641,7 +641,7 @@ epochNumber | string,number | false    | this.defaultEpoch | The end epochNumber
 `Promise.<string>` Hex bytes the contract method return.
 
 
-## Client.estimateGas
+## Conflux.estimateGas
 
 Executes a message call or transaction and returns the amount of the gas used.
 
@@ -669,13 +669,13 @@ Contract with all its methods and events defined in its abi.
 
 ### Parameters
 
-Name            | Type   | Required | Default | Description
-----------------|--------|----------|---------|-----------------------------------------------------------------------------------------------------
-client          | Client | true     |         | Client instance.
-options         | object | true     |         |
-options.abi     | array  | true     |         | The json interface for the contract to instantiate
-options.address | string | false    |         | The address of the smart contract to call, can be added later using `contract.address = '0x1234...'`
-options.code    | string | false    |         | The byte code of the contract, can be added later using `contract.constructor.code = '0x1234...'`
+Name            | Type    | Required | Default | Description
+----------------|---------|----------|---------|-----------------------------------------------------------------------------------------------------
+cfx             | Conflux | true     |         | Conflux instance.
+options         | object  | true     |         |
+options.abi     | array   | true     |         | The json interface for the contract to instantiate
+options.address | string  | false    |         | The address of the smart contract to call, can be added later using `contract.address = '0x1234...'`
+options.code    | string  | false    |         | The byte code of the contract, can be added later using `contract.constructor.code = '0x1234...'`
 
 ### Return
 
@@ -684,7 +684,7 @@ options.code    | string | false    |         | The byte code of the contract, c
 ### Example
 
 ```
-> const contract = client.Contract({ abi, code });> contract instanceof Contract;
+> const contract = cfx.Contract({ abi, code });> contract instanceof Contract;
    true> contract.abi; // input abi
    [{type:'constructor', inputs:[...]}, ...]> contract.constructor.code; // input code
    "0x6080604052600080..."// deploy a contract by send constructor then wait and get contract address by `PendingTransaction.deployed` trick.> await contract.constructor(100).sendTransaction({ from: account }).deployed();
@@ -692,7 +692,7 @@ options.code    | string | false    |         | The byte code of the contract, c
 ```
 
 ```
-> const contract = client.Contract({ abi, address });> contract.address
+> const contract = cfx.Contract({ abi, address });> contract.address
    "0xc3ed1a06471be1d3bcd014051fbe078387ec0ad8"> await contract.count(); // call a method without parameter, get decoded return value.
    BigNumber { _hex: '0x64' }> await contract.inc(1); // call a method with parameters, get decoded return value.
    BigNumber { _hex: '0x65' }> await contract.count().call({ from: account }); // call a method from a account.
@@ -760,7 +760,7 @@ set contract method encode as `data`.
 Name        | Type          | Required | Default | Description
 ------------|---------------|----------|---------|-------------------------------
 options     | object        | true     |         | See `Transaction.callOptions`.
-epochNumber | string,number | true     |         | See `Client.call`.
+epochNumber | string,number | true     |         | See `Conflux.call`.
 
 ### Return
 
@@ -787,7 +787,7 @@ options.delay | number | false    | 0       | Defer execute after `delay` ms.
 
 ### Return
 
-`Promise.<(Object|null)>` See `Client.getTransactionByHash`
+`Promise.<(Object|null)>` See `Conflux.getTransactionByHash`
 
 
 ## PendingTransaction.mined
@@ -806,7 +806,7 @@ options.timeout | number | false    | 30*1000 | Loop timeout in ms.
 
 ### Return
 
-`Promise.<object>` See `Client.getTransactionByHash`
+`Promise.<object>` See `Conflux.getTransactionByHash`
 
 
 ## PendingTransaction.executed
@@ -827,7 +827,7 @@ options.timeout | number | false    | 60*1000 | Loop timeout in ms.
 
 ### Return
 
-`Promise.<object>` See `Client.getTransactionReceipt`
+`Promise.<object>` See `Conflux.getTransactionReceipt`
 
 
 ## PendingTransaction.confirmed
@@ -848,7 +848,7 @@ options.threshold | number | false    | 0.01      | Number in range (0,1)
 
 ### Return
 
-`Promise.<object>` See `Client.getTransactionReceipt`
+`Promise.<object>` See `Conflux.getTransactionReceipt`
 
 
 ## PendingTransaction.deployed
@@ -1000,9 +1000,9 @@ Contains an in memory wallet with multiple accounts.
 
 ### Parameters
 
-Name   | Type   | Required | Default | Description
--------|--------|----------|---------|------------
-client | Client | true     |         |
+Name | Type    | Required | Default | Description
+-----|---------|----------|---------|------------
+cfx  | Conflux | true     |         |
 
 ### Return
 

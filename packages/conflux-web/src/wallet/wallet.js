@@ -7,11 +7,11 @@ const Account = require('./account');
  */
 class Wallet {
   /**
-   * @param client {Client}
+   * @param cfx {Conflux}
    * @return {Wallet}
    */
-  constructor(client) {
-    this.client = client; // for remote wallet api operate
+  constructor(cfx) {
+    this.cfx = cfx; // for remote wallet api operate
     this.accountMap = new Map();
   }
 

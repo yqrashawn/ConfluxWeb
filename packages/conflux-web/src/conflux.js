@@ -9,21 +9,22 @@ const Wallet = require('./wallet');
 const Subscribe = require('./subscribe');
 
 /**
- * A client of conflux node.
+ * A sdk of conflux.
  */
-class Client {
+class Conflux {
   /**
-   * @param [options] {object} - Client and Provider constructor options.
+   * @param [options] {object} - Conflux and Provider constructor options.
    * @param [options.url=''] {string} - Url of provider to create.
    * @param [options.defaultEpoch=EpochNumber.LATEST_STATE] {string|number} - Default epochNumber.
    * @param [options.defaultGasPrice] {string|number|BigNumber} - The default gas price in drip to use for transactions.
    * @param [options.defaultGas] {string|number|BigNumber} - The default maximum gas provided for a transaction (gasLimit).
    *
    * @example
-   * > const client = new Client({url:'http://testnet-jsonrpc.conflux-chain.org:12537'});
+   * > const Conflux = require('conflux-web');
+   * > const cfx = new Conflux({url:'http://testnet-jsonrpc.conflux-chain.org:12537'});
    *
    * @example
-   * > const client = new Client({
+   * > const cfx = new Conflux({
    *   url: 'http://localhost:8000',
    *   defaultGasPrice: 100,
    *   defaultGas: 100000,
@@ -48,23 +49,24 @@ class Client {
     this._afterExecution('sendTransaction', result => new Subscribe.PendingTransaction(this, result));
   }
 
+  // TODO change to config provider
   /**
-   * Create and set `provider` for client.
+   * Create and set `provider`.
    *
    * @param [url=''] {string} - Url of provider to create.
    * @param [options] {object} - Provider constructor options.
    * @return {Object}
    *
    * @example
-   * > client.provider;
+   * > cfx.provider;
    HttpProvider {
      url: 'http://testnet-jsonrpc.conflux-chain.org:12537',
      timeout: 30000,
      ...
    }
 
-   * > client.setProvider('http://localhost:8000');
-   * > client.provider; // Options will be reset to default.
+   * > cfx.setProvider('http://localhost:8000');
+   * > cfx.provider; // Options will be reset to default.
    HttpProvider {
      url: 'http://testnet-jsonrpc.conflux-chain.org:12537',
      timeout: 60000,
@@ -95,7 +97,7 @@ class Client {
   }
 
   /**
-   * A shout cut for `new Contract(client, options);`
+   * A shout cut for `new Contract(cfx, options);`
    *
    * @param options {object} - See `Contract.constructor`
    * @return {Contract}
@@ -105,10 +107,10 @@ class Client {
   }
 
   /**
-   * close client connection.
+   * close connection.
    *
    * @example
-   * > client.close();
+   * > cfx.close();
    */
   close() {
     if (this.provider) {
@@ -123,7 +125,7 @@ class Client {
    * @return {Promise<number>} Gas price in drip.
    *
    * @example
-   * > await client.gasPrice();
+   * > await cfx.gasPrice();
    0
    */
   async gasPrice() {
@@ -138,7 +140,7 @@ class Client {
    * @return {Promise<number>} EpochNumber
    *
    * @example
-   * > await client.epochNumber();
+   * > await cfx.epochNumber();
    200109
    */
   async epochNumber(epochNumber = EpochNumber.LATEST_MINED) {
@@ -150,14 +152,14 @@ class Client {
    * Gets past logs, matching the given options.
    *
    * @param [options] {object}
-   * @param [options.fromEpoch] {string|number} - The number of the earliest block
-   * @param [options.toEpoch] {string|number} - The number of the latest block
+   * @param [options.fromEpoch] {string|number} - The number of the earliest block. (>=)
+   * @param [options.toEpoch] {string|number} - The number of the latest block.(<=)
    * @param [options.address] {string|string[]} - An address or a list of addresses to only get logs from particular account(s).
    * @param [options.topics] {array} - An array of values which must each appear in the log entries. The order is important, if you want to leave topics out use null, e.g. [null, '0x12...']. You can also pass an array for each topic with options for that topic e.g. [null, ['option1', 'option2']]
    * @return {Promise<array>} Array of log objects.
    *
    * @example
-   * > await client.getPastLogs({
+   * > await cfx.getPastLogs({
       fromEpoch: 0,
       toEpoch: 'latest_mined',
       address: '0x169a10a431130B2F4853294A4a966803668af385'
@@ -181,14 +183,14 @@ class Client {
    * @return {Promise<BigNumber>} Address balance number in drip.
    *
    * @example
-   * > let balance = await client.getBalance("0xbbd9e9be525ab967e633bcdaeac8bd5723ed4d6b");
+   * > let balance = await cfx.getBalance("0xbbd9e9be525ab967e633bcdaeac8bd5723ed4d6b");
    * > balance;
    BigNumber { s: 1, e: 18, c: [ 17936, 36034970586632 ] }
 
    * > Drip.toCFX(balance).toString(10);
    1.793636034970586632
 
-   * > balance = await client.getBalance("0xbbd9e9be525ab967e633bcdaeac8bd5723ed4d6b", 0);
+   * > balance = await cfx.getBalance("0xbbd9e9be525ab967e633bcdaeac8bd5723ed4d6b", 0);
    * > balance.toString(10);
    0
    */
@@ -205,10 +207,10 @@ class Client {
    * @return {Promise<number>}
    *
    * @example
-   * > await client.getTransactionCount("0xbbd9e9be525ab967e633bcdaeac8bd5723ed4d6b");
+   * > await cfx.getTransactionCount("0xbbd9e9be525ab967e633bcdaeac8bd5723ed4d6b");
    61
 
-   * > await client.getTransactionCount("0xbbd9e9be525ab967e633bcdaeac8bd5723ed4d6b", EpochNumber.EARLIEST);
+   * > await cfx.getTransactionCount("0xbbd9e9be525ab967e633bcdaeac8bd5723ed4d6b", EpochNumber.EARLIEST);
    0
    */
   async getTransactionCount(address, epochNumber = this.defaultEpoch) {
@@ -230,10 +232,10 @@ class Client {
    * @return {Promise<string[]>} Block hash array, last one is the pivot block hash of this epochNumber.
    *
    * @example
-   * > await client.getBlocksByEpoch(EpochNumber.EARLIEST); // same as `client.getBlocksByEpoch(0)`
+   * > await cfx.getBlocksByEpoch(EpochNumber.EARLIEST); // same as `cfx.getBlocksByEpoch(0)`
    ['0x2da120ad267319c181b12136f9e36be9fba59e0d818f6cc789f04ee937b4f593']
 
-   * > await client.getBlocksByEpoch(449);
+   * > await cfx.getBlocksByEpoch(449);
    [
    '0x3d8b71208f81fb823f4eec5eaf2b0ec6b1457d381615eff2fbe24605ea333c39',
    '0x59339ff28bc235cceac9fa588ebafcbf61316e6a8c86c7a1d7239b9445d98e40'
@@ -271,7 +273,7 @@ class Client {
    * - `object` deferredStateRootWithAux: Information of deferred state root
    *
    * @example
-   * > await client.getBlockByHash('0x59339ff28bc235cceac9fa588ebafcbf61316e6a8c86c7a1d7239b9445d98e40');
+   * > await cfx.getBlockByHash('0x59339ff28bc235cceac9fa588ebafcbf61316e6a8c86c7a1d7239b9445d98e40');
    {
     "miner": "0x0000000000000000000000000000000000000015",
     "hash": "0x59339ff28bc235cceac9fa588ebafcbf61316e6a8c86c7a1d7239b9445d98e40",
@@ -310,7 +312,7 @@ class Client {
    }
 
    * @example
-   * > await client.getBlockByHash('0x59339ff28bc235cceac9fa588ebafcbf61316e6a8c86c7a1d7239b9445d98e40', true);
+   * > await cfx.getBlockByHash('0x59339ff28bc235cceac9fa588ebafcbf61316e6a8c86c7a1d7239b9445d98e40', true);
    {
     "hash": "0x59339ff28bc235cceac9fa588ebafcbf61316e6a8c86c7a1d7239b9445d98e40",
     "transactions": [
@@ -351,7 +353,7 @@ class Client {
    * @return {Promise<object|null>} The block info (same as `getBlockByHash`).
    *
    * @example
-   * > await client.getBlockByEpochNumber(449);
+   * > await cfx.getBlockByEpochNumber(449);
    {
      hash: '0x59339ff28bc235cceac9fa588ebafcbf61316e6a8c86c7a1d7239b9445d98e40',
      ...
@@ -374,7 +376,7 @@ class Client {
    * @return {Promise<object>} The block info (same as `getBlockByHash`).
    *
    * @example
-   * > await client.getBlockByHashWithPivotAssumption(
+   * > await cfx.getBlockByHashWithPivotAssumption(
    * '0x3d8b71208f81fb823f4eec5eaf2b0ec6b1457d381615eff2fbe24605ea333c39',
    * '0x59339ff28bc235cceac9fa588ebafcbf61316e6a8c86c7a1d7239b9445d98e40'
    * 449,
@@ -420,7 +422,7 @@ class Client {
    * - `string` v: ECDSA recovery id
    *
    * @example
-   * > await client.getTransactionByHash('0xbe007c3eca92d01f3917f33ae983f40681182cf618defe75f490a65aac016914');
+   * > await cfx.getTransactionByHash('0xbe007c3eca92d01f3917f33ae983f40681182cf618defe75f490a65aac016914');
    {
       "blockHash": "0x59339ff28bc235cceac9fa588ebafcbf61316e6a8c86c7a1d7239b9445d98e40",
       "transactionIndex": 0,
@@ -468,7 +470,7 @@ class Client {
    * - `string` logsBloom: Log bloom.
    *
    * @example
-   * > await client.getTransactionReceipt('0xbe007c3eca92d01f3917f33ae983f40681182cf618defe75f490a65aac016914');
+   * > await cfx.getTransactionReceipt('0xbe007c3eca92d01f3917f33ae983f40681182cf618defe75f490a65aac016914');
    {
     "outcomeStatus": 0,
     "stateRoot": "0x3854f64be6c124dffd0ddca57270846f0f43a119ea681b4e5d022ade537d9f07",
@@ -501,8 +503,8 @@ class Client {
    * > // TODO call with address
    *
    * @example
-   * > const account = client.wallet.add(KEY);
-   * > await client.sendTransaction({
+   * > const account = cfx.wallet.add(KEY);
+   * > await cfx.sendTransaction({
       from: account, // from account instance will sign by local.
       to: ADDRESS,
       value: Drip.fromCFX(0.023),
@@ -510,7 +512,7 @@ class Client {
    "0x459473cb019bb59b935abf5d6e76d66564aafa313efd3e337b4e1fa6bd022cc9"
 
    * @example
-   * > await client.sendTransaction({
+   * > await cfx.sendTransaction({
       from: account,
       to: account, // to account instance
       value: Drip.fromCFX(0.03),
@@ -530,7 +532,7 @@ class Client {
    }
 
    * @example
-   * > const promise = client.sendTransaction({ // Not await here, just get promise
+   * > const promise = cfx.sendTransaction({ // Not await here, just get promise
       from: account1,
       to: ADDRESS1,
       value: Drip.fromCFX(0.007),
@@ -600,7 +602,7 @@ class Client {
    * @return {Promise<PendingTransaction>} The PendingTransaction object. See `sendTransaction`
    *
    * @example
-   * > await client.sendRawTransaction('0xf85f800382520894bbd9e9b...');
+   * > await cfx.sendRawTransaction('0xf85f800382520894bbd9e9b...');
    "0xbe007c3eca92d01f3917f33ae983f40681182cf618defe75f490a65aac016914"
    */
   async sendRawTransaction(hex) {
@@ -616,7 +618,7 @@ class Client {
    * @return {Promise<string>} Code hex string
    *
    * @example
-   * > await client.getCode('0xb385b84f08161f92a195953b980c8939679e906a');
+   * > await cfx.getCode('0xb385b84f08161f92a195953b980c8939679e906a');
    "0x6080604052348015600f57600080fd5b506004361060325760003560e01c806306661abd1460375780638..."
    */
   async getCode(address, epochNumber = this.defaultEpoch) {
@@ -671,4 +673,4 @@ class Client {
   }
 }
 
-module.exports = Client;
+module.exports = Conflux;

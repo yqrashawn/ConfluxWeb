@@ -1,21 +1,21 @@
 const { Hex } = require('conflux-web-utils/src/type');
-const Client = require('../index');
+const Conflux = require('../index');
 const MockProvider = require('./__mocks__/provider');
 const { abi, code, address } = require('./__mocks__/contract.json');
 
 const ADDRESS = '0xbbd9e9be525ab967e633bcdaeac8bd5723ed4d6b';
 
 // ----------------------------------------------------------------------------
-const client = new Client({
+const cfx = new Conflux({
   defaultGasPrice: 100,
   defaultGas: 1000000,
 });
-client.provider = new MockProvider();
+cfx.provider = new MockProvider();
 
 test('Contract', async () => {
   let value;
 
-  const contract = await client.Contract({ abi, code, address });
+  const contract = await cfx.Contract({ abi, code, address });
 
   expect(contract.address).toBe(address);
   expect(contract.constructor.code).toBe(code);
