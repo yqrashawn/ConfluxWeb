@@ -1,7 +1,7 @@
 const lodash = require('lodash');
 const { Hex, Address, EpochNumber, BlockHash, TxHash } = require('conflux-web-utils/src/type');
 const Transaction = require('conflux-web-utils/src/transaction');
-const { HttpProvider, WebsocketProvider } = require('../lib/provider');
+const providerFactory = require('../lib/provider');
 
 const parse = require('./utils/parse');
 const Contract = require('./contract');
@@ -49,11 +49,10 @@ class Conflux {
     this._afterExecution('sendTransaction', result => new Subscribe.PendingTransaction(this, result));
   }
 
-  // TODO change to config provider
   /**
    * Create and set `provider`.
    *
-   * @param [url=''] {string} - Url of provider to create.
+   * @param url {string} - Url of provider to create.
    * @param [options] {object} - Provider constructor options.
    * @return {Object}
    *
@@ -61,31 +60,27 @@ class Conflux {
    * > cfx.provider;
    HttpProvider {
      url: 'http://testnet-jsonrpc.conflux-chain.org:12537',
-     timeout: 30000,
+     timeout: 60000,
      ...
    }
 
    * > cfx.setProvider('http://localhost:8000');
-   * > cfx.provider; // Options will be reset to default.
+   * > cfx.provider;
    HttpProvider {
-     url: 'http://testnet-jsonrpc.conflux-chain.org:12537',
+     url: 'http://localhost:8000',
      timeout: 60000,
      ...
    }
    */
-  setProvider(url, options) {
-    if (typeof url !== 'string') {
-      throw new Error('provider url must by string');
-    }
-
-    if (url === '') {
-      this.provider = null;
-    } else if (url.startsWith('http')) {
-      this.provider = new HttpProvider(url, options);
-    } else if (url.startsWith('ws')) {
-      this.provider = new WebsocketProvider(url, options);
+  setProvider(url, options = {}) {
+    if (!this.provider) {
+      this.provider = providerFactory(url, options);
+    } else if (url !== this.provider.url) {
+      const provider = providerFactory(url, { ...this.provider, ...options });
+      this.provider.close(); // close after factory create success
+      this.provider = provider;
     } else {
-      throw new Error(`Invalid protocol or url "${url}"`);
+      Object.assign(this.provider, options);
     }
 
     return this.provider;

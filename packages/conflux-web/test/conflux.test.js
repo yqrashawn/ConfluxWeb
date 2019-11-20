@@ -3,13 +3,15 @@ const Conflux = require('../index');
 
 // ----------------------------------------------------------------------------
 
-test('constructor()', () => {
+test('constructor()', async () => {
   const cfx = new Conflux();
 
   expect(cfx.defaultEpoch).toBe(EpochNumber.LATEST_STATE);
   expect(cfx.defaultGasPrice).toBe(undefined);
   expect(cfx.defaultGas).toBe(undefined);
-  expect(cfx.provider).toBe(null);
+  expect(cfx.provider.constructor.name).toBe('BaseProvider');
+
+  await expect(cfx.provider.call()).rejects.toThrow('call not implement');
 });
 
 test('constructor({...})', () => {
@@ -28,18 +30,23 @@ test('constructor({...})', () => {
 
 test('cfx.setProvider', () => {
   const cfx = new Conflux();
-  expect(cfx.provider).toBe(null);
 
-  cfx.setProvider('http://localhost:80');
+  expect(cfx.provider.constructor.name).toBe('BaseProvider');
+  expect(cfx.provider.timeout).toBe(60 * 1000);
+
+  cfx.setProvider('http://localhost:80', { timeout: 30 * 1000 });
   expect(cfx.provider.constructor.name).toBe('HttpProvider');
+  expect(cfx.provider.timeout).toBe(30 * 1000);
 
   cfx.setProvider('ws://localhost:443');
   expect(cfx.provider.constructor.name).toBe('WebsocketProvider');
+  expect(cfx.provider.timeout).toBe(30 * 1000);
 
   cfx.setProvider('');
-  expect(cfx.provider).toBe(null);
+  expect(cfx.provider.constructor.name).toBe('BaseProvider');
+  expect(cfx.provider.timeout).toBe(30 * 1000);
 
-  expect(() => cfx.setProvider()).toThrow('provider url must by string');
+  expect(() => cfx.setProvider()).toThrow('url must be string');
 });
 
 test('cfx.close', () => {

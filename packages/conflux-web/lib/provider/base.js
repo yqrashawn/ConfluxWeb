@@ -33,7 +33,7 @@ class BaseProvider {
   }
 
   async call() {
-    throw new Error(`NotImplementError: ${this.constructor.name}.call(method, ...params) not implement.`);
+    throw new Error(`NotImplementError: ${this.constructor.name}.call not implement.`);
   }
 
   close() {}

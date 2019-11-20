@@ -41,7 +41,7 @@ Create and set `provider`.
 
 Name    | Type   | Required | Default | Description
 --------|--------|----------|---------|------------------------------
-url     | string | false    | ''      | Url of provider to create.
+url     | string | true     |         | Url of provider to create.
 options | object | false    |         | Provider constructor options.
 
 ### Return
@@ -54,11 +54,11 @@ options | object | false    |         | Provider constructor options.
 > cfx.provider;
    HttpProvider {
      url: 'http://testnet-jsonrpc.conflux-chain.org:12537',
-     timeout: 30000,
+     timeout: 60000,
      ...
-   }> cfx.setProvider('http://localhost:8000');> cfx.provider; // Options will be reset to default.
+   }> cfx.setProvider('http://localhost:8000');> cfx.provider;
    HttpProvider {
-     url: 'http://testnet-jsonrpc.conflux-chain.org:12537',
+     url: 'http://localhost:8000',
      timeout: 60000,
      ...
    }
