@@ -12,7 +12,7 @@
   ],
   "dependencies": {
     "bignumber.js": "^9.0.0",
-    "conflux-web-utils": "0.2.0-alpha.0",
+    "conflux-web-utils": "0.2.0-alpha.2",
     "ethers": "^4.0.38",
     "lodash": "^4.17.15",
     "superagent": "^5.1.0",
