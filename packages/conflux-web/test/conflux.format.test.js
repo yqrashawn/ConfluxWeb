@@ -183,7 +183,7 @@ test('sendTransaction by address', async () => {
   };
 
   await expect(cfx.sendTransaction()).rejects.toThrow('Cannot read property');
-  await expect(cfx.sendTransaction({ nonce: 0 })).rejects.toThrow('`from` is required and should match `Address`');
+  await expect(cfx.sendTransaction({ nonce: 0 })).rejects.toThrow('\'from\' is required and should match \'Address\'');
 
   cfx.provider.call = async (method, options) => {
     expect(method).toBe('cfx_sendTransaction');
@@ -271,7 +271,7 @@ test('call', async () => {
   };
 
   await expect(cfx.call()).rejects.toThrow('Cannot read property');
-  await expect(cfx.call({ nonce: 0 })).rejects.toThrow('`to` is required and should match `Address`');
+  await expect(cfx.call({ nonce: 0 })).rejects.toThrow('\'to\' is required and should match \'Address\'');
 
   cfx.provider.call = async (method, options, epochNumber) => {
     expect(method).toBe('cfx_call');
@@ -320,7 +320,6 @@ test('estimateGas', async () => {
   };
 
   await expect(cfx.estimateGas()).rejects.toThrow('Cannot read property');
-  await expect(cfx.estimateGas({ nonce: 0 })).rejects.toThrow('`to` is required and should match `Address`');
 
   cfx.provider.call = async (method, options) => {
     expect(method).toBe('cfx_estimateGas');

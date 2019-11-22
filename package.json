@@ -3,14 +3,6 @@
   "description": "Conflux JavaScript API wrapper repository",
   "license": "LGPL-3.0",
   "main": "./packages/conflux-web/src/index.js",
-  "scripts": {
-    "clean": "lerna clean",
-    "link": "lerna link",
-    "bootstrap": "lerna bootstrap",
-    "publish": "lerna publish --no-git-tag-version --no-push",
-    "test": "jest",
-    "test:coverage": "jest --coverage"
-  },
   "repository": {
     "type": "git",
     "url": "https://github.com/Conflux-Chain/ConfluxWeb.git"
@@ -29,5 +21,13 @@
     "eslint": "^6.3.0",
     "eslint-config-airbnb-base": "^14.0.0",
     "eslint-plugin-import": "^2.18.2"
+  },
+  "scripts": {
+    "clean": "lerna clean",
+    "link": "lerna link",
+    "bootstrap": "lerna bootstrap",
+    "publish": "lerna publish --no-git-tag-version --no-push",
+    "test": "jest",
+    "test:coverage": "jest --coverage"
   }
 }

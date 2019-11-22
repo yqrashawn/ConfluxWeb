@@ -39,11 +39,11 @@ test('Transaction', () => {
 
 test('sendOptions', () => {
   expect(() => Transaction.sendOptions()).toThrow('Cannot destructure property');
-  expect(() => Transaction.sendOptions({})).toThrow('`from` is required and should match `Address`');
-  expect(() => Transaction.sendOptions({ from: ADDRESS })).toThrow('`nonce` is required and should match `UInt`');
-  expect(() => Transaction.sendOptions({ nonce: 0, from: ADDRESS })).toThrow('`gasPrice` is required and should match `Drip`');
+  expect(() => Transaction.sendOptions({})).toThrow('\'from\' is required and should match \'Address\'');
+  expect(() => Transaction.sendOptions({ from: ADDRESS })).toThrow('\'nonce\' is required and should match \'UInt\'');
+  expect(() => Transaction.sendOptions({ nonce: 0, from: ADDRESS })).toThrow('\'gasPrice\' is required and should match \'Drip\'');
   expect(() => Transaction.sendOptions({ nonce: 0, from: ADDRESS, gasPrice: 1 }))
-    .toThrow('`gas` is required and should match `UInt`');
+    .toThrow('\'gas\' is required and should match \'UInt\'');
 
   const tx = Transaction.sendOptions({ nonce: 0, from: ADDRESS, gasPrice: 1, gas: 21000 });
   expect(tx.from).toBe(ADDRESS);
@@ -57,7 +57,7 @@ test('sendOptions', () => {
 
 test('callOptions', () => {
   expect(() => Transaction.callOptions()).toThrow('Cannot destructure property');
-  expect(() => Transaction.callOptions({})).toThrow('`to` is required and should match `Address`');
+  expect(() => Transaction.callOptions({})).toThrow('\'to\' is required and should match \'Address\'');
 
   const tx = Transaction.callOptions({ to: ADDRESS });
   expect(tx.from).toBe(undefined);
@@ -71,9 +71,9 @@ test('callOptions', () => {
 
 test('rawOptions', () => {
   expect(() => Transaction.rawOptions()).toThrow('Cannot destructure property');
-  expect(() => Transaction.rawOptions({})).toThrow('`nonce` is required and should match `UInt`');
-  expect(() => Transaction.rawOptions({ nonce: 0 })).toThrow('`gasPrice` is required and should match `Drip`');
-  expect(() => Transaction.rawOptions({ nonce: 0, gasPrice: 1 })).toThrow('`gas` is required and should match `UInt`');
+  expect(() => Transaction.rawOptions({})).toThrow('\'nonce\' is required and should match \'UInt\'');
+  expect(() => Transaction.rawOptions({ nonce: 0 })).toThrow('\'gasPrice\' is required and should match \'Drip\'');
+  expect(() => Transaction.rawOptions({ nonce: 0, gasPrice: 1 })).toThrow('\'gas\' is required and should match \'UInt\'');
 
   const tx = Transaction.rawOptions({ nonce: 0, gasPrice: 1, gas: 21000 });
   expect(tx.nonce).toBe('0x00');

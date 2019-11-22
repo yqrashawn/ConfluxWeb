@@ -663,7 +663,7 @@ class Conflux {
       options.nonce = await this.getTransactionCount(options.from);
     }
 
-    const result = await this.provider.call('cfx_estimateGas', Transaction.callOptions(options));
+    const result = await this.provider.call('cfx_estimateGas', Transaction.estimateOptions(options));
     return parse.number(result);
   }
 }

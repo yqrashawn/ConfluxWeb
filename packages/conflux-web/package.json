@@ -1,10 +1,10 @@
 {
   "name": "conflux-web",
-  "version": "0.2.0-alpha.2",
+  "version": "0.2.0-alpha.3",
   "description": "Conflux JavaScript API",
   "repository": "https://github.com/Conflux-Chain/ConfluxWeb/tree/master/packages/conflux-web",
   "license": "LGPL-3.0",
-  "main": "dist/conflux-web.cjs.js",
+  "main": "index.js",
   "keywords": [
     "Conflux",
     "JavaScript",
@@ -12,7 +12,7 @@
   ],
   "dependencies": {
     "bignumber.js": "^9.0.0",
-    "conflux-web-utils": "0.2.0-alpha.2",
+    "conflux-web-utils": "0.2.0-alpha.4",
     "ethers": "^4.0.38",
     "lodash": "^4.17.15",
     "superagent": "^5.1.0",
@@ -23,7 +23,6 @@
     "lib",
     "src",
     "index.js",
-    "yarn.lock",
-    "readme.md"
+    "yarn.lock"
   ]
 }

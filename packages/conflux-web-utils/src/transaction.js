@@ -19,10 +19,10 @@ class Transaction {
    */
   static sendOptions({ from, nonce, gasPrice, gas, to, value, data }) {
     return {
-      from: from !== undefined ? Address(from) : throwError('`from` is required and should match `Address`'),
-      nonce: nonce !== undefined ? UInt(nonce) : throwError('`nonce` is required and should match `UInt`'),
-      gasPrice: gasPrice !== undefined ? Drip(gasPrice) : throwError('`gasPrice` is required and should match `Drip`'),
-      gas: gas !== undefined ? UInt(gas) : throwError('`gas` is required and should match `UInt`'),
+      from: from !== undefined ? Address(from) : throwError(`'from' is required and should match 'Address', got ${from}`),
+      nonce: nonce !== undefined ? UInt(nonce) : throwError(`'nonce' is required and should match 'UInt', got ${nonce}`),
+      gasPrice: gasPrice !== undefined ? Drip(gasPrice) : throwError(`'gasPrice' is required and should match 'Drip', got ${gasPrice}`),
+      gas: gas !== undefined ? UInt(gas) : throwError(`'gas' is required and should match 'UInt', got ${gas}`),
       to: to !== undefined ? Address(to) : undefined,
       value: value !== undefined ? Drip(value) : undefined,
       data: data !== undefined ? Hex(data) : Hex(''),
@@ -46,7 +46,30 @@ class Transaction {
       nonce: nonce !== undefined ? UInt(nonce) : undefined,
       gasPrice: gasPrice !== undefined ? Drip(gasPrice) : undefined,
       gas: gas !== undefined ? UInt(gas) : undefined,
-      to: to !== undefined ? Address(to) : throwError('`to` is required and should match `Address`'),
+      to: to !== undefined ? Address(to) : throwError(`'to' is required and should match 'Address', got ${to}`),
+      value: value !== undefined ? Drip(value) : undefined,
+      data: data !== undefined ? Hex(data) : undefined,
+    };
+  }
+
+  /**
+   * @param options {object}
+   * @param [options.from] {string} - The address the transaction is sent from.
+   * @param [options.nonce] {string|number} - The caller nonce (transaction count).
+   * @param [options.gasPrice] {string|number} - The gasPrice used for each paid gas.
+   * @param [options.gas] {string|number} - The gas provided for the transaction execution. `call` consumes zero gas, but this parameter may be needed by some executions.
+   * @param [options.to] {string} - The address the transaction is directed to.
+   * @param [options.value] {string|number|BigNumber} - Integer of the value sent with this transaction.
+   * @param [options.data] {string|Buffer} - Hash of the method signature and encoded parameters.
+   * @return {object} Formatted call contract options object.
+   */
+  static estimateOptions({ from, nonce, gasPrice, gas, to, value, data }) {
+    return {
+      from: from !== undefined ? Address(from) : undefined,
+      nonce: nonce !== undefined ? UInt(nonce) : undefined,
+      gasPrice: gasPrice !== undefined ? Drip(gasPrice) : undefined,
+      gas: gas !== undefined ? UInt(gas) : undefined,
+      to: to !== undefined ? Address(to) : undefined,
       value: value !== undefined ? Drip(value) : undefined,
       data: data !== undefined ? Hex(data) : undefined,
     };
@@ -67,9 +90,9 @@ class Transaction {
    */
   static rawOptions({ nonce, gasPrice, gas, to, value, data, r, s, v }) {
     return {
-      nonce: nonce !== undefined ? UInt(nonce) : throwError('`nonce` is required and should match `UInt`'),
-      gasPrice: gasPrice !== undefined ? Drip(gasPrice) : throwError('`gasPrice` is required and should match `Drip`'),
-      gas: gas !== undefined ? UInt(gas) : throwError('`gas` is required and should match `UInt`'),
+      nonce: nonce !== undefined ? UInt(nonce) : throwError(`'nonce' is required and should match 'UInt', got ${nonce}`),
+      gasPrice: gasPrice !== undefined ? Drip(gasPrice) : throwError(`'gasPrice' is required and should match 'Drip', got ${gasPrice}`),
+      gas: gas !== undefined ? UInt(gas) : throwError(`'gas' is required and should match 'UInt', got ${gas}`),
       to: to !== undefined ? Address(to) : Hex(null),
       value: value !== undefined ? Drip(value) : Drip(0),
       data: data !== undefined ? Hex(data) : Hex(''),
