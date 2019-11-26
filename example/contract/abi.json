@@ -64,6 +64,12 @@
         "internalType": "address",
         "name": "sender",
         "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "current",
+        "type": "uint256"
       }
     ],
     "name": "SelfEvent",

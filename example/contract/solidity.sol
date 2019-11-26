@@ -2,7 +2,7 @@ pragma solidity ^0.5.0;
 
 contract Counter {
     uint public count=0;
-    event SelfEvent(address indexed sender);
+    event SelfEvent(address indexed sender, uint current);
 
     constructor(uint num) public {
         count = num;
@@ -13,6 +13,6 @@ contract Counter {
     }
 
     function self() public {
-        emit SelfEvent(msg.sender);
+        emit SelfEvent(msg.sender, count);
     }
 }

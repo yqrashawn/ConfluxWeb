@@ -8,10 +8,12 @@ async function main() {
   const cfx = new Conflux({
     url: 'http://testnet-jsonrpc.conflux-chain.org:12537',
     defaultGasPrice: 100,
+    defaultGas: 1000000,
     logger: console,
   });
 
   console.log(cfx.defaultGasPrice); // 100
+  console.log(cfx.defaultGas); // 1000000
 
   // ================================ Contract ================================
   const account = cfx.wallet.add(PRIVATE_KEY); // create account instance
@@ -24,7 +26,7 @@ async function main() {
 
   // estimate deploy contract gas use
   const estimateDeployGas = await contract.constructor(10).estimateGas();
-  console.log(estimateDeployGas); // 170494
+  console.log(estimateDeployGas); // 173978
 
   // deploy the contract
   const contractAddress = await contract.constructor(10)
@@ -33,12 +35,9 @@ async function main() {
       // gas: estimateDeployGas, // if not set gas, will use 'cfx.defaultGas'
     })
     .deployed();
-  console.log(contractAddress); // 0xbd72de06cd4a94ad31ed9303cf32a2bccb82c404
+  console.log(contractAddress); // 0x32116df84f12e1fc936720a57bbdcba2a1e1ff05
 
   contract.address = contractAddress;
-
-  const getCode = await cfx.getCode(contract.address);
-  console.log(getCode); // same as 'code'
 
   /*
    call contract method.
