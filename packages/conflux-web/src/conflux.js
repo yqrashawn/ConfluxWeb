@@ -152,21 +152,58 @@ class Conflux {
    * @param [options.address] {string|string[]} - An address or a list of addresses to only get logs from particular account(s).
    * @param [options.topics] {array} - An array of values which must each appear in the log entries. The order is important, if you want to leave topics out use null, e.g. [null, '0x12...']. You can also pass an array for each topic with options for that topic e.g. [null, ['option1', 'option2']]
    * @return {Promise<array>} Array of log objects.
+   * - `string` address: Address this event originated from.
+   * - `string[]` topics: An array with max 4 32 Byte topics, topic 1-3 contains indexed parameters of the event.
+   * - `string` data: The data containing non-indexed log parameter.
+   * - `string` type: TODO
+   * - `boolean` removed: TODO
+   * - `number` epochNumber: The epochNumber this log was created in. null when still pending.
+   * - `string` blockHash: Hash of the block this event was created in. null when it’s still pending.
+   * - `string` transactionHash: Hash of the transaction this event was created in.
+   * - `string` transactionIndex: Integer of the transaction’s index position the event was created in.
+   * - `number` logIndex: Integer of the event index position in the block.
+   * - `number` transactionLogIndex: Integer of the event index position in the transaction.
    *
    * @example
    * > await cfx.getPastLogs({
+      address: '0xbd72de06cd4a94ad31ed9303cf32a2bccb82c404',
       fromEpoch: 0,
       toEpoch: 'latest_mined',
-      address: '0x169a10a431130B2F4853294A4a966803668af385'
+      topics: [
+        '0xb818399ffd68e821c34de8d5fbc5aeda8456fdb9296fc1b02bf6245ade7ebbd4',
+        '0x0000000000000000000000001ead8630345121d19ee3604128e5dc54b36e8ea6'
+      ]
     });
+
+   [
+   {
+    address: '0xbd72de06cd4a94ad31ed9303cf32a2bccb82c404',
+    blockHash: '0x701afee0ffc49aaebadf0e6618b6ec1715d31e7aa639e2e00dc8df10994e0283',
+    data: '0x',
+    epochNumber: 542556,
+    logIndex: 0,
+    removed: false,
+    topics: [
+      '0xb818399ffd68e821c34de8d5fbc5aeda8456fdb9296fc1b02bf6245ade7ebbd4',
+      '0x0000000000000000000000001ead8630345121d19ee3604128e5dc54b36e8ea6'
+    ],
+    transactionHash: '0x5a301d2c342709d7de9da24bd096ab3754ea328b016d85ab3410d375616f5d0d',
+    transactionIndex: 0,
+    transactionLogIndex: 0,
+    type: 'mined'
+   },
+   ...
+   ]
    */
   async getLogs({ fromEpoch, toEpoch, address, topics }) {
-    return this.provider.call('cfx_getLogs', {
+    const result = await this.provider.call('cfx_getLogs', {
       fromEpoch: fromEpoch !== undefined ? EpochNumber(fromEpoch) : undefined,
       toEpoch: toEpoch !== undefined ? EpochNumber(toEpoch) : undefined,
       address: address !== undefined ? Address(address) : undefined,
       topics,
     });
+
+    return parse.eventLogs(result);
   }
 
   // -------------------------------- address -----------------------------------

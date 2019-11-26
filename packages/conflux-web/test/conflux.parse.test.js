@@ -25,6 +25,26 @@ test('epochNumber', async () => {
   expect(Number.isInteger(epochNumber)).toBe(true);
 });
 
+test('getLogs', async () => {
+  const eventLogs = await cfx.getLogs({});
+  expect(Array.isArray(eventLogs)).toBe(true);
+
+  const [eventLog] = eventLogs;
+  expect(Hex.isHex(eventLog.address)).toBe(true);
+  expect(Hex.isHex(eventLog.blockHash)).toBe(true);
+  expect(Hex.isHex(eventLog.transactionHash)).toBe(true);
+  expect(lodash.isString(eventLog.type)).toBe(true);
+  expect(lodash.isBoolean(eventLog.removed)).toBe(true);
+  expect(Number.isInteger(eventLog.epochNumber)).toBe(true);
+  expect(Number.isInteger(eventLog.transactionIndex)).toBe(true);
+  expect(Number.isInteger(eventLog.logIndex)).toBe(true);
+  expect(Number.isInteger(eventLog.transactionLogIndex)).toBe(true);
+  expect(eventLog.data.startsWith('0x')).toBe(true);
+  eventLog.topics.forEach((topic) => {
+    expect(Hex.isHex32(topic)).toBe(true);
+  });
+});
+
 test('getBalance', async () => {
   const balance = await cfx.getBalance(ADDRESS);
 

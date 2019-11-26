@@ -65,4 +65,13 @@ parse.receipt = parse({
   gasUsed: parse.bigNumber,
 });
 
+parse.eventLogs = parse([
+  {
+    epochNumber: parse.number,
+    logIndex: parse.number,
+    transactionIndex: parse.number,
+    transactionLogIndex: parse.number,
+  },
+]);
+
 module.exports = parse;

@@ -13,7 +13,7 @@ const fullNode = {
   },
 
   cfx_getLogs() {
-    return []; // TODO
+    return mockData.logs;
   },
 
   cfx_getBalance(address, epochNumber) {

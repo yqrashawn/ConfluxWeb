@@ -154,15 +154,50 @@ options.topics    | array                 | false    |         | An array of val
 ### Return
 
 `Promise.<array>` Array of log objects.
+- `string` address: Address this event originated from.
+- `string[]` topics: An array with max 4 32 Byte topics, topic 1-3 contains indexed parameters of the event.
+- `string` data: The data containing non-indexed log parameter.
+- `string` type: TODO
+- `boolean` removed: TODO
+- `number` epochNumber: The epochNumber this log was created in. null when still pending.
+- `string` blockHash: Hash of the block this event was created in. null when it’s still pending.
+- `string` transactionHash: Hash of the transaction this event was created in.
+- `string` transactionIndex: Integer of the transaction’s index position the event was created in.
+- `number` logIndex: Integer of the event index position in the block.
+- `number` transactionLogIndex: Integer of the event index position in the transaction.
 
 ### Example
 
 ```
 > await cfx.getPastLogs({
+      address: '0xbd72de06cd4a94ad31ed9303cf32a2bccb82c404',
       fromEpoch: 0,
       toEpoch: 'latest_mined',
-      address: '0x169a10a431130B2F4853294A4a966803668af385'
+      topics: [
+        '0xb818399ffd68e821c34de8d5fbc5aeda8456fdb9296fc1b02bf6245ade7ebbd4',
+        '0x0000000000000000000000001ead8630345121d19ee3604128e5dc54b36e8ea6'
+      ]
     });
+
+   [
+   {
+    address: '0xbd72de06cd4a94ad31ed9303cf32a2bccb82c404',
+    blockHash: '0x701afee0ffc49aaebadf0e6618b6ec1715d31e7aa639e2e00dc8df10994e0283',
+    data: '0x',
+    epochNumber: 542556,
+    logIndex: 0,
+    removed: false,
+    topics: [
+      '0xb818399ffd68e821c34de8d5fbc5aeda8456fdb9296fc1b02bf6245ade7ebbd4',
+      '0x0000000000000000000000001ead8630345121d19ee3604128e5dc54b36e8ea6'
+    ],
+    transactionHash: '0x5a301d2c342709d7de9da24bd096ab3754ea328b016d85ab3410d375616f5d0d',
+    transactionIndex: 0,
+    transactionLogIndex: 0,
+    type: 'mined'
+   },
+   ...
+   ]
 ```
 
 ## Conflux.getBalance
@@ -708,7 +743,26 @@ options.code    | string  | false    |         | The byte code of the contract, 
      "outcomeStatus": 0,
      ...
    }> await contract.count(); // data in block chain changed by transaction.
-   BigNumber { _hex: '0x65' }
+   BigNumber { _hex: '0x65' }> await contract.SelfEvent(account1.address).list()
+   [
+     {
+      address: '0xc3ed1a06471be1d3bcd014051fbe078387ec0ad8',
+      blockHash: '0xc8cb678891d4914aa66670e3ebd7a977bb3e38d2cdb1e2df4c0556cb2c4715a4',
+      data: '0x000000000000000000000000000000000000000000000000000000000000000a',
+      epochNumber: 545896,
+      logIndex: 0,
+      removed: false,
+      topics: [
+        '0xc4c01f6de493c58245fb681341f3a76bba9551ce81b11cbbb5d6d297844594df',
+        '0x000000000000000000000000bbd9e9be525ab967e633bcdaeac8bd5723ed4d6b'
+      ],
+      transactionHash: '0x9100f4f84f711aa358e140197e9d2e5aab1f99751bc26a660d324a8282fc54d0',
+      transactionIndex: 0,
+      transactionLogIndex: 0,
+      type: 'mined',
+      params: [ '0xbbd9e9be525ab967e633bcdaeac8bd5723ed4d6b', '10' ]
+     }
+   ]
 ```
 
 ## Contract.Called.sendTransaction

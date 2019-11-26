@@ -1,4 +1,5 @@
 // FIXME: not to depend on 'web3-eth-abi' and 'ethers'
+const lodash = require('lodash');
 const web3Abi = require('web3-eth-abi');
 const { defaultAbiCoder: ethAbi } = require('ethers/utils/abi-coder');
 
@@ -79,7 +80,7 @@ class Called {
   }
 }
 
-class Method extends Function {
+class ContractFunction extends Function {
   constructor(cfx, { contract, abi }) {
     super();
     this.cfx = cfx;
@@ -116,7 +117,7 @@ class Method extends Function {
   }
 }
 
-class Constructor extends Method {
+class ContractConstructor extends ContractFunction {
   constructor(cfx, { code, ...rest }) {
     super(cfx, rest);
     this.code = code;
@@ -139,6 +140,74 @@ class Constructor extends Method {
     return hex;
   }
 }
+
+// ----------------------------------------------------------------------------
+class EventLog {
+  constructor(eventLog, { address, topics }) {
+    this.eventLog = eventLog;
+    this.address = address;
+    this.topics = topics;
+  }
+
+  async list(options) {
+    const logs = await this.eventLog.cfx.getLogs({
+      address: this.address,
+      topics: this.topics,
+      ...options,
+    });
+
+    logs.forEach((log) => {
+      log.params = this.eventLog.params(log);
+    });
+
+    return logs;
+  }
+}
+
+class ContractEvent extends Function {
+  constructor(cfx, { contract, abi }) {
+    super();
+    this.cfx = cfx;
+    this.contract = contract;
+    this.abi = abi;
+    this.code = web3Abi.encodeEventSignature(abi);
+    return new Proxy(this, this.constructor);
+  }
+
+  static apply(self, _, params) {
+    lodash.forEach(params, (param, index) => {
+      if (!lodash.isNil(param)) {
+        params[index] = web3Abi.encodeParameter(self.abi.inputs[index], param);
+      }
+    });
+
+    return new EventLog(self, {
+      address: self.contract.address,
+      topics: [self.code, ...params],
+    });
+  }
+
+  params(log) {
+    if (this.code !== log.topics[0]) {
+      return undefined;
+    }
+
+    if (Array.isArray(log.data)) {
+      // FIXME: getTransactionReceipt returned log.data is array of number
+      log.data = `0x${Buffer.from(log.data).toString('hex')}`;
+    }
+
+    const result = web3Abi.decodeLog(
+      this.abi.inputs,
+      log.data,
+      this.abi.anonymous ? log.topics : log.topics.slice(1),
+    );
+
+    return lodash.range(result.__length__).map(i => result[i]);
+  }
+}
+
+// ----------------------------------------------------------------------------
 
 /**
  * Contract with all its methods and events defined in its abi.
@@ -198,6 +267,27 @@ class Contract {
 
    * > await contract.count(); // data in block chain changed by transaction.
    BigNumber { _hex: '0x65' }
+
+   * > await contract.SelfEvent(account1.address).list()
+   [
+     {
+      address: '0xc3ed1a06471be1d3bcd014051fbe078387ec0ad8',
+      blockHash: '0xc8cb678891d4914aa66670e3ebd7a977bb3e38d2cdb1e2df4c0556cb2c4715a4',
+      data: '0x000000000000000000000000000000000000000000000000000000000000000a',
+      epochNumber: 545896,
+      logIndex: 0,
+      removed: false,
+      topics: [
+        '0xc4c01f6de493c58245fb681341f3a76bba9551ce81b11cbbb5d6d297844594df',
+        '0x000000000000000000000000bbd9e9be525ab967e633bcdaeac8bd5723ed4d6b'
+      ],
+      transactionHash: '0x9100f4f84f711aa358e140197e9d2e5aab1f99751bc26a660d324a8282fc54d0',
+      transactionIndex: 0,
+      transactionLogIndex: 0,
+      type: 'mined',
+      params: [ '0xbbd9e9be525ab967e633bcdaeac8bd5723ed4d6b', '10' ]
+     }
+   ]
    */
   constructor(cfx, { abi: contractABI, address, code }) {
     this.abi = contractABI; // XXX: Create a method named `abi` in solidity is a `Warning`.
@@ -205,17 +295,16 @@ class Contract {
 
     contractABI.forEach((methodABI) => {
       switch (methodABI.type) {
-        case 'constructor':
-          // cover this.constructor
-          this.constructor = new Constructor(cfx, { contract: this, abi: methodABI, code });
+        case 'constructor': // cover this.constructor
+          this.constructor = new ContractConstructor(cfx, { contract: this, abi: methodABI, code });
           break;
 
         case 'function':
-          this[methodABI.name] = new Method(cfx, { contract: this, abi: methodABI });
+          this[methodABI.name] = new ContractFunction(cfx, { contract: this, abi: methodABI });
           break;
 
         case 'event':
-          // TODO
+          this[methodABI.name] = new ContractEvent(cfx, { contract: this, abi: methodABI });
           break;
 
         default:
@@ -226,6 +315,7 @@ class Contract {
 }
 
 module.exports = Contract;
-module.exports.Constructor = Constructor;
-module.exports.Method = Method;
+module.exports.ContractConstructor = ContractConstructor;
+module.exports.ContractFunction = ContractFunction;
 module.exports.Called = Called;
+module.exports.EventLog = EventLog;

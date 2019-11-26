@@ -312,6 +312,28 @@ options.data     | string,Buffer           | false    |         | Hash of the me
 `object` Formatted call contract options object.
 
 
+## Transaction.estimateOptions
+
+
+
+### Parameters
+
+Name             | Type                    | Required | Default | Description
+-----------------|-------------------------|----------|---------|-------------------------------------------------------------------------------------------------------------------------------
+options          | object                  | true     |         |
+options.from     | string                  | false    |         | The address the transaction is sent from.
+options.nonce    | string,number           | false    |         | The caller nonce (transaction count).
+options.gasPrice | string,number           | false    |         | The gasPrice used for each paid gas.
+options.gas      | string,number           | false    |         | The gas provided for the transaction execution. `call` consumes zero gas, but this parameter may be needed by some executions.
+options.to       | string                  | false    |         | The address the transaction is directed to.
+options.value    | string,number,BigNumber | false    |         | Integer of the value sent with this transaction.
+options.data     | string,Buffer           | false    |         | Hash of the method signature and encoded parameters.
+
+### Return
+
+`object` Formatted call contract options object.
+
+
 ## Transaction.rawOptions
 
 
