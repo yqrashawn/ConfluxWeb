@@ -123,12 +123,6 @@ class ContractConstructor extends ContractFunction {
     this.code = code;
   }
 
-  static apply(self, _, params) {
-    return new Called(self, {
-      data: self.encode(params),
-    });
-  }
-
   encode(params) {
     if (!this.code) {
       throw new Error('contract.constructor.code is empty');
@@ -192,11 +186,6 @@ class ContractEvent extends Function {
       return undefined;
     }
 
-    if (Array.isArray(log.data)) {
-      // FIXME: getTransactionReceipt returned log.data is array of number
-      log.data = `0x${Buffer.from(log.data).toString('hex')}`;
-    }
-
     const result = web3Abi.decodeLog(
       this.abi.inputs,
       log.data,
@@ -208,6 +197,46 @@ class ContractEvent extends Function {
 }
 
 // ----------------------------------------------------------------------------
+class ABI {
+  constructor(contract) {
+    this._constructorFunction = null;
+    this._codeToFunction = {};
+    this._codeToEvent = {};
+
+    Object.values(contract).forEach((instance) => {
+      if (instance instanceof ContractConstructor) {
+        this._constructorFunction = instance;
+      } else if (instance instanceof ContractFunction) {
+        this._codeToFunction[instance.code] = instance;
+      } else if (instance instanceof ContractEvent) {
+        this._codeToEvent[instance.code] = instance;
+      }
+    });
+  }
+
+  decodeData(data) {
+    const _function = this._codeToFunction[data.slice(0, 10)]; // contract function code match '0x[0~9a-z]{8}'
+    if (_function) {
+      return { name: _function.abi.name, params: _function.params(data) };
+    }
+
+    const _constructor = this._constructorFunction;
+    if (_constructor && data.startsWith(_constructor.code)) {
+      return { name: _constructor.abi.type, params: _constructor.params(data) };
+    }
+
+    return undefined;
+  }
+
+  decodeLog(log) {
+    const event = this._codeToEvent[log.topics[0]];
+    if (!event) {
+      return undefined;
+    }
+
+    return { name: event.abi.name, params: event.params(log) };
+  }
+}
 
 /**
  * Contract with all its methods and events defined in its abi.
@@ -265,12 +294,19 @@ class Contract {
      ...
    }
 
+   * > tx = await cfx.getTransactionByHash('0x8a5f48c2de0f1bdacfe90443810ad650e4b327a0d19ce49a53faffb224883e42');
+   * > await contract.abi.decodeData(tx.data)
+   {
+     name: 'inc',
+     params: [BigNumber{0x01}]
+   }
+
    * > await contract.count(); // data in block chain changed by transaction.
    BigNumber { _hex: '0x65' }
 
-   * > await contract.SelfEvent(account1.address).list()
+   * > logs = await contract.SelfEvent(account1.address).list()
    [
-     {
+   {
       address: '0xc3ed1a06471be1d3bcd014051fbe078387ec0ad8',
       blockHash: '0xc8cb678891d4914aa66670e3ebd7a977bb3e38d2cdb1e2df4c0556cb2c4715a4',
       data: '0x000000000000000000000000000000000000000000000000000000000000000a',
@@ -288,9 +324,17 @@ class Contract {
       params: [ '0xbbd9e9be525ab967e633bcdaeac8bd5723ed4d6b', '10' ]
      }
    ]
+
+   * > contract.abi.decodeLog(logs[0]);
+   {
+      name: "SelfEvent",
+      params: [
+        '0xbbd9e9be525ab967e633bcdaeac8bd5723ed4d6b',
+        BigNumber{0x64},
+      ]
+    }
    */
   constructor(cfx, { abi: contractABI, address, code }) {
-    this.abi = contractABI; // XXX: Create a method named `abi` in solidity is a `Warning`.
     this.address = address; // XXX: Create a method named `address` in solidity is a `ParserError`
 
     contractABI.forEach((methodABI) => {
@@ -311,6 +355,8 @@ class Contract {
           break;
       }
     });
+
+    this.abi = new ABI(this); // XXX: Create a method named `abi` in solidity is a `Warning`.
   }
 }
 

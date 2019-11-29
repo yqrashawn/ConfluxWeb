@@ -16,94 +16,94 @@ cfx.provider = new MockProvider();
 test('gasPrice', async () => {
   const gasPrice = await cfx.gasPrice();
 
-  expect(Number.isInteger(gasPrice)).toBe(true);
+  expect(Number.isInteger(gasPrice)).toEqual(true);
 });
 
 test('epochNumber', async () => {
   const epochNumber = await cfx.epochNumber();
 
-  expect(Number.isInteger(epochNumber)).toBe(true);
+  expect(Number.isInteger(epochNumber)).toEqual(true);
 });
 
 test('getLogs', async () => {
   const eventLogs = await cfx.getLogs({});
-  expect(Array.isArray(eventLogs)).toBe(true);
+  expect(Array.isArray(eventLogs)).toEqual(true);
 
   const [eventLog] = eventLogs;
-  expect(Hex.isHex(eventLog.address)).toBe(true);
-  expect(Hex.isHex(eventLog.blockHash)).toBe(true);
-  expect(Hex.isHex(eventLog.transactionHash)).toBe(true);
-  expect(lodash.isString(eventLog.type)).toBe(true);
-  expect(lodash.isBoolean(eventLog.removed)).toBe(true);
-  expect(Number.isInteger(eventLog.epochNumber)).toBe(true);
-  expect(Number.isInteger(eventLog.transactionIndex)).toBe(true);
-  expect(Number.isInteger(eventLog.logIndex)).toBe(true);
-  expect(Number.isInteger(eventLog.transactionLogIndex)).toBe(true);
-  expect(eventLog.data.startsWith('0x')).toBe(true);
+  expect(Hex.isHex(eventLog.address)).toEqual(true);
+  expect(Hex.isHex(eventLog.blockHash)).toEqual(true);
+  expect(Hex.isHex(eventLog.transactionHash)).toEqual(true);
+  expect(lodash.isString(eventLog.type)).toEqual(true);
+  expect(lodash.isBoolean(eventLog.removed)).toEqual(true);
+  expect(Number.isInteger(eventLog.epochNumber)).toEqual(true);
+  expect(Number.isInteger(eventLog.transactionIndex)).toEqual(true);
+  expect(Number.isInteger(eventLog.logIndex)).toEqual(true);
+  expect(Number.isInteger(eventLog.transactionLogIndex)).toEqual(true);
+  expect(eventLog.data.startsWith('0x')).toEqual(true);
   eventLog.topics.forEach((topic) => {
-    expect(Hex.isHex32(topic)).toBe(true);
+    expect(Hex.isHex32(topic)).toEqual(true);
   });
 });
 
 test('getBalance', async () => {
   const balance = await cfx.getBalance(ADDRESS);
 
-  expect(BigNumber.isBigNumber(balance)).toBe(true);
-  expect(balance.isInteger()).toBe(true);
+  expect(BigNumber.isBigNumber(balance)).toEqual(true);
+  expect(balance.isInteger()).toEqual(true);
 });
 
 test('getTransactionCount', async () => {
   const txCount = await cfx.getTransactionCount(ADDRESS);
 
-  expect(Number.isInteger(txCount)).toBe(true);
+  expect(Number.isInteger(txCount)).toEqual(true);
 });
 
 test('getBlocksByEpoch', async () => {
   const blockHashArray = await cfx.getBlocksByEpoch(0);
 
-  expect(Array.isArray(blockHashArray)).toBe(true);
+  expect(Array.isArray(blockHashArray)).toEqual(true);
   blockHashArray.forEach((txHash) => {
-    expect(Hex.isHex32(txHash)).toBe(true);
+    expect(Hex.isHex32(txHash)).toEqual(true);
   });
 });
 
 test('getBlockByHash', async () => {
   const block = await cfx.getBlockByHash(BLOCK_HASH);
 
-  expect(Hex.isHex32(block.hash)).toBe(true);
-  expect(Hex.isHex20(block.miner)).toBe(true);
-  expect(Hex.isHex32(block.parentHash)).toBe(true);
-  expect(Hex.isHex(block.transactionsRoot)).toBe(true);
-  expect(Hex.isHex(block.deferredLogsBloomHash)).toBe(true);
-  expect(Hex.isHex(block.deferredReceiptsRoot)).toBe(true);
-  expect(Hex.isHex(block.deferredStateRoot)).toBe(true);
-  expect(lodash.isBoolean(block.adaptive)).toBe(true);
-  // expect(lodash.isBoolean(block.stable)).toBe(true); ???
-  expect(Number.isInteger(block.blame)).toBe(true);
-  expect(Number.isInteger(block.epochNumber)).toBe(true);
-  expect(Number.isInteger(block.size)).toBe(true);
-  expect(Number.isInteger(block.height)).toBe(true);
-  expect(Number.isInteger(block.timestamp)).toBe(true);
-  expect(block.nonce.startsWith('0x')).toBe(true);
-  expect(BigNumber.isBigNumber(block.gasLimit)).toBe(true);
-  expect(BigNumber.isBigNumber(block.difficulty)).toBe(true);
-  expect(Array.isArray(block.refereeHashes)).toBe(true);
-  expect(Array.isArray(block.transactions)).toBe(true);
-  expect(lodash.isPlainObject(block.deferredStateRootWithAux)).toBe(true);
+  expect(Hex.isHex32(block.hash)).toEqual(true);
+  expect(Hex.isHex20(block.miner)).toEqual(true);
+  expect(Hex.isHex32(block.parentHash)).toEqual(true);
+  expect(Hex.isHex(block.transactionsRoot)).toEqual(true);
+  expect(Hex.isHex(block.deferredLogsBloomHash)).toEqual(true);
+  expect(Hex.isHex(block.deferredReceiptsRoot)).toEqual(true);
+  expect(Hex.isHex(block.deferredStateRoot)).toEqual(true);
+  expect(lodash.isBoolean(block.adaptive)).toEqual(true);
+  // expect(lodash.isBoolean(block.stable)).toEqual(true); ???
+  expect(Number.isInteger(block.blame)).toEqual(true);
+  expect(Number.isInteger(block.epochNumber)).toEqual(true);
+  expect(Number.isInteger(block.size)).toEqual(true);
+  expect(Number.isInteger(block.height)).toEqual(true);
+  expect(Number.isInteger(block.timestamp)).toEqual(true);
+  expect(block.nonce.startsWith('0x')).toEqual(true);
+  expect(BigNumber.isBigNumber(block.gasLimit)).toEqual(true);
+  expect(BigNumber.isBigNumber(block.difficulty)).toEqual(true);
+  expect(Array.isArray(block.refereeHashes)).toEqual(true);
+  expect(Array.isArray(block.transactions)).toEqual(true);
+  expect(lodash.isPlainObject(block.deferredStateRootWithAux)).toEqual(true);
   block.transactions.forEach((txHash) => {
-    expect(Hex.isHex32(txHash)).toBe(true);
+    expect(Hex.isHex32(txHash)).toEqual(true);
   });
 
   const blockDetail = await cfx.getBlockByHash(BLOCK_HASH, true);
-  expect(Array.isArray(blockDetail.transactions)).toBe(true);
+  expect(Array.isArray(blockDetail.transactions)).toEqual(true);
   blockDetail.transactions.forEach((tx) => {
-    expect(lodash.isPlainObject(tx)).toBe(true);
+    expect(lodash.isPlainObject(tx)).toEqual(true);
   });
 });
 
 test('getBlockByEpochNumber', async () => {
   const block = await cfx.getBlockByEpochNumber(1);
-  expect(block.epochNumber).toBe(1);
+  expect(block.epochNumber).toEqual(1);
 });
 
 test('getBlockByHashWithPivotAssumption', async () => {
@@ -112,45 +112,45 @@ test('getBlockByHashWithPivotAssumption', async () => {
     '0xe1b0000000000000000000000000000000000000000000000000000000000001',
     1,
   );
-  expect(block.hash).toBe('0xe1b0000000000000000000000000000000000000000000000000000000000000');
-  expect(block.epochNumber).toBe(1);
+  expect(block.hash).toEqual('0xe1b0000000000000000000000000000000000000000000000000000000000000');
+  expect(block.epochNumber).toEqual(1);
 });
 
 test('getTransactionByHash', async () => {
   const transaction = await cfx.getTransactionByHash(TX_HASH);
 
-  expect(Hex.isHex32(transaction.blockHash)).toBe(true);
-  expect(Hex.isHex32(transaction.hash)).toBe(true);
-  expect(Hex.isHex20(transaction.from)).toBe(true);
-  expect(Hex.isHex20(transaction.to)).toBe(true);
-  expect(transaction.data.startsWith('0x')).toBe(true);
-  expect(Hex.isHex32(transaction.r)).toBe(true);
-  expect(Hex.isHex32(transaction.s)).toBe(true);
-  expect(Hex.isHex20(transaction.contractCreated) || lodash.isNull(transaction.contractCreated)).toBe(true);
-  expect(Number.isInteger(transaction.transactionIndex)).toBe(true);
-  expect(Number.isInteger(transaction.nonce)).toBe(true);
-  expect(Number.isInteger(transaction.status)).toBe(true);
-  expect(Number.isInteger(transaction.v)).toBe(true);
-  expect(BigNumber.isBigNumber(transaction.gas)).toBe(true);
-  expect(BigNumber.isBigNumber(transaction.gasPrice)).toBe(true);
-  expect(BigNumber.isBigNumber(transaction.value)).toBe(true);
+  expect(Hex.isHex32(transaction.blockHash)).toEqual(true);
+  expect(Hex.isHex32(transaction.hash)).toEqual(true);
+  expect(Hex.isHex20(transaction.from)).toEqual(true);
+  expect(Hex.isHex20(transaction.to)).toEqual(true);
+  expect(transaction.data.startsWith('0x')).toEqual(true);
+  expect(Hex.isHex32(transaction.r)).toEqual(true);
+  expect(Hex.isHex32(transaction.s)).toEqual(true);
+  expect(Hex.isHex20(transaction.contractCreated) || lodash.isNull(transaction.contractCreated)).toEqual(true);
+  expect(Number.isInteger(transaction.transactionIndex)).toEqual(true);
+  expect(Number.isInteger(transaction.nonce)).toEqual(true);
+  expect(Number.isInteger(transaction.status)).toEqual(true);
+  expect(Number.isInteger(transaction.v)).toEqual(true);
+  expect(BigNumber.isBigNumber(transaction.gas)).toEqual(true);
+  expect(BigNumber.isBigNumber(transaction.gasPrice)).toEqual(true);
+  expect(BigNumber.isBigNumber(transaction.value)).toEqual(true);
 });
 
 test('getTransactionReceipt', async () => {
   const receipt = await cfx.getTransactionReceipt(TX_HASH);
 
-  expect(Hex.isHex32(receipt.blockHash)).toBe(true);
-  expect(Hex.isHex32(receipt.transactionHash)).toBe(true);
-  expect(Hex.isHex20(receipt.from)).toBe(true);
-  expect(Hex.isHex20(receipt.to)).toBe(true);
-  expect(Hex.isHex(receipt.logsBloom)).toBe(true);
-  expect(Hex.isHex(receipt.stateRoot)).toBe(true);
-  expect(Hex.isHex20(receipt.contractCreated) || lodash.isNull(receipt.contractCreated)).toBe(true);
-  expect(Number.isInteger(receipt.index)).toBe(true);
-  expect(Number.isInteger(receipt.epochNumber)).toBe(true);
-  expect(Number.isInteger(receipt.outcomeStatus)).toBe(true);
-  expect(BigNumber.isBigNumber(receipt.gasUsed)).toBe(true);
-  expect(Array.isArray(receipt.logs)).toBe(true);
+  expect(Hex.isHex32(receipt.blockHash)).toEqual(true);
+  expect(Hex.isHex32(receipt.transactionHash)).toEqual(true);
+  expect(Hex.isHex20(receipt.from)).toEqual(true);
+  expect(Hex.isHex20(receipt.to)).toEqual(true);
+  expect(Hex.isHex(receipt.logsBloom)).toEqual(true);
+  expect(Hex.isHex(receipt.stateRoot)).toEqual(true);
+  expect(Hex.isHex20(receipt.contractCreated) || lodash.isNull(receipt.contractCreated)).toEqual(true);
+  expect(Number.isInteger(receipt.index)).toEqual(true);
+  expect(Number.isInteger(receipt.epochNumber)).toEqual(true);
+  expect(Number.isInteger(receipt.outcomeStatus)).toEqual(true);
+  expect(BigNumber.isBigNumber(receipt.gasUsed)).toEqual(true);
+  expect(Array.isArray(receipt.logs)).toEqual(true);
 });
 
 test('sendTransaction by address', async () => {
@@ -162,19 +162,19 @@ test('sendTransaction by address', async () => {
   });
 
   const txHash = await promise;
-  expect(Hex.isHex(txHash)).toBe(true);
+  expect(Hex.isHex(txHash)).toEqual(true);
 
   const transactionCreated = await promise.get({ delta: 0 });
-  expect(Hex.isHex32(transactionCreated.hash)).toBe(true);
+  expect(Hex.isHex32(transactionCreated.hash)).toEqual(true);
 
   const transactionMined = await promise.mined();
-  expect(Hex.isHex32(transactionMined.blockHash)).toBe(true);
+  expect(Hex.isHex32(transactionMined.blockHash)).toEqual(true);
 
   const receiptExecute = await promise.executed();
-  expect(receiptExecute.outcomeStatus).toBe(0);
+  expect(receiptExecute.outcomeStatus).toEqual(0);
 
   const receiptConfirmed = await promise.confirmed({ bar: 0.01 });
-  expect(receiptConfirmed.outcomeStatus).toBe(0);
+  expect(receiptConfirmed.outcomeStatus).toEqual(0);
 
   await expect(promise.confirmed({ timeout: 0 })).rejects.toThrow('Timeout');
 });

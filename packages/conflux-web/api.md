@@ -143,13 +143,15 @@ Gets past logs, matching the given options.
 
 ### Parameters
 
-Name              | Type                  | Required | Default | Description
-------------------|-----------------------|----------|---------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-options           | object                | false    |         |
-options.fromEpoch | string,number         | false    |         | The number of the earliest block. (>=)
-options.toEpoch   | string,number         | false    |         | The number of the latest block.(<=)
-options.address   | string,Array.<string> | false    |         | An address or a list of addresses to only get logs from particular account(s).
-options.topics    | array                 | false    |         | An array of values which must each appear in the log entries. The order is important, if you want to leave topics out use null, e.g. [null, '0x12...']. You can also pass an array for each topic with options for that topic e.g. [null, ['option1', 'option2']]
+Name                | Type                  | Required | Default | Description
+--------------------|-----------------------|----------|---------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+options             | object                | false    |         |
+options.fromEpoch   | string,number         | false    |         | The number of the earliest block. (>=)
+options.toEpoch     | string,number         | false    |         | The number of the latest block.(<=)
+options.blockHashes | Array.<string>        | false    |         | The block hash list
+options.address     | string,Array.<string> | false    |         | An address or a list of addresses to only get logs from particular account(s).
+options.topics      | array                 | false    |         | An array of values which must each appear in the log entries. The order is important, if you want to leave topics out use null, e.g. [null, '0x12...']. You can also pass an array for each topic with options for that topic e.g. [null, ['option1', 'option2']]
+options.limit       | number                | false    |         | Limit log number.
 
 ### Return
 
@@ -173,6 +175,7 @@ options.topics    | array                 | false    |         | An array of val
       address: '0xbd72de06cd4a94ad31ed9303cf32a2bccb82c404',
       fromEpoch: 0,
       toEpoch: 'latest_mined',
+      limit: 1,
       topics: [
         '0xb818399ffd68e821c34de8d5fbc5aeda8456fdb9296fc1b02bf6245ade7ebbd4',
         '0x0000000000000000000000001ead8630345121d19ee3604128e5dc54b36e8ea6'
@@ -196,7 +199,6 @@ options.topics    | array                 | false    |         | An array of val
     transactionLogIndex: 0,
     type: 'mined'
    },
-   ...
    ]
 ```
 
@@ -742,10 +744,14 @@ options.code    | string  | false    |         | The byte code of the contract, 
      "transactionHash": "0x8a5f48c2de0f1bdacfe90443810ad650e4b327a0d19ce49a53faffb224883e42",
      "outcomeStatus": 0,
      ...
+   }> tx = await cfx.getTransactionByHash('0x8a5f48c2de0f1bdacfe90443810ad650e4b327a0d19ce49a53faffb224883e42');> await contract.abi.decodeData(tx.data)
+   {
+     name: 'inc',
+     params: [BigNumber{0x01}]
    }> await contract.count(); // data in block chain changed by transaction.
-   BigNumber { _hex: '0x65' }> await contract.SelfEvent(account1.address).list()
+   BigNumber { _hex: '0x65' }> logs = await contract.SelfEvent(account1.address).list()
    [
-     {
+   {
       address: '0xc3ed1a06471be1d3bcd014051fbe078387ec0ad8',
       blockHash: '0xc8cb678891d4914aa66670e3ebd7a977bb3e38d2cdb1e2df4c0556cb2c4715a4',
       data: '0x000000000000000000000000000000000000000000000000000000000000000a',
@@ -762,7 +768,14 @@ options.code    | string  | false    |         | The byte code of the contract, 
       type: 'mined',
       params: [ '0xbbd9e9be525ab967e633bcdaeac8bd5723ed4d6b', '10' ]
      }
-   ]
+   ]> contract.abi.decodeLog(logs[0]);
+   {
+      name: "SelfEvent",
+      params: [
+        '0xbbd9e9be525ab967e633bcdaeac8bd5723ed4d6b',
+        BigNumber{0x64},
+      ]
+    }
 ```
 
 ## Contract.Called.sendTransaction

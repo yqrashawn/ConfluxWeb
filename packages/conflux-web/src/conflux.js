@@ -1,5 +1,5 @@
 const lodash = require('lodash');
-const { Hex, Address, EpochNumber, BlockHash, TxHash } = require('conflux-web-utils/src/type');
+const { Hex, Address, EpochNumber, BlockHash, TxHash, UInt } = require('conflux-web-utils/src/type');
 const Transaction = require('conflux-web-utils/src/transaction');
 const providerFactory = require('../lib/provider');
 
@@ -149,8 +149,10 @@ class Conflux {
    * @param [options] {object}
    * @param [options.fromEpoch] {string|number} - The number of the earliest block. (>=)
    * @param [options.toEpoch] {string|number} - The number of the latest block.(<=)
+   * @param [options.blockHashes] {string[]} - The block hash list
    * @param [options.address] {string|string[]} - An address or a list of addresses to only get logs from particular account(s).
    * @param [options.topics] {array} - An array of values which must each appear in the log entries. The order is important, if you want to leave topics out use null, e.g. [null, '0x12...']. You can also pass an array for each topic with options for that topic e.g. [null, ['option1', 'option2']]
+   * @param [options.limit] {number} - Limit log number.
    * @return {Promise<array>} Array of log objects.
    * - `string` address: Address this event originated from.
    * - `string[]` topics: An array with max 4 32 Byte topics, topic 1-3 contains indexed parameters of the event.
@@ -169,6 +171,7 @@ class Conflux {
       address: '0xbd72de06cd4a94ad31ed9303cf32a2bccb82c404',
       fromEpoch: 0,
       toEpoch: 'latest_mined',
+      limit: 1,
       topics: [
         '0xb818399ffd68e821c34de8d5fbc5aeda8456fdb9296fc1b02bf6245ade7ebbd4',
         '0x0000000000000000000000001ead8630345121d19ee3604128e5dc54b36e8ea6'
@@ -192,14 +195,19 @@ class Conflux {
     transactionLogIndex: 0,
     type: 'mined'
    },
-   ...
    ]
    */
-  async getLogs({ fromEpoch, toEpoch, address, topics }) {
+  async getLogs({ fromEpoch, toEpoch, blockHashes, address, topics, limit }) {
+    if (topics !== undefined) {
+      topics = topics.map(topic => (lodash.isNil(topic) ? null : Hex(topic))); // XXX: TODO Hash32
+    }
+
     const result = await this.provider.call('cfx_getLogs', {
       fromEpoch: fromEpoch !== undefined ? EpochNumber(fromEpoch) : undefined,
       toEpoch: toEpoch !== undefined ? EpochNumber(toEpoch) : undefined,
       address: address !== undefined ? Address(address) : undefined,
+      blockHashes: blockHashes !== undefined ? blockHashes.map(BlockHash) : undefined,
+      limit: limit !== undefined ? UInt(limit) : undefined,
       topics,
     });
 

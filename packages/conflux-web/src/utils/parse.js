@@ -63,6 +63,12 @@ parse.receipt = parse({
   epochNumber: parse.number, // XXX: number already in rpc return
   outcomeStatus: parse.number, // XXX: number already in rpc return
   gasUsed: parse.bigNumber,
+  logs: [
+    {
+      // FIXME: getTransactionReceipt returned log.data is array of number
+      data: data => (Array.isArray(data) ? `0x${Buffer.from(data).toString('hex')}` : data),
+    },
+  ],
 });
 
 parse.eventLogs = parse([

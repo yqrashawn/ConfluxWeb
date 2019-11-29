@@ -19,35 +19,41 @@ const cfx = new Conflux({
 cfx.provider = new MockProvider();
 
 beforeAll(() => {
-  expect(cfx.defaultEpoch).toBe(EpochNumber.LATEST_STATE);
-  expect(cfx.defaultGas).toBe(DEFAULT_GAS);
-  expect(cfx.defaultGasPrice).toBe(DEFAULT_GAS_PRICE);
+  expect(cfx.defaultEpoch).toEqual(EpochNumber.LATEST_STATE);
+  expect(cfx.defaultGas).toEqual(DEFAULT_GAS);
+  expect(cfx.defaultGasPrice).toEqual(DEFAULT_GAS_PRICE);
 });
 
 test('getLogs', async () => {
   await expect(cfx.getLogs()).rejects.toThrow('Cannot destructure property');
 
   cfx.provider.call = async (method, options) => {
-    expect(method).toBe('cfx_getLogs');
-    expect(options.fromEpoch).toBe(undefined);
-    expect(options.toEpoch).toBe(undefined);
-    expect(options.address).toBe(undefined);
-    expect(options.topics).toBe(undefined);
+    expect(method).toEqual('cfx_getLogs');
+    expect(options.fromEpoch).toEqual(undefined);
+    expect(options.toEpoch).toEqual(undefined);
+    expect(options.blockHashes).toEqual(undefined);
+    expect(options.address).toEqual(undefined);
+    expect(options.topics).toEqual(undefined);
+    expect(options.limit).toEqual(undefined);
   };
   await cfx.getLogs({});
 
   cfx.provider.call = async (method, options) => {
-    expect(method).toBe('cfx_getLogs');
-    expect(options.fromEpoch).toBe('0x00');
-    expect(options.toEpoch).toBe(EpochNumber.LATEST_MINED);
-    expect(options.address).toBe(ADDRESS);
-    expect(Array.isArray(options.topics)).toBe(true);
+    expect(method).toEqual('cfx_getLogs');
+    expect(options.fromEpoch).toEqual('0x00');
+    expect(options.toEpoch).toEqual(EpochNumber.LATEST_MINED);
+    expect(options.blockHashes).toEqual([BLOCK_HASH]);
+    expect(options.address).toEqual(ADDRESS);
+    expect(options.limit).toEqual('0x01');
+    expect(options.topics).toEqual([]);
   };
   await cfx.getLogs({
     fromEpoch: 0,
     toEpoch: EpochNumber.LATEST_MINED,
+    blockHashes: [BLOCK_HASH],
     address: Hex.toBuffer(ADDRESS),
     topics: [],
+    limit: 1,
   });
 });
 
@@ -55,18 +61,18 @@ test('getBalance', async () => {
   await expect(cfx.getBalance()).rejects.toThrow('do not match hex string');
 
   cfx.provider.call = async (method, address, epochNumber) => {
-    expect(method).toBe('cfx_getBalance');
-    expect(address).toBe(ADDRESS);
-    expect(epochNumber).toBe(cfx.defaultEpoch);
+    expect(method).toEqual('cfx_getBalance');
+    expect(address).toEqual(ADDRESS);
+    expect(epochNumber).toEqual(cfx.defaultEpoch);
   };
   await cfx.getBalance(ADDRESS);
   await cfx.getBalance(ADDRESS.replace('0x', ''));
   await cfx.getBalance(ADDRESS, EpochNumber.LATEST_STATE);
 
   cfx.provider.call = async (method, address, epochNumber) => {
-    expect(method).toBe('cfx_getBalance');
-    expect(address).toBe(ADDRESS);
-    expect(epochNumber).toBe('0x00');
+    expect(method).toEqual('cfx_getBalance');
+    expect(address).toEqual(ADDRESS);
+    expect(epochNumber).toEqual('0x00');
   };
   await cfx.getBalance(ADDRESS, 0);
 });
@@ -75,18 +81,18 @@ test('getTransactionCount', async () => {
   await expect(cfx.getTransactionCount()).rejects.toThrow('do not match hex string');
 
   cfx.provider.call = async (method, address, epochNumber) => {
-    expect(method).toBe('cfx_getTransactionCount');
-    expect(address).toBe(ADDRESS);
-    expect(epochNumber).toBe(cfx.defaultEpoch);
+    expect(method).toEqual('cfx_getTransactionCount');
+    expect(address).toEqual(ADDRESS);
+    expect(epochNumber).toEqual(cfx.defaultEpoch);
   };
   await cfx.getTransactionCount(ADDRESS);
   await cfx.getTransactionCount(ADDRESS.replace('0x', ''));
   await cfx.getTransactionCount(ADDRESS, EpochNumber.LATEST_STATE);
 
   cfx.provider.call = async (method, address, epochNumber) => {
-    expect(method).toBe('cfx_getTransactionCount');
-    expect(address).toBe(ADDRESS);
-    expect(epochNumber).toBe('0x00');
+    expect(method).toEqual('cfx_getTransactionCount');
+    expect(address).toEqual(ADDRESS);
+    expect(epochNumber).toEqual('0x00');
   };
   await cfx.getTransactionCount(ADDRESS, 0);
 });
@@ -95,8 +101,8 @@ test('getBlocksByEpoch', async () => {
   await expect(cfx.getBlocksByEpoch()).rejects.toThrow('do not match hex string');
 
   cfx.provider.call = async (method, epochNumber) => {
-    expect(method).toBe('cfx_getBlocksByEpoch');
-    expect(epochNumber).toBe('0x00');
+    expect(method).toEqual('cfx_getBlocksByEpoch');
+    expect(epochNumber).toEqual('0x00');
   };
   await cfx.getBlocksByEpoch(0);
 });
@@ -107,18 +113,18 @@ test('getBlockByHash', async () => {
   await expect(cfx.getBlockByHash(BLOCK_HASH, 0)).rejects.toThrow('detail must be boolean');
 
   cfx.provider.call = async (method, blockHash, detail) => {
-    expect(method).toBe('cfx_getBlockByHash');
-    expect(blockHash).toBe(BLOCK_HASH);
-    expect(detail).toBe(false);
+    expect(method).toEqual('cfx_getBlockByHash');
+    expect(blockHash).toEqual(BLOCK_HASH);
+    expect(detail).toEqual(false);
   };
   await cfx.getBlockByHash(BLOCK_HASH);
   await cfx.getBlockByHash(BLOCK_HASH.replace('0x', ''));
   await cfx.getBlockByHash(BLOCK_HASH, false);
 
   cfx.provider.call = async (method, blockHash, detail) => {
-    expect(method).toBe('cfx_getBlockByHash');
-    expect(blockHash).toBe(BLOCK_HASH);
-    expect(detail).toBe(true);
+    expect(method).toEqual('cfx_getBlockByHash');
+    expect(blockHash).toEqual(BLOCK_HASH);
+    expect(detail).toEqual(true);
   };
   await cfx.getBlockByHash(BLOCK_HASH, true);
 });
@@ -128,17 +134,17 @@ test('getBlockByEpochNumber', async () => {
   await expect(cfx.getBlockByEpochNumber(0, 1)).rejects.toThrow('detail must be boolean');
 
   cfx.provider.call = async (method, epochNumber, detail) => {
-    expect(method).toBe('cfx_getBlockByEpochNumber');
-    expect(epochNumber).toBe(cfx.defaultEpoch);
-    expect(detail).toBe(false);
+    expect(method).toEqual('cfx_getBlockByEpochNumber');
+    expect(epochNumber).toEqual(cfx.defaultEpoch);
+    expect(detail).toEqual(false);
   };
   await cfx.getBlockByEpochNumber(EpochNumber.LATEST_STATE);
   await cfx.getBlockByEpochNumber(EpochNumber.LATEST_STATE, false);
 
   cfx.provider.call = async (method, epochNumber, detail) => {
-    expect(method).toBe('cfx_getBlockByEpochNumber');
-    expect(epochNumber).toBe('0x00');
-    expect(detail).toBe(true);
+    expect(method).toEqual('cfx_getBlockByEpochNumber');
+    expect(epochNumber).toEqual('0x00');
+    expect(detail).toEqual(true);
   };
   await cfx.getBlockByEpochNumber(0, true);
   await cfx.getBlockByEpochNumber('0', true);
@@ -157,8 +163,8 @@ test('getTransactionByHash', async () => {
   await expect(cfx.getTransactionByHash(ADDRESS)).rejects.toThrow('do not match TxHash');
 
   cfx.provider.call = async (method, txHash) => {
-    expect(method).toBe('cfx_getTransactionByHash');
-    expect(txHash).toBe(TX_HASH);
+    expect(method).toEqual('cfx_getTransactionByHash');
+    expect(txHash).toEqual(TX_HASH);
   };
   await cfx.getTransactionByHash(TX_HASH);
   await cfx.getTransactionByHash(TX_HASH.replace('0x', ''));
@@ -169,8 +175,8 @@ test('getTransactionReceipt', async () => {
   await expect(cfx.getTransactionReceipt(ADDRESS)).rejects.toThrow('do not match TxHash');
 
   cfx.provider.call = async (method, txHash) => {
-    expect(method).toBe('cfx_getTransactionReceipt');
-    expect(txHash).toBe(TX_HASH);
+    expect(method).toEqual('cfx_getTransactionReceipt');
+    expect(txHash).toEqual(TX_HASH);
   };
   await cfx.getTransactionReceipt(TX_HASH);
   await cfx.getTransactionReceipt(TX_HASH.replace('0x', ''));
@@ -178,7 +184,7 @@ test('getTransactionReceipt', async () => {
 
 test('sendTransaction by address', async () => {
   cfx.getTransactionCount = async (address) => {
-    expect(address).toBe(ADDRESS);
+    expect(address).toEqual(ADDRESS);
     return 0;
   };
 
@@ -186,27 +192,27 @@ test('sendTransaction by address', async () => {
   await expect(cfx.sendTransaction({ nonce: 0 })).rejects.toThrow('\'from\' is required and should match \'Address\'');
 
   cfx.provider.call = async (method, options) => {
-    expect(method).toBe('cfx_sendTransaction');
-    expect(options.from).toBe(ADDRESS);
-    expect(options.nonce).toBe('0x00');
-    expect(options.gasPrice).toBe(Hex(cfx.defaultGasPrice));
-    expect(options.gas).toBe(Hex(cfx.defaultGas));
-    expect(options.to).toBe(undefined);
-    expect(options.value).toBe(undefined);
-    expect(options.data).toBe('0x');
+    expect(method).toEqual('cfx_sendTransaction');
+    expect(options.from).toEqual(ADDRESS);
+    expect(options.nonce).toEqual('0x00');
+    expect(options.gasPrice).toEqual(Hex(cfx.defaultGasPrice));
+    expect(options.gas).toEqual(Hex(cfx.defaultGas));
+    expect(options.to).toEqual(undefined);
+    expect(options.value).toEqual(undefined);
+    expect(options.data).toEqual('0x');
   };
   await cfx.sendTransaction({ from: ADDRESS });
   await cfx.sendTransaction({ nonce: 0, from: ADDRESS });
 
   cfx.provider.call = async (method, options) => {
-    expect(method).toBe('cfx_sendTransaction');
-    expect(options.from).toBe(ADDRESS);
-    expect(options.nonce).toBe('0x64');
-    expect(options.gasPrice).toBe(Hex(cfx.defaultGasPrice));
-    expect(options.gas).toBe('0x01');
-    expect(options.to).toBe(ADDRESS);
-    expect(options.value).toBe('0x00');
-    expect(options.data).toBe('0x');
+    expect(method).toEqual('cfx_sendTransaction');
+    expect(options.from).toEqual(ADDRESS);
+    expect(options.nonce).toEqual('0x64');
+    expect(options.gasPrice).toEqual(Hex(cfx.defaultGasPrice));
+    expect(options.gas).toEqual('0x01');
+    expect(options.to).toEqual(ADDRESS);
+    expect(options.value).toEqual('0x00');
+    expect(options.data).toEqual('0x');
   };
   await cfx.sendTransaction({
     nonce: '100',
@@ -222,13 +228,13 @@ test('sendTransaction by account', async () => {
   const account = cfx.wallet.add(KEY);
 
   cfx.getTransactionCount = async (address) => {
-    expect(Hex(address)).toBe(ADDRESS);
+    expect(Hex(address)).toEqual(ADDRESS);
     return 0;
   };
 
   cfx.provider.call = async (method, hex) => {
-    expect(method).toBe('cfx_sendRawTransaction');
-    expect(Hex.isHex(hex)).toBe(true);
+    expect(method).toEqual('cfx_sendRawTransaction');
+    expect(Hex.isHex(hex)).toEqual(true);
   };
   await cfx.sendTransaction({ from: account });
 });
@@ -237,8 +243,8 @@ test('sendRawTransaction', async () => {
   await expect(cfx.sendRawTransaction()).rejects.toThrow('do not match hex string');
 
   cfx.provider.call = async (method, txHash) => {
-    expect(method).toBe('cfx_sendRawTransaction');
-    expect(txHash).toBe('0x01ff');
+    expect(method).toEqual('cfx_sendRawTransaction');
+    expect(txHash).toEqual('0x01ff');
   };
   await cfx.sendRawTransaction('01ff');
   await cfx.sendRawTransaction(Buffer.from([1, 255]));
@@ -248,25 +254,25 @@ test('getCode', async () => {
   await expect(cfx.getCode()).rejects.toThrow('do not match hex string');
 
   cfx.provider.call = async (method, address, epochNumber) => {
-    expect(method).toBe('cfx_getCode');
-    expect(address).toBe(ADDRESS);
-    expect(epochNumber).toBe(cfx.defaultEpoch);
+    expect(method).toEqual('cfx_getCode');
+    expect(address).toEqual(ADDRESS);
+    expect(epochNumber).toEqual(cfx.defaultEpoch);
   };
   await cfx.getCode(ADDRESS);
   await cfx.getCode(ADDRESS.replace('0x', ''));
   await cfx.getCode(ADDRESS, cfx.defaultEpoch);
 
   cfx.provider.call = async (method, address, epochNumber) => {
-    expect(method).toBe('cfx_getCode');
-    expect(address).toBe(ADDRESS);
-    expect(epochNumber).toBe('0x00');
+    expect(method).toEqual('cfx_getCode');
+    expect(address).toEqual(ADDRESS);
+    expect(epochNumber).toEqual('0x00');
   };
   await cfx.getCode(ADDRESS, 0);
 });
 
 test('call', async () => {
   cfx.getTransactionCount = async (address) => {
-    expect(Hex(address)).toBe(ADDRESS);
+    expect(Hex(address)).toEqual(ADDRESS);
     return 100;
   };
 
@@ -274,32 +280,32 @@ test('call', async () => {
   await expect(cfx.call({ nonce: 0 })).rejects.toThrow('\'to\' is required and should match \'Address\'');
 
   cfx.provider.call = async (method, options, epochNumber) => {
-    expect(method).toBe('cfx_call');
+    expect(method).toEqual('cfx_call');
 
-    expect(options.from).toBe(undefined);
-    expect(options.nonce).toBe(undefined);
-    expect(options.gasPrice).toBe(Hex(cfx.defaultGasPrice));
-    expect(options.gas).toBe(Hex(cfx.defaultGas));
-    expect(options.to).toBe(ADDRESS);
-    expect(options.value).toBe(undefined);
-    expect(options.data).toBe(undefined);
+    expect(options.from).toEqual(undefined);
+    expect(options.nonce).toEqual(undefined);
+    expect(options.gasPrice).toEqual(Hex(cfx.defaultGasPrice));
+    expect(options.gas).toEqual(Hex(cfx.defaultGas));
+    expect(options.to).toEqual(ADDRESS);
+    expect(options.value).toEqual(undefined);
+    expect(options.data).toEqual(undefined);
 
-    expect(epochNumber).toBe(cfx.defaultEpoch);
+    expect(epochNumber).toEqual(cfx.defaultEpoch);
   };
   await cfx.call({ to: ADDRESS });
 
   cfx.provider.call = async (method, options, epochNumber) => {
-    expect(method).toBe('cfx_call');
+    expect(method).toEqual('cfx_call');
 
-    expect(options.from).toBe(ADDRESS);
-    expect(options.nonce).toBe('0x64');
-    expect(options.gasPrice).toBe(Hex(cfx.defaultGasPrice));
-    expect(options.gas).toBe('0x01');
-    expect(options.to).toBe(ADDRESS);
-    expect(options.value).toBe('0x64');
-    expect(options.data).toBe('0x');
+    expect(options.from).toEqual(ADDRESS);
+    expect(options.nonce).toEqual('0x64');
+    expect(options.gasPrice).toEqual(Hex(cfx.defaultGasPrice));
+    expect(options.gas).toEqual('0x01');
+    expect(options.to).toEqual(ADDRESS);
+    expect(options.value).toEqual('0x64');
+    expect(options.data).toEqual('0x');
 
-    expect(epochNumber).toBe(EpochNumber.EARLIEST);
+    expect(epochNumber).toEqual(EpochNumber.EARLIEST);
   };
   await cfx.call(
     {
@@ -315,35 +321,35 @@ test('call', async () => {
 
 test('estimateGas', async () => {
   cfx.getTransactionCount = async (address) => {
-    expect(Hex(address)).toBe(ADDRESS);
+    expect(Hex(address)).toEqual(ADDRESS);
     return 100;
   };
 
   await expect(cfx.estimateGas()).rejects.toThrow('Cannot read property');
 
   cfx.provider.call = async (method, options) => {
-    expect(method).toBe('cfx_estimateGas');
+    expect(method).toEqual('cfx_estimateGas');
 
-    expect(options.from).toBe(undefined);
-    expect(options.nonce).toBe(undefined);
-    expect(options.gasPrice).toBe(Hex(cfx.defaultGasPrice));
-    expect(options.gas).toBe(Hex(cfx.defaultGas));
-    expect(options.to).toBe(ADDRESS);
-    expect(options.value).toBe(undefined);
-    expect(options.data).toBe(undefined);
+    expect(options.from).toEqual(undefined);
+    expect(options.nonce).toEqual(undefined);
+    expect(options.gasPrice).toEqual(Hex(cfx.defaultGasPrice));
+    expect(options.gas).toEqual(Hex(cfx.defaultGas));
+    expect(options.to).toEqual(ADDRESS);
+    expect(options.value).toEqual(undefined);
+    expect(options.data).toEqual(undefined);
   };
   await cfx.estimateGas({ to: ADDRESS });
 
   cfx.provider.call = async (method, options) => {
-    expect(method).toBe('cfx_estimateGas');
+    expect(method).toEqual('cfx_estimateGas');
 
-    expect(options.from).toBe(ADDRESS);
-    expect(options.nonce).toBe('0x64');
-    expect(options.gasPrice).toBe(Hex(cfx.defaultGasPrice));
-    expect(options.gas).toBe('0x01');
-    expect(options.to).toBe(ADDRESS);
-    expect(options.value).toBe('0x64');
-    expect(options.data).toBe('0x');
+    expect(options.from).toEqual(ADDRESS);
+    expect(options.nonce).toEqual('0x64');
+    expect(options.gasPrice).toEqual(Hex(cfx.defaultGasPrice));
+    expect(options.gas).toEqual('0x01');
+    expect(options.to).toEqual(ADDRESS);
+    expect(options.value).toEqual('0x64');
+    expect(options.data).toEqual('0x');
   };
   await cfx.estimateGas(
     {

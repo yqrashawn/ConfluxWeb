@@ -25,5 +25,6 @@ module.exports = {
     'no-param-reassign': 0, // for type format
     'no-underscore-dangle': 0, // for private attribute
     'object-curly-newline': 0,
+    'prefer-destructuring': 0,
   },
 };

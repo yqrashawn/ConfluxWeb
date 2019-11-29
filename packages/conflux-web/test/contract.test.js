@@ -3,7 +3,7 @@ const Conflux = require('../index');
 const MockProvider = require('./__mocks__/provider');
 const { abi, code, address } = require('./__mocks__/contract.json');
 
-const ADDRESS = '0xbbd9e9be525ab967e633bcdaeac8bd5723ed4d6b';
+const ADDRESS = '0xc000000000000000000000000000000000000000';
 
 // ----------------------------------------------------------------------------
 const cfx = new Conflux({
@@ -12,23 +12,60 @@ const cfx = new Conflux({
 });
 cfx.provider = new MockProvider();
 
+const contract = cfx.Contract({ abi, code, address });
+
 test('Contract', async () => {
   let value;
 
-  const contract = await cfx.Contract({ abi, code, address });
-
-  expect(contract.address).toBe(address);
-  expect(contract.constructor.code).toBe(code);
+  expect(contract.address).toEqual(address);
+  expect(contract.constructor.code).toEqual(code);
 
   const deployAddress = await contract.constructor(100).sendTransaction({ from: ADDRESS, nonce: 0 }).deployed();
-  expect(Hex.isHex(deployAddress)).toBe(true);
+  expect(Hex.isHex(deployAddress)).toEqual(true);
 
   value = await contract.count();
-  expect(value.toString()).toBe('100');
+  expect(value.toString()).toEqual('100');
 
   value = await contract.inc(0).call({ from: ADDRESS, nonce: 0 });
-  expect(value.toString()).toBe('100');
+  expect(value.toString()).toEqual('100');
 
   value = await contract.count().estimateGas({ gasPrice: 101 });
-  expect(value).toBe(21000);
+  expect(value).toEqual(21000);
+
+  const logs = await contract.SelfEvent(ADDRESS).list();
+  expect(logs.length).toEqual(1);
+});
+
+test('decodeData.constructor', () => {
+  const data = contract.constructor(50).data;
+
+  const value = contract.abi.decodeData(data);
+  expect(value.name).toEqual('constructor');
+  expect(value.params.length).toEqual(1);
+  expect(`${value.params[0]}`).toEqual('50');
+});
+
+test('decodeData.function', () => {
+  const data = contract.inc(100).data;
+
+  const value = contract.abi.decodeData(data);
+  expect(value.name).toEqual('inc');
+  expect(value.params.length).toEqual(1);
+  expect(`${value.params[0]}`).toEqual('100');
+});
+
+test('decodeLog', () => {
+  const log = {
+    data: '0x0000000000000000000000000000000000000000000000000000000000000064',
+    topics: [
+      '0xc4c01f6de493c58245fb681341f3a76bba9551ce81b11cbbb5d6d297844594df',
+      '0x000000000000000000000000a000000000000000000000000000000000000001',
+    ],
+  };
+
+  const value = contract.abi.decodeLog(log);
+  expect(value.name).toEqual('SelfEvent');
+  expect(value.params.length).toEqual(2);
+  expect(value.params[0].toLowerCase()).toEqual('0xa000000000000000000000000000000000000001');
+  expect(value.params[1]).toEqual('100');
 });

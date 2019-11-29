@@ -6,46 +6,46 @@ const ADDRESS = '0xbbd9e9be525ab967e633bcdaeac8bd5723ed4d6b';
 // ----------------------------------------------------------------------------
 test('Wallet', () => {
   const wallet = new Wallet();
-  expect(wallet.size).toBe(0);
+  expect(wallet.size).toEqual(0);
 
   const accountNew = wallet.create();
-  expect(wallet.size).toBe(1);
+  expect(wallet.size).toEqual(1);
 
   const accountGet = wallet.get(accountNew.address);
-  expect(accountGet.address).toBe(accountNew.address);
-  expect(accountGet.privateKey).toBe(accountNew.privateKey);
+  expect(accountGet.address).toEqual(accountNew.address);
+  expect(accountGet.privateKey).toEqual(accountNew.privateKey);
 
   const accountAdd = wallet.add(KEY);
-  expect(wallet.size).toBe(2);
-  expect(accountAdd.privateKey).toBe(KEY);
-  expect(accountAdd.address).toBe(ADDRESS);
+  expect(wallet.size).toEqual(2);
+  expect(accountAdd.privateKey).toEqual(KEY);
+  expect(accountAdd.address).toEqual(ADDRESS);
 
   const accountDup = wallet.add(KEY);
-  expect(wallet.size).toBe(2);
-  expect(accountAdd.address).toBe(accountDup.address);
-  expect(accountAdd.privateKey).toBe(accountDup.privateKey);
+  expect(wallet.size).toEqual(2);
+  expect(accountAdd.address).toEqual(accountDup.address);
+  expect(accountAdd.privateKey).toEqual(accountDup.privateKey);
 
   const accountRemove = wallet.remove(accountNew.address);
-  expect(accountRemove.address).toBe(accountNew.address);
-  expect(accountRemove.privateKey).toBe(accountNew.privateKey);
-  expect(wallet.size).toBe(1);
+  expect(accountRemove.address).toEqual(accountNew.address);
+  expect(accountRemove.privateKey).toEqual(accountNew.privateKey);
+  expect(wallet.size).toEqual(1);
 
   const empty = wallet.remove(accountNew.address);
-  expect(empty).toBe(undefined);
-  expect(wallet.size).toBe(1);
+  expect(empty).toEqual(undefined);
+  expect(wallet.size).toEqual(1);
 
   wallet.clear(accountNew.address);
-  expect(wallet.size).toBe(0);
+  expect(wallet.size).toEqual(0);
 });
 
 test('Wallet.Account', () => {
   const account = new Wallet.Account(KEY);
-  expect(account.privateKey).toBe(KEY);
-  expect(account.address).toBe(ADDRESS);
+  expect(account.privateKey).toEqual(KEY);
+  expect(account.address).toEqual(ADDRESS);
 
   const info = account.encrypt('password');
   const loadAccount = Wallet.Account.decrypt(info, 'password');
 
-  expect(loadAccount.privateKey).toBe(account.privateKey);
-  expect(loadAccount.address).toBe(account.address);
+  expect(loadAccount.privateKey).toEqual(account.privateKey);
+  expect(loadAccount.address).toEqual(account.address);
 });

@@ -6,10 +6,10 @@ const Conflux = require('../index');
 test('constructor()', async () => {
   const cfx = new Conflux();
 
-  expect(cfx.defaultEpoch).toBe(EpochNumber.LATEST_STATE);
-  expect(cfx.defaultGasPrice).toBe(undefined);
-  expect(cfx.defaultGas).toBe(undefined);
-  expect(cfx.provider.constructor.name).toBe('BaseProvider');
+  expect(cfx.defaultEpoch).toEqual(EpochNumber.LATEST_STATE);
+  expect(cfx.defaultGasPrice).toEqual(undefined);
+  expect(cfx.defaultGas).toEqual(undefined);
+  expect(cfx.provider.constructor.name).toEqual('BaseProvider');
 
   await expect(cfx.provider.call()).rejects.toThrow('call not implement');
 });
@@ -22,29 +22,29 @@ test('constructor({...})', () => {
     defaultGas: 1000000,
   });
 
-  expect(cfx.defaultEpoch).toBe(EpochNumber.LATEST_MINED);
-  expect(cfx.defaultGasPrice).toBe(100);
-  expect(cfx.defaultGas).toBe(1000000);
-  expect(cfx.provider.constructor.name).toBe('HttpProvider');
+  expect(cfx.defaultEpoch).toEqual(EpochNumber.LATEST_MINED);
+  expect(cfx.defaultGasPrice).toEqual(100);
+  expect(cfx.defaultGas).toEqual(1000000);
+  expect(cfx.provider.constructor.name).toEqual('HttpProvider');
 });
 
 test('cfx.setProvider', () => {
   const cfx = new Conflux();
 
-  expect(cfx.provider.constructor.name).toBe('BaseProvider');
-  expect(cfx.provider.timeout).toBe(60 * 1000);
+  expect(cfx.provider.constructor.name).toEqual('BaseProvider');
+  expect(cfx.provider.timeout).toEqual(60 * 1000);
 
   cfx.setProvider('http://localhost:80', { timeout: 30 * 1000 });
-  expect(cfx.provider.constructor.name).toBe('HttpProvider');
-  expect(cfx.provider.timeout).toBe(30 * 1000);
+  expect(cfx.provider.constructor.name).toEqual('HttpProvider');
+  expect(cfx.provider.timeout).toEqual(30 * 1000);
 
   cfx.setProvider('ws://localhost:443');
-  expect(cfx.provider.constructor.name).toBe('WebsocketProvider');
-  expect(cfx.provider.timeout).toBe(30 * 1000);
+  expect(cfx.provider.constructor.name).toEqual('WebsocketProvider');
+  expect(cfx.provider.timeout).toEqual(30 * 1000);
 
   cfx.setProvider('');
-  expect(cfx.provider.constructor.name).toBe('BaseProvider');
-  expect(cfx.provider.timeout).toBe(30 * 1000);
+  expect(cfx.provider.constructor.name).toEqual('BaseProvider');
+  expect(cfx.provider.timeout).toEqual(30 * 1000);
 
   expect(() => cfx.setProvider()).toThrow('url must be string');
 });
