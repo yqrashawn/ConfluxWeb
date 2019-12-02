@@ -214,7 +214,7 @@ class Conflux {
     return parse.eventLogs(result);
   }
 
-  // -------------------------------- address -----------------------------------
+  // ------------------------------- address ----------------------------------
   /**
    * Get the balance of an address at a given epochNumber.
    *
@@ -439,7 +439,7 @@ class Conflux {
     return 0;
   }
 
-  // -------------------------------- transaction -----------------------------------
+  // ----------------------------- transaction --------------------------------
   /**
    * Returns a transaction matching the given transaction hash.
    *
@@ -649,7 +649,7 @@ class Conflux {
     return this.provider.call('cfx_sendRawTransaction', Hex(hex));
   }
 
-  // -------------------------------- contract -----------------------------------
+  // ------------------------------ contract ----------------------------------
   /**
    * Get the code at a specific address.
    *
