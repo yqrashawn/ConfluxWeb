@@ -166,7 +166,7 @@ class Transaction {
    * @return {Buffer}
    */
   encode(includeSignature = false) {
-    const raw = [this.nonce, this.gasPrice, this.gas, this.to, this.value, this.data];
+    const raw = [this.nonce, this.gasPrice, this.gas, this.to, this.value, this.data]; // ordered
     if (includeSignature) {
       if (this.v === undefined) {
         throwError('`v` is required and should match `Hex`');
@@ -177,7 +177,7 @@ class Transaction {
       if (this.s === undefined) {
         throwError('`s` is required and should match `Hex`');
       }
-      raw.push(this.v, this.r, this.s);
+      raw.push(this.v, this.r, this.s); // ordered
     }
     return rlpEncode(raw.map(Hex.toBuffer));
   }

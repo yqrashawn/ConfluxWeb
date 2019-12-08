@@ -62,6 +62,8 @@ Hex.isHex32 = function (hex) {
 };
 
 /**
+ * It's importance to only support hex string but not auto `Hex()`,
+ * cause `Transaction.encode` will not check hex again.
  * @param hex {string} - The hex string.
  * @return {Buffer}
  */
@@ -70,11 +72,21 @@ Hex.toBuffer = function (hex) {
     throw new Error(`"${hex}" do not match hex string`);
   }
 
-  const buffer = Buffer.from(hex.substring(2), 'hex');
-  if (buffer.equals(Buffer.from('00', 'hex'))) {
-    return Buffer.from('');
-  }
-  return buffer;
+  return Buffer.from(hex.substring(2), 'hex');
+};
+
+/**
+ * @param values {array} - Array of hex string
+ * @return {string}
+ */
+Hex.concat = function (...values) {
+  values.forEach((value, index) => {
+    if (!Hex.isHex(value)) {
+      throw new Error(`values[${index}] do not match hex string, got "${value}"`);
+    }
+  });
+
+  return `0x${values.map(v => Hex(v).substring(2)).join('')}`;
 };
 
 // ---------------------------------- UInt ------------------------------------

@@ -18,7 +18,10 @@ function sha3(buffer) {
  * @return {Buffer}
  */
 function rlpEncode(array) {
-  return rlp.encode(array);
+  const ZERO = Buffer.from('00', 'hex');
+  const EMPTY = Buffer.from('', 'hex');
+
+  return rlp.encode(array.map(v => (v.equals(ZERO) ? EMPTY : v)));
 }
 
 // ----------------------------------------------------------------------------
