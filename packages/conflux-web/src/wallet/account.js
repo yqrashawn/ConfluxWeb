@@ -1,6 +1,5 @@
-const lodash = require('lodash');
 const { Hex, PrivateKey, Address } = require('conflux-web-utils/src/type');
-const { privateKeyToAddress, encrypt, decrypt } = require('conflux-web-utils/src/sign');
+const { privateKeyToAddress } = require('conflux-web-utils/src/sign'); // and decrypt, encrypt
 const Transaction = require('conflux-web-utils/src/transaction');
 
 class Account {
@@ -15,28 +14,28 @@ class Account {
     this.address = Address(privateKeyToAddress(Hex.toBuffer(this.privateKey)));
   }
 
-  /**
-   * Decrypt account encrypt info.
-   *
-   * @param info {object}
-   * @param password {string}
-   * @return {Account}
-   */
-  static decrypt(info, password) {
-    const privateKeyBuffer = decrypt(lodash.mapValues(info, Hex.toBuffer), Buffer.from(password));
-    return new this(privateKeyBuffer);
-  }
-
-  /**
-   * Encrypt account privateKey to object.
-   *
-   * @param password {string}
-   * @return {object}
-   */
-  encrypt(password) {
-    const info = encrypt(Hex.toBuffer(this.privateKey), Buffer.from(password));
-    return lodash.mapValues(info, Hex);
-  }
+  // /**
+  //  * Decrypt account encrypt info.
+  //  *
+  //  * @param info {object}
+  //  * @param password {string}
+  //  * @return {Account}
+  //  */
+  // static decrypt(info, password) {
+  //   const privateKeyBuffer = decrypt(lodash.mapValues(info, Hex.toBuffer), Buffer.from(password));
+  //   return new this(privateKeyBuffer);
+  // }
+  //
+  // /**
+  //  * Encrypt account privateKey to object.
+  //  *
+  //  * @param password {string}
+  //  * @return {object}
+  //  */
+  // encrypt(password) {
+  //   const info = encrypt(Hex.toBuffer(this.privateKey), Buffer.from(password));
+  //   return lodash.mapValues(info, Hex);
+  // }
 
   /**
    * Sign a transaction.

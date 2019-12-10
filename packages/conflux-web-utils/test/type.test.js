@@ -1,7 +1,6 @@
 const BigNumber = require('bignumber.js');
 const {
   Hex,
-  UInt,
   Drip,
   PrivateKey,
   Address,
@@ -69,6 +68,16 @@ test('Hex(Date)', () => {
   expect(Hex(new Date('2020-01-01T00:00:00.000Z'))).toEqual('0x016f5e66e800');
 });
 
+test('Hex.isHex', () => {
+  expect(Hex.isHex()).toEqual(false);
+  expect(Hex.isHex('0x')).toEqual(true);
+  expect(Hex.isHex('01')).toEqual(false);
+  expect(Hex.isHex('0x01')).toEqual(true);
+  expect(Hex.isHex('0x1')).toEqual(false);
+
+  expect(Hex.isHex(0x01)).toEqual(false);
+});
+
 test('Hex.toBuffer', () => {
   expect(Hex.toBuffer('0x')).toEqual(Buffer.from(''));
   expect(Hex.toBuffer('0x00')).toEqual(Buffer.from([0]));
@@ -89,16 +98,15 @@ test('Hex.concat', () => {
   expect(() => Hex.concat(['0x01', '0x02'])).toThrow('do not match hex string');
 });
 
-test('UInt', () => {
-  expect(() => UInt(undefined)).toThrow('do not match hex string');
+test('Hex.fromNumber', () => {
+  expect(() => Hex.fromNumber(undefined)).toThrow('do not match hex string');
 
-  expect(UInt(100)).toEqual('0x64');
-  expect(UInt('100')).toEqual('0x64');
-  expect(UInt('0100')).toEqual('0x64');
-  expect(() => UInt(-100)).toThrow('do not match hex string');
-
-  expect(UInt(true)).toEqual('0x01');
-  expect(UInt(null)).toEqual('0x00');
+  expect(Hex.fromNumber(100)).toEqual('0x64');
+  expect(Hex.fromNumber('100')).toEqual('0x64');
+  expect(Hex.fromNumber('0100')).toEqual('0x64');
+  expect(() => Hex.fromNumber(-100)).toThrow('do not match hex string');
+  expect(() => Hex.fromNumber(true)).toThrow('do not match hex string');
+  expect(() => Hex.fromNumber(null)).toThrow('do not match hex string');
 });
 
 test('Drip', () => {
@@ -116,18 +124,16 @@ test('Drip.fromGDrip', () => {
   expect(Drip.fromGDrip(0)).toEqual('0x00');
   expect(Drip.fromGDrip(0.01)).toEqual('0x989680');
   expect(Drip.fromGDrip(1)).toEqual('0x3b9aca00');
-  expect(() => Drip.fromGDrip(BigNumber(0.1).div(1e9))).toThrow('GDrip to Drip in integer');
-
   expect(Drip.toGDrip('1000000000').toString()).toEqual('1');
+  expect(Drip.toGDrip(Drip.fromCFX(1)).toString()).toEqual('1000000000');
 });
 
 test('Drip.fromCFX', () => {
   expect(Drip.fromCFX(0)).toEqual('0x00');
   expect(Drip.fromCFX(0.01)).toEqual('0x2386f26fc10000');
   expect(Drip.fromCFX(1)).toEqual('0x0de0b6b3a7640000');
-  expect(() => Drip.fromCFX(BigNumber(0.1).div(1e9).div(1e9))).toThrow('CFX to Drip in integer');
-
   expect(Drip.toCFX('1000000000000000000').toString()).toEqual('1');
+  expect(Drip.toCFX(Drip.fromGDrip(1e9)).toString()).toEqual('1');
 });
 
 test('PrivateKey', () => {
@@ -151,7 +157,6 @@ test('Address', () => {
 test('EpochNumber', () => {
   expect(() => EpochNumber(undefined)).toThrow('do not match hex string');
 
-  expect(EpochNumber(null)).toEqual('0x00');
   expect(EpochNumber(0)).toEqual('0x00');
   expect(EpochNumber('100')).toEqual('0x64');
   expect(EpochNumber(EpochNumber.EARLIEST)).toEqual(EpochNumber.EARLIEST);

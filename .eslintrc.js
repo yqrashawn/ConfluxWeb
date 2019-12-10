@@ -15,6 +15,7 @@ module.exports = {
   },
   rules: {
     'arrow-parens': ['error', 'as-needed', { 'requireForBlockBody': true }],
+    'arrow-body-style': 0,
     'class-methods-use-this': 0,
     'func-names': 0, // for type format
     'function-paren-newline': 0,

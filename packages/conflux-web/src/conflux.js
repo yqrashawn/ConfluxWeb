@@ -1,5 +1,5 @@
 const lodash = require('lodash');
-const { Hex, Address, EpochNumber, BlockHash, TxHash, UInt } = require('conflux-web-utils/src/type');
+const { Hex, Address, EpochNumber, BlockHash, TxHash } = require('conflux-web-utils/src/type');
 const Transaction = require('conflux-web-utils/src/transaction');
 const providerFactory = require('../lib/provider');
 
@@ -199,7 +199,7 @@ class Conflux {
    */
   async getLogs({ fromEpoch, toEpoch, blockHashes, address, topics, limit }) {
     if (topics !== undefined) {
-      topics = topics.map(topic => (lodash.isNil(topic) ? null : Hex(topic))); // XXX: TODO Hash32
+      topics = topics.map(topic => (lodash.isNil(topic) ? null : Hex(topic))); // XXX: Hash32
     }
 
     const result = await this.provider.call('cfx_getLogs', {
@@ -207,7 +207,7 @@ class Conflux {
       toEpoch: toEpoch !== undefined ? EpochNumber(toEpoch) : undefined,
       address: address !== undefined ? Address(address) : undefined,
       blockHashes: blockHashes !== undefined ? blockHashes.map(BlockHash) : undefined,
-      limit: limit !== undefined ? UInt(limit) : undefined,
+      limit: limit !== undefined ? Hex.fromNumber(limit) : undefined,
       topics,
     });
 
@@ -536,11 +536,13 @@ class Conflux {
    *
    * > FIXME: rpc `cfx_sendTransaction` not implement yet.
    *
+   * > NOTE: if `from` options is a instance of `Account`, this methods will sign by account local and send by `cfx_sendRawTransaction`, else send by `cfx_sendTransaction`
+   *
    * @param options {object} - See `Transaction.callOptions`
    * @return {Promise<PendingTransaction>} The PendingTransaction object.
    *
    * @example
-   * > // TODO call with address
+   * > // TODO call with address, need `cfx_sendTransaction`
    *
    * @example
    * > const account = cfx.wallet.add(KEY);

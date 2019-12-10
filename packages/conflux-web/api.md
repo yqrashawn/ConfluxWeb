@@ -537,6 +537,8 @@ Creates new message call transaction or a contract creation, if the data field c
 
 > FIXME: rpc `cfx_sendTransaction` not implement yet.
 
+> NOTE: if `from` options is a instance of `Account`, this methods will sign by account local and send by `cfx_sendRawTransaction`, else send by `cfx_sendTransaction`
+
 ### Parameters
 
 Name    | Type   | Required | Default | Description
@@ -550,7 +552,7 @@ options | object | true     |         | See `Transaction.callOptions`
 ### Example
 
 ```
-> // TODO call with address
+> // TODO call with address, need `cfx_sendTransaction`
 ```
 
 ```
@@ -834,9 +836,8 @@ epochNumber | string,number | true     |         | See `Conflux.call`.
 `Promise.<*>` Decoded contact call return.
 
 
-
 ----------
-# subscribe.pending_transaction
+# subscribe.pendingTransaction
 
 Pending transaction
 
@@ -973,7 +974,6 @@ options.timeout | number   | false    | 30*1000 | Loop timeout in ms.
 `Promise.<*>` 
 
 
-
 ----------
 # wallet.account
 
@@ -993,21 +993,6 @@ privateKey | string,Buffer | true     |         |
 ### Return
 
 `Account` 
-
-
-## Account.encrypt
-
-Encrypt account privateKey to object.
-
-### Parameters
-
-Name     | Type   | Required | Default | Description
----------|--------|----------|---------|------------
-password | string | true     |         |
-
-### Return
-
-`object` 
 
 
 ## Account.signTransaction
@@ -1036,23 +1021,6 @@ options | object | true     |         | See 'Transaction'
 ### Return
 
 `string` Account address as string.
-
-
-## Account.decrypt
-
-Decrypt account encrypt info.
-
-### Parameters
-
-Name     | Type   | Required | Default | Description
----------|--------|----------|---------|------------
-info     | object | true     |         |
-password | string | true     |         |
-
-### Return
-
-`Account` 
-
 
 
 ----------

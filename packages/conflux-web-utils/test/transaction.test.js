@@ -40,10 +40,10 @@ test('Transaction', () => {
 test('sendOptions', () => {
   expect(() => Transaction.sendOptions()).toThrow('Cannot destructure property');
   expect(() => Transaction.sendOptions({})).toThrow('\'from\' is required and should match \'Address\'');
-  expect(() => Transaction.sendOptions({ from: ADDRESS })).toThrow('\'nonce\' is required and should match \'UInt\'');
+  expect(() => Transaction.sendOptions({ from: ADDRESS })).toThrow('\'nonce\' is required and should match \'uint\'');
   expect(() => Transaction.sendOptions({ nonce: 0, from: ADDRESS })).toThrow('\'gasPrice\' is required and should match \'Drip\'');
   expect(() => Transaction.sendOptions({ nonce: 0, from: ADDRESS, gasPrice: 1 }))
-    .toThrow('\'gas\' is required and should match \'UInt\'');
+    .toThrow('\'gas\' is required and should match \'uint\'');
 
   const tx = Transaction.sendOptions({ nonce: 0, from: ADDRESS, gasPrice: 1, gas: 21000 });
   expect(tx.from).toEqual(ADDRESS);
@@ -84,9 +84,9 @@ test('estimateOptions', () => {
 
 test('rawOptions', () => {
   expect(() => Transaction.rawOptions()).toThrow('Cannot destructure property');
-  expect(() => Transaction.rawOptions({})).toThrow('\'nonce\' is required and should match \'UInt\'');
+  expect(() => Transaction.rawOptions({})).toThrow('\'nonce\' is required and should match \'uint\'');
   expect(() => Transaction.rawOptions({ nonce: 0 })).toThrow('\'gasPrice\' is required and should match \'Drip\'');
-  expect(() => Transaction.rawOptions({ nonce: 0, gasPrice: 1 })).toThrow('\'gas\' is required and should match \'UInt\'');
+  expect(() => Transaction.rawOptions({ nonce: 0, gasPrice: 1 })).toThrow('\'gas\' is required and should match \'uint\'');
 
   const tx = Transaction.rawOptions({ nonce: 0, gasPrice: 1, gas: 21000 });
   expect(tx.nonce).toEqual('0x00');

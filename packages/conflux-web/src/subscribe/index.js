@@ -1,1 +1,1 @@
-module.exports.PendingTransaction = require('./pending_transaction');
+module.exports.PendingTransaction = require('./pendingTransaction');

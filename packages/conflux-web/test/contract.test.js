@@ -1,3 +1,4 @@
+const BigNumber = require('bignumber.js');
 const { Hex } = require('conflux-web-utils/src/type');
 const Conflux = require('../index');
 const MockProvider = require('./__mocks__/provider');
@@ -42,7 +43,7 @@ test('decodeData.constructor', () => {
   const value = contract.abi.decodeData(data);
   expect(value.name).toEqual('constructor');
   expect(value.params.length).toEqual(1);
-  expect(`${value.params[0]}`).toEqual('50');
+  expect(value.params[0]).toEqual(BigNumber(50));
 });
 
 test('decodeData.function', () => {
@@ -51,7 +52,7 @@ test('decodeData.function', () => {
   const value = contract.abi.decodeData(data);
   expect(value.name).toEqual('inc');
   expect(value.params.length).toEqual(1);
-  expect(`${value.params[0]}`).toEqual('100');
+  expect(value.params[0]).toEqual(BigNumber(100));
 });
 
 test('decodeLog', () => {
@@ -66,6 +67,6 @@ test('decodeLog', () => {
   const value = contract.abi.decodeLog(log);
   expect(value.name).toEqual('SelfEvent');
   expect(value.params.length).toEqual(2);
-  expect(value.params[0].toLowerCase()).toEqual('0xa000000000000000000000000000000000000001');
-  expect(value.params[1]).toEqual('100');
+  expect(value.params[0]).toEqual('0xa000000000000000000000000000000000000001');
+  expect(value.params[1]).toEqual(BigNumber(100));
 });

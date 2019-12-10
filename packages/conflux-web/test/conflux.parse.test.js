@@ -1,6 +1,6 @@
 const lodash = require('lodash');
 const BigNumber = require('bignumber.js');
-const { Hex } = require('conflux-web-utils/src/type');
+const { Hex, Address } = require('conflux-web-utils/src/type');
 
 const Conflux = require('../index');
 const MockProvider = require('./__mocks__/provider');
@@ -41,7 +41,7 @@ test('getLogs', async () => {
   expect(Number.isInteger(eventLog.transactionLogIndex)).toEqual(true);
   expect(eventLog.data.startsWith('0x')).toEqual(true);
   eventLog.topics.forEach((topic) => {
-    expect(Hex.isHex32(topic)).toEqual(true);
+    expect(Hex.isHex(topic)).toEqual(true);
   });
 });
 
@@ -63,16 +63,16 @@ test('getBlocksByEpoch', async () => {
 
   expect(Array.isArray(blockHashArray)).toEqual(true);
   blockHashArray.forEach((txHash) => {
-    expect(Hex.isHex32(txHash)).toEqual(true);
+    expect(Hex.isHex(txHash)).toEqual(true);
   });
 });
 
 test('getBlockByHash', async () => {
   const block = await cfx.getBlockByHash(BLOCK_HASH);
 
-  expect(Hex.isHex32(block.hash)).toEqual(true);
-  expect(Hex.isHex20(block.miner)).toEqual(true);
-  expect(Hex.isHex32(block.parentHash)).toEqual(true);
+  expect(Hex.isHex(block.hash)).toEqual(true);
+  expect(Hex.isHex(block.miner)).toEqual(true);
+  expect(Hex.isHex(block.parentHash)).toEqual(true);
   expect(Hex.isHex(block.transactionsRoot)).toEqual(true);
   expect(Hex.isHex(block.deferredLogsBloomHash)).toEqual(true);
   expect(Hex.isHex(block.deferredReceiptsRoot)).toEqual(true);
@@ -91,7 +91,7 @@ test('getBlockByHash', async () => {
   expect(Array.isArray(block.transactions)).toEqual(true);
   expect(lodash.isPlainObject(block.deferredStateRootWithAux)).toEqual(true);
   block.transactions.forEach((txHash) => {
-    expect(Hex.isHex32(txHash)).toEqual(true);
+    expect(Hex.isHex(txHash)).toEqual(true);
   });
 
   const blockDetail = await cfx.getBlockByHash(BLOCK_HASH, true);
@@ -119,14 +119,14 @@ test('getBlockByHashWithPivotAssumption', async () => {
 test('getTransactionByHash', async () => {
   const transaction = await cfx.getTransactionByHash(TX_HASH);
 
-  expect(Hex.isHex32(transaction.blockHash)).toEqual(true);
-  expect(Hex.isHex32(transaction.hash)).toEqual(true);
-  expect(Hex.isHex20(transaction.from)).toEqual(true);
-  expect(Hex.isHex20(transaction.to)).toEqual(true);
+  expect(Hex.isHex(transaction.blockHash)).toEqual(true);
+  expect(Hex.isHex(transaction.hash)).toEqual(true);
+  expect(Hex.isHex(transaction.from)).toEqual(true);
+  expect(Hex.isHex(transaction.to)).toEqual(true);
   expect(transaction.data.startsWith('0x')).toEqual(true);
-  expect(Hex.isHex32(transaction.r)).toEqual(true);
-  expect(Hex.isHex32(transaction.s)).toEqual(true);
-  expect(Hex.isHex20(transaction.contractCreated) || lodash.isNull(transaction.contractCreated)).toEqual(true);
+  expect(Hex.isHex(transaction.r)).toEqual(true);
+  expect(Hex.isHex(transaction.s)).toEqual(true);
+  expect(Hex.isHex(transaction.contractCreated) || lodash.isNull(transaction.contractCreated)).toEqual(true);
   expect(Number.isInteger(transaction.transactionIndex)).toEqual(true);
   expect(Number.isInteger(transaction.nonce)).toEqual(true);
   expect(Number.isInteger(transaction.status)).toEqual(true);
@@ -139,13 +139,13 @@ test('getTransactionByHash', async () => {
 test('getTransactionReceipt', async () => {
   const receipt = await cfx.getTransactionReceipt(TX_HASH);
 
-  expect(Hex.isHex32(receipt.blockHash)).toEqual(true);
-  expect(Hex.isHex32(receipt.transactionHash)).toEqual(true);
-  expect(Hex.isHex20(receipt.from)).toEqual(true);
-  expect(Hex.isHex20(receipt.to)).toEqual(true);
+  expect(Hex.isHex(receipt.blockHash)).toEqual(true);
+  expect(Hex.isHex(receipt.transactionHash)).toEqual(true);
+  expect(Hex.isHex(receipt.from)).toEqual(true);
+  expect(Hex.isHex(receipt.to)).toEqual(true);
   expect(Hex.isHex(receipt.logsBloom)).toEqual(true);
   expect(Hex.isHex(receipt.stateRoot)).toEqual(true);
-  expect(Hex.isHex20(receipt.contractCreated) || lodash.isNull(receipt.contractCreated)).toEqual(true);
+  expect(Hex.isHex(receipt.contractCreated) || lodash.isNull(receipt.contractCreated)).toEqual(true);
   expect(Number.isInteger(receipt.index)).toEqual(true);
   expect(Number.isInteger(receipt.epochNumber)).toEqual(true);
   expect(Number.isInteger(receipt.outcomeStatus)).toEqual(true);
@@ -165,10 +165,10 @@ test('sendTransaction by address', async () => {
   expect(Hex.isHex(txHash)).toEqual(true);
 
   const transactionCreated = await promise.get({ delta: 0 });
-  expect(Hex.isHex32(transactionCreated.hash)).toEqual(true);
+  expect(Hex.isHex(transactionCreated.hash)).toEqual(true);
 
   const transactionMined = await promise.mined();
-  expect(Hex.isHex32(transactionMined.blockHash)).toEqual(true);
+  expect(Hex.isHex(transactionMined.blockHash)).toEqual(true);
 
   const receiptExecute = await promise.executed();
   expect(receiptExecute.outcomeStatus).toEqual(0);

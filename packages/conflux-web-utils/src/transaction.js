@@ -1,4 +1,4 @@
-const { Hex, Address, PrivateKey, UInt, Drip } = require('./type');
+const { Hex, Address, PrivateKey, Drip } = require('./type');
 const { rlpEncode, sha3, ecdsaSign, ecdsaRecover, publicKeyToAddress } = require('./sign');
 
 function throwError(...args) {
@@ -20,9 +20,9 @@ class Transaction {
   static sendOptions({ from, nonce, gasPrice, gas, to, value, data }) {
     return {
       from: from !== undefined ? Address(from) : throwError(`'from' is required and should match 'Address', got ${from}`),
-      nonce: nonce !== undefined ? UInt(nonce) : throwError(`'nonce' is required and should match 'UInt', got ${nonce}`),
+      nonce: nonce !== undefined ? Hex.fromNumber(nonce) : throwError(`'nonce' is required and should match 'uint', got ${nonce}`),
       gasPrice: gasPrice !== undefined ? Drip(gasPrice) : throwError(`'gasPrice' is required and should match 'Drip', got ${gasPrice}`),
-      gas: gas !== undefined ? UInt(gas) : throwError(`'gas' is required and should match 'UInt', got ${gas}`),
+      gas: gas !== undefined ? Hex.fromNumber(gas) : throwError(`'gas' is required and should match 'uint', got ${gas}`),
       to: to !== undefined ? Address(to) : undefined,
       value: value !== undefined ? Drip(value) : undefined,
       data: data !== undefined ? Hex(data) : Hex(''),
@@ -43,9 +43,9 @@ class Transaction {
   static callOptions({ from, nonce, gasPrice, gas, to, value, data }) {
     return {
       from: from !== undefined ? Address(from) : undefined,
-      nonce: nonce !== undefined ? UInt(nonce) : undefined,
+      nonce: nonce !== undefined ? Hex.fromNumber(nonce) : undefined,
       gasPrice: gasPrice !== undefined ? Drip(gasPrice) : undefined,
-      gas: gas !== undefined ? UInt(gas) : undefined,
+      gas: gas !== undefined ? Hex.fromNumber(gas) : undefined,
       to: to !== undefined ? Address(to) : throwError(`'to' is required and should match 'Address', got ${to}`),
       value: value !== undefined ? Drip(value) : undefined,
       data: data !== undefined ? Hex(data) : undefined,
@@ -66,9 +66,9 @@ class Transaction {
   static estimateOptions({ from, nonce, gasPrice, gas, to, value, data }) {
     return {
       from: from !== undefined ? Address(from) : undefined,
-      nonce: nonce !== undefined ? UInt(nonce) : undefined,
+      nonce: nonce !== undefined ? Hex.fromNumber(nonce) : undefined,
       gasPrice: gasPrice !== undefined ? Drip(gasPrice) : undefined,
-      gas: gas !== undefined ? UInt(gas) : undefined,
+      gas: gas !== undefined ? Hex.fromNumber(gas) : undefined,
       to: to !== undefined ? Address(to) : undefined,
       value: value !== undefined ? Drip(value) : undefined,
       data: data !== undefined ? Hex(data) : undefined,
@@ -90,9 +90,9 @@ class Transaction {
    */
   static rawOptions({ nonce, gasPrice, gas, to, value, data, r, s, v }) {
     return {
-      nonce: nonce !== undefined ? UInt(nonce) : throwError(`'nonce' is required and should match 'UInt', got ${nonce}`),
+      nonce: nonce !== undefined ? Hex.fromNumber(nonce) : throwError(`'nonce' is required and should match 'uint', got ${nonce}`),
       gasPrice: gasPrice !== undefined ? Drip(gasPrice) : throwError(`'gasPrice' is required and should match 'Drip', got ${gasPrice}`),
-      gas: gas !== undefined ? UInt(gas) : throwError(`'gas' is required and should match 'UInt', got ${gas}`),
+      gas: gas !== undefined ? Hex.fromNumber(gas) : throwError(`'gas' is required and should match 'uint', got ${gas}`),
       to: to !== undefined ? Address(to) : Hex(null),
       value: value !== undefined ? Drip(value) : Drip(0),
       data: data !== undefined ? Hex(data) : Hex(''),

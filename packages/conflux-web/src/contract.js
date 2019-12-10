@@ -1,7 +1,7 @@
-// FIXME: not to depend on 'web3-eth-abi' and 'ethers'
-const lodash = require('lodash');
-const web3Abi = require('web3-eth-abi');
-const { defaultAbiCoder: ethAbi } = require('ethers/utils/abi-coder');
+const {
+  type: { Hex },
+  abi: { FunctionCoder, EventCoder },
+} = require('conflux-web-utils');
 
 /**
  * @memberOf Contract
@@ -81,12 +81,15 @@ class Called {
 }
 
 class ContractFunction extends Function {
-  constructor(cfx, { contract, abi }) {
+  constructor(cfx, contract, fragment) {
     super();
     this.cfx = cfx;
     this.contract = contract;
-    this.abi = abi;
-    this.code = web3Abi.encodeFunctionSignature(this.abi);
+    this.fragment = fragment;
+
+    this.coder = new FunctionCoder(this.fragment);
+    this.code = this.coder.signature();
+
     return new Proxy(this, this.constructor);
   }
 
@@ -97,37 +100,29 @@ class ContractFunction extends Function {
     });
   }
 
-  params(data) {
-    if (!data.startsWith(this.code)) {
+  params(hex) {
+    if (!hex.startsWith(this.code)) {
       return undefined;
     }
-    const hex = `0x${data.slice(this.code.length)}`;
-    const decode = ethAbi.decode(this.abi.inputs, hex);
-    return [...decode];
+    return this.coder.decodeInputs(hex.slice(this.code.length)); // skip this.code as prefix
   }
 
   encode(params) {
-    return this.code + web3Abi.encodeParameters(this.abi.inputs, params).replace('0x', '');
+    return Hex.concat(this.code, this.coder.encodeInputs(params));
   }
 
   decode(hex) {
-    const decode = ethAbi.decode(this.abi.outputs, hex);
-    const outputs = [...decode];
-    return outputs.length <= 1 ? outputs[0] : outputs;
+    const array = this.coder.decodeOutputs(hex);
+    return array.length <= 1 ? array[0] : array;
   }
 }
 
 class ContractConstructor extends ContractFunction {
-  constructor(cfx, { code, ...rest }) {
-    super(cfx, rest);
-    this.code = code;
-  }
-
   encode(params) {
     if (!this.code) {
       throw new Error('contract.constructor.code is empty');
     }
-    return this.code + web3Abi.encodeParameters(this.abi.inputs, params).replace('0x', '');
+    return Hex.concat(this.code, this.coder.encodeInputs(params));
   }
 
   decode(hex) {
@@ -159,19 +154,21 @@ class EventLog {
 }
 
 class ContractEvent extends Function {
-  constructor(cfx, { contract, abi }) {
+  constructor(cfx, contract, fragment) {
     super();
     this.cfx = cfx;
     this.contract = contract;
-    this.abi = abi;
-    this.code = web3Abi.encodeEventSignature(abi);
+    this.fragment = fragment;
+
+    this.coder = new EventCoder(this.fragment);
+    this.code = this.coder.signature();
     return new Proxy(this, this.constructor);
   }
 
   static apply(self, _, params) {
-    lodash.forEach(params, (param, index) => {
-      if (!lodash.isNil(param)) {
-        params[index] = web3Abi.encodeParameter(self.abi.inputs[index], param);
+    Object.entries(params).forEach(([index, param]) => {
+      if (param !== undefined) {
+        params[index] = self.coder.encodeInputByIndex(param, index);
       }
     });
 
@@ -185,14 +182,7 @@ class ContractEvent extends Function {
     if (this.code !== log.topics[0]) {
       return undefined;
     }
-
-    const result = web3Abi.decodeLog(
-      this.abi.inputs,
-      log.data,
-      this.abi.anonymous ? log.topics : log.topics.slice(1),
-    );
-
-    return lodash.range(result.__length__).map(i => result[i]);
+    return this.coder.decodeLog(log);
   }
 }
 
@@ -217,12 +207,12 @@ class ABI {
   decodeData(data) {
     const _function = this._codeToFunction[data.slice(0, 10)]; // contract function code match '0x[0~9a-z]{8}'
     if (_function) {
-      return { name: _function.abi.name, params: _function.params(data) };
+      return { name: _function.fragment.name, params: _function.params(data) };
     }
 
     const _constructor = this._constructorFunction;
     if (_constructor && data.startsWith(_constructor.code)) {
-      return { name: _constructor.abi.type, params: _constructor.params(data) };
+      return { name: _constructor.fragment.type, params: _constructor.params(data) };
     }
 
     return undefined;
@@ -234,7 +224,7 @@ class ABI {
       return undefined;
     }
 
-    return { name: event.abi.name, params: event.params(log) };
+    return { name: event.fragment.name, params: event.params(log) };
   }
 }
 
@@ -337,18 +327,23 @@ class Contract {
   constructor(cfx, { abi: contractABI, address, code }) {
     this.address = address; // XXX: Create a method named `address` in solidity is a `ParserError`
 
-    contractABI.forEach((methodABI) => {
-      switch (methodABI.type) {
+    contractABI.forEach((fragment) => {
+      switch (fragment.type) {
         case 'constructor': // cover this.constructor
-          this.constructor = new ContractConstructor(cfx, { contract: this, abi: methodABI, code });
+          this.constructor = new ContractConstructor(cfx, this, fragment);
+          this.constructor.code = code; // set constructor.code to input code
           break;
 
         case 'function':
-          this[methodABI.name] = new ContractFunction(cfx, { contract: this, abi: methodABI });
+          this[fragment.name] = new ContractFunction(cfx, this, fragment);
           break;
 
         case 'event':
-          this[methodABI.name] = new ContractEvent(cfx, { contract: this, abi: methodABI });
+          this[fragment.name] = new ContractEvent(cfx, this, fragment);
+          break;
+
+        case 'fallback':
+          // see https://solidity.readthedocs.io/en/v0.5.13/contracts.html#fallback-function
           break;
 
         default:
