@@ -6,8 +6,8 @@ const {
   privateKeyToAddress,
   ecdsaSign,
   ecdsaRecover,
-  encrypt,
-  decrypt,
+  // encrypt,
+  // decrypt,
 } = require('../src/sign');
 
 const KEY = '0xa816a06117e572ca7ae2f786a046d2bc478051d0717bf5cc4f5397923258d393';
@@ -38,17 +38,17 @@ test('privateKeyToAddress', () => {
   expect(address).toEqual(ADDRESS);
 });
 
-test('encrypt and decrypt', () => {
-  const { salt, iv, cipher, mac } = encrypt(Hex.toBuffer(KEY), Buffer.from('password'));
-
-  expect(salt.length).toEqual(32);
-  expect(iv.length).toEqual(16);
-  expect(cipher.length).toEqual(32);
-  expect(mac.length).toEqual(32);
-
-  const key = Hex(decrypt({ salt, iv, cipher, mac }, Buffer.from('password')));
-  expect(key).toEqual(KEY);
-});
+// test('encrypt and decrypt', () => {
+//   const { salt, iv, cipher, mac } = encrypt(Hex.toBuffer(KEY), Buffer.from('password'));
+//
+//   expect(salt.length).toEqual(32);
+//   expect(iv.length).toEqual(16);
+//   expect(cipher.length).toEqual(32);
+//   expect(mac.length).toEqual(32);
+//
+//   const key = Hex(decrypt({ salt, iv, cipher, mac }, Buffer.from('password')));
+//   expect(key).toEqual(KEY);
+// });
 
 test('ecdsaSign and ecdsaRecover', () => {
   const hash = randomBuffer(32);

@@ -134,46 +134,6 @@ v    | number | true     |         |
 `Buffer` publicKey
 
 
-## sign.encrypt
-
-
-
-### Parameters
-
-Name     | Type   | Required | Default | Description
----------|--------|----------|---------|------------
-key      | Buffer | true     |         |
-password | Buffer | true     |         |
-
-### Return
-
-`object` Encrypt info
-- salt {Buffer}
-- iv {Buffer}
-- cipher {Buffer}
-- mac {Buffer}
-
-
-## sign.decrypt
-
-
-
-### Parameters
-
-Name           | Type   | Required | Default | Description
----------------|--------|----------|---------|------------
-options        |        | true     |         |
-options.salt   | Buffer | true     |         |
-options.iv     | Buffer | true     |         |
-options.cipher | Buffer | true     |         |
-options.mac    | Buffer | true     |         |
-password       | Buffer | true     |         |
-
-### Return
-
-`Buffer` 
-
-
 ----------
 # transaction
 
@@ -415,7 +375,8 @@ hex  | string | true     |         | Value to be check.
 
 ## type.Hex.toBuffer
 
-
+It's importance to only support hex string but not auto `Hex()`,
+cause `Transaction.encode` will not check hex again.
 
 ### Parameters
 
@@ -426,6 +387,21 @@ hex  | string | true     |         | The hex string.
 ### Return
 
 `Buffer` 
+
+
+## type.Hex.concat
+
+
+
+### Parameters
+
+Name   | Type  | Required | Default | Description
+-------|-------|----------|---------|--------------------
+values | array | true     |         | Array of hex string
+
+### Return
+
+`string` 
 
 
 ## type.UInt
