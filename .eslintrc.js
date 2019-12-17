@@ -14,7 +14,7 @@ module.exports = {
     ecmaVersion: 2018,
   },
   rules: {
-    'arrow-parens': ['error', 'as-needed', { 'requireForBlockBody': true }],
+    'arrow-parens': ['error', 'as-needed'],
     'arrow-body-style': 0,
     'class-methods-use-this': 0,
     'func-names': 0, // for type format
@@ -24,6 +24,7 @@ module.exports = {
     'max-len': 0, // for jsdoc
     'no-await-in-loop': 0, // for loop request
     'no-else-return': 0,
+    'no-ex-assign': 0, // for extend Error
     'no-param-reassign': 0, // for type format
     'no-underscore-dangle': 0, // for private attribute
     'object-curly-newline': 0,

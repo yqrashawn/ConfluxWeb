@@ -25,7 +25,7 @@ beforeAll(() => {
 });
 
 test('getLogs', async () => {
-  await expect(cfx.getLogs()).rejects.toThrow('Cannot destructure property');
+  await expect(cfx.getLogs()).rejects.toThrow('Cannot read property');
 
   cfx.provider.call = async (method, options) => {
     expect(method).toEqual('cfx_getLogs');
@@ -40,21 +40,22 @@ test('getLogs', async () => {
 
   cfx.provider.call = async (method, options) => {
     expect(method).toEqual('cfx_getLogs');
-    expect(options.fromEpoch).toEqual('0x00');
-    expect(options.toEpoch).toEqual(EpochNumber.LATEST_MINED);
+    expect(options.fromEpoch).toEqual(undefined);
+    expect(options.toEpoch).toEqual(undefined);
     expect(options.blockHashes).toEqual([BLOCK_HASH]);
     expect(options.address).toEqual(ADDRESS);
-    expect(options.limit).toEqual('0x01');
-    expect(options.topics).toEqual([]);
+    expect(options.topics).toEqual([[TX_HASH], null]);
+    expect(options.limit).toEqual('0x64');
   };
   await cfx.getLogs({
-    fromEpoch: 0,
-    toEpoch: EpochNumber.LATEST_MINED,
     blockHashes: [BLOCK_HASH],
-    address: Hex.toBuffer(ADDRESS),
-    topics: [],
-    limit: 1,
+    address: ADDRESS,
+    topics: [[TX_HASH], null],
+    limit: 100,
   });
+
+  await expect(cfx.getLogs({ blockHashes: [], fromEpoch: 0 })).rejects.toThrow('Override waring');
+  await expect(cfx.getLogs({ topics: [[null]] })).rejects.toThrow('do not match Hex32');
 });
 
 test('getBalance', async () => {
@@ -108,7 +109,7 @@ test('getBlocksByEpoch', async () => {
 });
 
 test('getBlockByHash', async () => {
-  await expect(cfx.getBlockByHash()).rejects.toThrow('do not match hex string');
+  await expect(cfx.getBlockByHash()).rejects.toThrow('do not match BlockHash');
   await expect(cfx.getBlockByHash(ADDRESS)).rejects.toThrow('do not match BlockHash');
   await expect(cfx.getBlockByHash(BLOCK_HASH, 0)).rejects.toThrow('detail must be boolean');
 
@@ -159,7 +160,7 @@ test('getRiskCoefficient', async () => {
 });
 
 test('getTransactionByHash', async () => {
-  await expect(cfx.getTransactionByHash()).rejects.toThrow('do not match hex string');
+  await expect(cfx.getTransactionByHash()).rejects.toThrow('do not match TxHash');
   await expect(cfx.getTransactionByHash(ADDRESS)).rejects.toThrow('do not match TxHash');
 
   cfx.provider.call = async (method, txHash) => {
@@ -171,7 +172,7 @@ test('getTransactionByHash', async () => {
 });
 
 test('getTransactionReceipt', async () => {
-  await expect(cfx.getTransactionReceipt()).rejects.toThrow('do not match hex string');
+  await expect(cfx.getTransactionReceipt()).rejects.toThrow('do not match TxHash');
   await expect(cfx.getTransactionReceipt(ADDRESS)).rejects.toThrow('do not match TxHash');
 
   cfx.provider.call = async (method, txHash) => {
@@ -183,7 +184,7 @@ test('getTransactionReceipt', async () => {
 });
 
 test('sendTransaction by address', async () => {
-  cfx.getTransactionCount = async (address) => {
+  cfx.getTransactionCount = async address => {
     expect(address).toEqual(ADDRESS);
     return 0;
   };
@@ -227,7 +228,7 @@ test('sendTransaction by address', async () => {
 test('sendTransaction by account', async () => {
   const account = cfx.wallet.add(KEY);
 
-  cfx.getTransactionCount = async (address) => {
+  cfx.getTransactionCount = async address => {
     expect(Hex(address)).toEqual(ADDRESS);
     return 0;
   };
@@ -271,7 +272,7 @@ test('getCode', async () => {
 });
 
 test('call', async () => {
-  cfx.getTransactionCount = async (address) => {
+  cfx.getTransactionCount = async address => {
     expect(Hex(address)).toEqual(ADDRESS);
     return 100;
   };
@@ -320,7 +321,7 @@ test('call', async () => {
 });
 
 test('estimateGas', async () => {
-  cfx.getTransactionCount = async (address) => {
+  cfx.getTransactionCount = async address => {
     expect(Hex(address)).toEqual(ADDRESS);
     return 100;
   };

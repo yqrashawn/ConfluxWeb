@@ -13,12 +13,12 @@ class WebsocketProvider extends BaseProvider {
       const ws = new WS(this.url);
 
       // catch connecting error
-      ws.once('error', (e) => {
+      ws.once('error', e => {
         throw new Error(e);
       });
 
       // wait till open
-      await new Promise((resolve) => {
+      await new Promise(resolve => {
         ws.once('open', () => {
           // ignore message error
           ws.removeEventListener('error');
@@ -32,7 +32,7 @@ class WebsocketProvider extends BaseProvider {
       });
 
       // transfer message by id
-      ws.on('message', (message) => {
+      ws.on('message', message => {
         const body = JSON.parse(message);
         this.messageEvent.emit(body.id, body);
       });

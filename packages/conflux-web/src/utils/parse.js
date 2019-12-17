@@ -1,61 +1,40 @@
+/*
+ NOTE:
+   - check Hex array before Hex, eg: `parse([BlockHash]).or(parse(BlockHash))`
+   - check null before number, eg: `(parse.null).or(parse.number)`
+ */
+
 const lodash = require('lodash');
 const BigNumber = require('bignumber.js');
 
-BigNumber.config({ EXPONENTIAL_AT: 1e+9 });
+const { Hex, TxHash, Hex32, Address, EpochNumber, BlockHash } = require('conflux-web-utils/src/type');
+const parse = require('../../lib/parse');
 
-function parse(schema) {
-  if (Array.isArray(schema)) {
-    const func = parse(schema[0]);
-    return arr => (lodash.isNil(arr) ? arr : arr.map(func));
-  }
+parse.any = parse(v => v);
+parse.null = parse.any.validate(lodash.isNull);
+parse.boolean = v => Boolean(Number(v));
+parse.number = Number;
+parse.bigNumber = BigNumber;
 
-  if (lodash.isPlainObject(schema)) {
-    const parseTable = lodash.mapValues(schema, parse);
-    return (obj) => {
-      if (lodash.isNil(obj)) {
-        return obj;
-      }
-
-      const result = lodash.mapValues(obj, (value, key) => {
-        const func = parseTable[key];
-        return func ? func(value) : value;
-      });
-
-      return lodash.pickBy(result, v => v !== undefined);
-    };
-  }
-
-  if (lodash.isFunction(schema)) {
-    return value => (lodash.isNil(value) ? value : schema(value));
-  }
-
-  throw new Error(`unknown schema type ${typeof schema}`);
-}
-
-// ----------------------------------------------------------------------------
-parse.boolean = parse(v => Boolean(Number(v)));
-parse.number = parse(Number);
-parse.bigNumber = parse(BigNumber);
+parse.transaction = parse({
+  nonce: parse.number,
+  value: parse.bigNumber,
+  gasPrice: parse.bigNumber,
+  gas: parse.bigNumber,
+  v: parse.number,
+  transactionIndex: (parse.null).or(parse.number),
+  status: (parse.null).or(parse.number), // XXX: might be remove in rpc returned
+});
 
 parse.block = parse({
   epochNumber: parse.number,
-  stable: parse.boolean,
   height: parse.number,
   size: parse.number,
   timestamp: parse.number,
   gasLimit: parse.bigNumber,
   difficulty: parse.bigNumber,
-  transactions: parse([v => (lodash.isObject(v) ? parse.transaction(v) : v)]),
-});
-
-parse.transaction = parse({
-  transactionIndex: parse.number,
-  nonce: parse.number,
-  value: parse.bigNumber,
-  gasPrice: parse.bigNumber,
-  gas: parse.bigNumber,
-  status: parse.number, // XXX: might be remove in rpc returned
-  v: parse.number,
+  transactions: [(parse.transaction).or(TxHash)],
+  stable: (parse.null).or(parse.boolean),
 });
 
 parse.receipt = parse({
@@ -66,12 +45,12 @@ parse.receipt = parse({
   logs: [
     {
       // FIXME: getTransactionReceipt returned log.data is array of number
-      data: data => (Array.isArray(data) ? `0x${Buffer.from(data).toString('hex')}` : data),
+      data: data => (Array.isArray(data) ? Hex(Buffer.from(data)) : data),
     },
   ],
 });
 
-parse.eventLogs = parse([
+parse.logs = parse([
   {
     epochNumber: parse.number,
     logIndex: parse.number,
@@ -79,5 +58,15 @@ parse.eventLogs = parse([
     transactionLogIndex: parse.number,
   },
 ]);
+
+// ----------------------------------------------------------------------------
+parse.getLogs = parse({
+  limit: Hex.fromNumber,
+  fromEpoch: EpochNumber,
+  toEpoch: EpochNumber,
+  blockHashes: parse([BlockHash]).or(parse(BlockHash)),
+  address: parse([Address]).or(parse(Address)),
+  topics: [(parse.null).or(parse([Hex32])).or(parse(Hex32))],
+});
 
 module.exports = parse;

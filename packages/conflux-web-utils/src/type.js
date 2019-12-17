@@ -34,7 +34,7 @@ BigNumber.config({
  * > Hex(Buffer.from([1, 2]))
  "0x0102"
  */
-const Hex = (value) => {
+const Hex = value => {
   if (value === null) {
     return '0x';
   }
@@ -65,7 +65,7 @@ const Hex = (value) => {
     return Hex(value.valueOf());
   }
 
-  return Hex(`${value}`);
+  return Hex(`${value}`); // for magic method `toString`
 };
 
 /**
@@ -86,7 +86,7 @@ const Hex = (value) => {
  * > Hex.isHex('01')
  false
  */
-Hex.isHex = (hex) => {
+Hex.isHex = hex => {
   return /^0x([0-9a-f][0-9a-f])*$/.test(hex);
 };
 
@@ -102,7 +102,7 @@ Hex.isHex = (hex) => {
  * > Hex('10')
  "0x10"
  */
-Hex.fromNumber = (value) => {
+Hex.fromNumber = value => {
   return Hex(lodash.isNumber(value) ? value : BigNumber(value));
 };
 
@@ -118,7 +118,7 @@ Hex.fromNumber = (value) => {
  * > Hex.toBuffer('0x0102')
  <Buffer 01 02>
  */
-Hex.toBuffer = (hex) => {
+Hex.toBuffer = hex => {
   if (!Hex.isHex(hex)) {
     throw new Error(`"${hex}" do not match hex string`);
   }
@@ -148,6 +148,103 @@ Hex.concat = (...values) => {
   return `0x${values.map(v => Hex(v).substring(2)).join('')}`;
 };
 
+// ----------------------------------- Address --------------------------------
+/**
+ * Get and validate `Address` from value
+ *
+ * @memberOf type
+ * @param value {string|number|Buffer|BigNumber}
+ * @return {string}
+ *
+ * @example
+ * > Address('0123456789012345678901234567890123456789')
+ "0x0123456789012345678901234567890123456789"
+ */
+const Address = value => {
+  const hex = Hex(value);
+  if (hex.length !== 2 + 2 * 20) {
+    throw new Error(`${value} do not match Address`);
+  }
+  return hex;
+};
+
+// ------------------------------------ Hash ----------------------------------
+/**
+ *
+ * @memberOf type
+ * @param value {string|number|Buffer|BigNumber}
+ * @return {string}
+ *
+ * @example
+ * > Hex32('0123456789012345678901234567890123456789012345678901234567890123')
+ "0x0123456789012345678901234567890123456789012345678901234567890123"
+ */
+const Hex32 = value => {
+  const hex = Hex(value);
+  if (hex.length !== 2 + 2 * 32) {
+    throw new Error(`${value} do not match Hex32`);
+  }
+  return hex;
+};
+
+// ---------------------------------- PrivateKey ------------------------------
+/**
+ * Get and validate `PrivateKey` from value.
+ *
+ * > same as `Hex32` in coincidence
+ *
+ * @memberOf type
+ * @param value {string|number|Buffer|BigNumber}
+ * @return {string}
+ */
+const PrivateKey = value => {
+  try {
+    return Hex32(value);
+  } catch (e) {
+    throw new Error(`${value} do not match PrivateKey`);
+  }
+};
+
+// ----------------------------------- BlockHash ------------------------------
+/**
+ * Get and validate `BlockHash` from value
+ *
+ * > same as `Hex32` in coincidence
+ *
+ * @memberOf type
+ * @param value {string|number|Buffer|BigNumber}
+ * @return {string}
+ */
+const BlockHash = value => {
+  try {
+    return Hex32(value);
+  } catch (e) {
+    throw new Error(`${value} do not match BlockHash`);
+  }
+};
+
+// ----------------------------------- TxHash ---------------------------------
+/**
+ * Get and validate `TxHash` from value
+ *
+ * > same as `Hex32` in coincidence
+ *
+ * @memberOf type
+ * @param value {string|number|Buffer|BigNumber}
+ * @return {string}
+ *
+ * @example
+ * > TxHash('0123456789012345678901234567890123456789012345678901234567890123')
+ "0x0123456789012345678901234567890123456789012345678901234567890123"
+ */
+const TxHash = value => {
+  try {
+    return Hex32(value);
+  } catch (e) {
+    throw new Error(`${value} do not match TxHash`);
+  }
+};
+
 // ---------------------------------- Drip ------------------------------------
 /**
  * @memberOf type
@@ -162,7 +259,7 @@ Hex.concat = (...values) => {
  * > Drip.toGDrip(Drip.fromCFX(1));
  "1000000000"
  */
-const Drip = (value) => {
+const Drip = value => {
   return Hex.fromNumber(value);
 };
 
@@ -180,7 +277,7 @@ const Drip = (value) => {
  * > Drip.fromGDrip(0.1)
  "0x05f5e100"
  */
-Drip.fromGDrip = (value) => {
+Drip.fromGDrip = value => {
   const number = BigNumber(value).times(1e9);
   return Drip(number.integerValue());
 };
@@ -199,7 +296,7 @@ Drip.fromGDrip = (value) => {
  * > Drip.fromCFX(0.1)
  "0x016345785d8a0000"
  */
-Drip.fromCFX = (value) => {
+Drip.fromCFX = value => {
   const number = BigNumber(value).times(1e9).times(1e9); // XXX: 1e18 > Number.MAX_SAFE_INTEGER > 1e9
   return Drip(number.integerValue());
 };
@@ -216,7 +313,7 @@ Drip.fromCFX = (value) => {
  * > Drip.toGDrip(Drip.fromCFX(1))
  "1000000000"
  */
-Drip.toGDrip = (value) => {
+Drip.toGDrip = value => {
   return BigNumber(value).div(1e9);
 };
 
@@ -232,48 +329,8 @@ Drip.toGDrip = (value) => {
  * > Drip.toCFX(Drip.fromGDrip(1e9))
  "1"
  */
-Drip.toCFX = (value) => {
+Drip.toCFX = value => {
   return BigNumber(value).div(1e9).div(1e9); // XXX: 1e18 > Number.MAX_SAFE_INTEGER > 1e9
-};
-
-// ---------------------------------- PrivateKey ------------------------------
-/**
- * Get and validate `PrivateKey` from value
- *
- * @memberOf type
- * @param value {string|number|Buffer|BigNumber}
- * @return {string}
- *
- * @example
- * > PrivateKey('0123456789012345678901234567890123456789012345678901234567890123')
- "0x0123456789012345678901234567890123456789012345678901234567890123"
- */
-const PrivateKey = (value) => {
-  const hex = Hex(value);
-  if (hex.length !== 2 + 64) { // XXX: check length for performance
-    throw new Error(`${value} do not match PrivateKey`);
-  }
-  return hex;
-};
-
-// ----------------------------------- Address --------------------------------
-/**
- * Get and validate `Address` from value
- *
- * @memberOf type
- * @param value {string|number|Buffer|BigNumber}
- * @return {string}
- *
- * @example
- * > Address('0123456789012345678901234567890123456789')
- "0x0123456789012345678901234567890123456789"
- */
-const Address = (value) => {
-  const hex = Hex(value);
-  if (hex.length !== 2 + 40) { // XXX: check length for performance
-    throw new Error(`${value} do not match Address`);
-  }
-  return hex;
 };
 
 // ------------------------------- EpochNumber --------------------------------
@@ -294,7 +351,7 @@ const Address = (value) => {
  * > EpochNumber('LATEST_STATE')
  "latest_state"
  */
-const EpochNumber = (value) => {
+const EpochNumber = value => {
   if (lodash.isString(value)) {
     value = value.toLowerCase();
   }
@@ -327,52 +384,13 @@ EpochNumber.LATEST_STATE = 'latest_state';
  */
 EpochNumber.LATEST_MINED = 'latest_mined';
 
-// ----------------------------------- BlockHash ------------------------------
-/**
- * Get and validate `BlockHash` from value
- *
- * @memberOf type
- * @param value {string|number|Buffer|BigNumber}
- * @return {string}
- *
- * @example
- * > BlockHash('0123456789012345678901234567890123456789012345678901234567890123')
- "0x0123456789012345678901234567890123456789012345678901234567890123"
- */
-const BlockHash = (value) => {
-  const string = Hex(value);
-  if (string.length !== 2 + 64) {
-    throw new Error(`${value} do not match BlockHash`);
-  }
-  return string;
-};
-
-// ----------------------------------- TxHash ---------------------------------
-/**
- * Get and validate `TxHash` from value
- *
- * @memberOf type
- * @param value {string|number|Buffer|BigNumber}
- * @return {string}
- *
- * @example
- * > TxHash('0123456789012345678901234567890123456789012345678901234567890123')
- "0x0123456789012345678901234567890123456789012345678901234567890123"
- */
-const TxHash = (value) => {
-  const string = Hex(value);
-  if (string.length !== 2 + 64) {
-    throw new Error(`${value} do not match TxHash`);
-  }
-  return string;
-};
-
 module.exports = {
   Hex,
-  Drip,
-  PrivateKey,
   Address,
-  EpochNumber,
+  Hex32,
+  PrivateKey,
   BlockHash,
   TxHash,
+  Drip,
+  EpochNumber,
 };

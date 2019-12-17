@@ -137,7 +137,7 @@ test('Drip.fromCFX', () => {
 });
 
 test('PrivateKey', () => {
-  expect(() => PrivateKey(undefined)).toThrow('do not match hex string');
+  expect(() => PrivateKey(undefined)).toThrow('do not match PrivateKey');
 
   expect(PrivateKey(KEY)).toEqual(KEY);
   expect(PrivateKey(KEY.toUpperCase())).toEqual(KEY);
@@ -167,7 +167,7 @@ test('EpochNumber', () => {
 });
 
 test('BlockHash', () => {
-  expect(() => BlockHash(undefined)).toThrow('do not match hex string');
+  expect(() => BlockHash(undefined)).toThrow('do not match BlockHash');
 
   expect(BlockHash('0123456789012345678901234567890123456789012345678901234567890123'))
     .toEqual('0x0123456789012345678901234567890123456789012345678901234567890123');
@@ -179,7 +179,7 @@ test('BlockHash', () => {
 });
 
 test('TxHash', () => {
-  expect(() => TxHash(undefined)).toThrow('do not match hex string');
+  expect(() => TxHash(undefined)).toThrow('do not match TxHash');
 
   expect(TxHash('0123456789012345678901234567890123456789012345678901234567890123'))
     .toEqual('0x0123456789012345678901234567890123456789012345678901234567890123');

@@ -223,7 +223,7 @@ class EventCoder {
     // XXX: for !this.anonymous, assert(topics[0] === this.signature)
 
     let index = this.anonymous ? 0 : 1;
-    const array = this.inputs.map((input) => {
+    const array = this.inputs.map(input => {
       let stream = dataStream;
       if (input.indexed) {
         stream = HexStream.from(topics[index]);

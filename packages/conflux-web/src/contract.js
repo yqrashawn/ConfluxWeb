@@ -145,7 +145,7 @@ class EventLog {
       ...options,
     });
 
-    logs.forEach((log) => {
+    logs.forEach(log => {
       log.params = this.eventLog.params(log);
     });
 
@@ -193,7 +193,7 @@ class ABI {
     this._codeToFunction = {};
     this._codeToEvent = {};
 
-    Object.values(contract).forEach((instance) => {
+    Object.values(contract).forEach(instance => {
       if (instance instanceof ContractConstructor) {
         this._constructorFunction = instance;
       } else if (instance instanceof ContractFunction) {
@@ -327,7 +327,7 @@ class Contract {
   constructor(cfx, { abi: contractABI, address, code }) {
     this.address = address; // XXX: Create a method named `address` in solidity is a `ParserError`
 
-    contractABI.forEach((fragment) => {
+    contractABI.forEach(fragment => {
       switch (fragment.type) {
         case 'constructor': // cover this.constructor
           this.constructor = new ContractConstructor(cfx, this, fragment);

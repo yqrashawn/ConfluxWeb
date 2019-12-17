@@ -1,6 +1,6 @@
 const lodash = require('lodash');
 const BigNumber = require('bignumber.js');
-const { Hex, Address } = require('conflux-web-utils/src/type');
+const { Hex } = require('conflux-web-utils/src/type');
 
 const Conflux = require('../index');
 const MockProvider = require('./__mocks__/provider');
@@ -40,7 +40,7 @@ test('getLogs', async () => {
   expect(Number.isInteger(eventLog.logIndex)).toEqual(true);
   expect(Number.isInteger(eventLog.transactionLogIndex)).toEqual(true);
   expect(eventLog.data.startsWith('0x')).toEqual(true);
-  eventLog.topics.forEach((topic) => {
+  eventLog.topics.forEach(topic => {
     expect(Hex.isHex(topic)).toEqual(true);
   });
 });
@@ -62,7 +62,7 @@ test('getBlocksByEpoch', async () => {
   const blockHashArray = await cfx.getBlocksByEpoch(0);
 
   expect(Array.isArray(blockHashArray)).toEqual(true);
-  blockHashArray.forEach((txHash) => {
+  blockHashArray.forEach(txHash => {
     expect(Hex.isHex(txHash)).toEqual(true);
   });
 });
@@ -90,13 +90,13 @@ test('getBlockByHash', async () => {
   expect(Array.isArray(block.refereeHashes)).toEqual(true);
   expect(Array.isArray(block.transactions)).toEqual(true);
   expect(lodash.isPlainObject(block.deferredStateRootWithAux)).toEqual(true);
-  block.transactions.forEach((txHash) => {
+  block.transactions.forEach(txHash => {
     expect(Hex.isHex(txHash)).toEqual(true);
   });
 
   const blockDetail = await cfx.getBlockByHash(BLOCK_HASH, true);
   expect(Array.isArray(blockDetail.transactions)).toEqual(true);
-  blockDetail.transactions.forEach((tx) => {
+  blockDetail.transactions.forEach(tx => {
     expect(lodash.isPlainObject(tx)).toEqual(true);
   });
 });

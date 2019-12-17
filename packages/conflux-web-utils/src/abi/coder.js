@@ -53,7 +53,7 @@ function pack(coders, array) {
 function unpack(coders, stream) {
   const startIndex = stream.index;
 
-  const array = coders.map((coder) => {
+  const array = coders.map(coder => {
     if (coder.dynamic) {
       const offset = UINT_CODER.decode(stream).toNumber();
       return new Pointer(startIndex + offset);

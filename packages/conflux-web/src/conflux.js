@@ -197,21 +197,14 @@ class Conflux {
    },
    ]
    */
-  async getLogs({ fromEpoch, toEpoch, blockHashes, address, topics, limit }) {
-    if (topics !== undefined) {
-      topics = topics.map(topic => (lodash.isNil(topic) ? null : Hex(topic))); // XXX: Hash32
+  async getLogs(options) {
+    if (options.blockHashes !== undefined && (options.fromEpoch !== undefined || options.toEpoch !== undefined)) {
+      throw new Error('Override waring, do not use `blockHashes` with `fromEpoch` or `toEpoch`, cause only `blockHashes` will take effect');
     }
 
-    const result = await this.provider.call('cfx_getLogs', {
-      fromEpoch: fromEpoch !== undefined ? EpochNumber(fromEpoch) : undefined,
-      toEpoch: toEpoch !== undefined ? EpochNumber(toEpoch) : undefined,
-      address: address !== undefined ? Address(address) : undefined,
-      blockHashes: blockHashes !== undefined ? blockHashes.map(BlockHash) : undefined,
-      limit: limit !== undefined ? Hex.fromNumber(limit) : undefined,
-      topics,
-    });
+    const result = await this.provider.call('cfx_getLogs', parse.getLogs(options));
 
-    return parse.eventLogs(result);
+    return parse.logs(result);
   }
 
   // ------------------------------- address ----------------------------------
@@ -259,11 +252,10 @@ class Conflux {
   }
 
   // -------------------------------- block -----------------------------------
-
   // TODO
-  // async getBestBlockHash() {
-  //   return this.provider.call('cfx_getBestBlockHash');
-  // }
+  async getBestBlockHash() {
+    return this.provider.call('cfx_getBestBlockHash');
+  }
 
   /**
    * Get block hash array of a epochNumber.

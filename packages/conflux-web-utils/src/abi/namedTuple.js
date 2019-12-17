@@ -42,7 +42,7 @@ function namedTuple(...names) {
 
     toObject() {
       const obj = {};
-      names.forEach((name) => {
+      names.forEach(name => {
         obj[name] = this[name];
       });
       return obj;
