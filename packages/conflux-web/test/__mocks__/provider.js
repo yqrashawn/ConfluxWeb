@@ -30,6 +30,10 @@ const fullNode = {
     return Hex(randomBuffer(1));
   },
 
+  cfx_getBestBlockHash() {
+    return Hex(randomBuffer(32));
+  },
+
   cfx_getBlocksByEpoch(epochNumber) {
     if (epochNumber === EpochNumber.EARLIEST || epochNumber === '0x00') {
       return mockData.epoch[epochNumber];

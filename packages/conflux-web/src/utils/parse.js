@@ -10,11 +10,13 @@ const BigNumber = require('bignumber.js');
 const { Hex, TxHash, Hex32, Address, EpochNumber, BlockHash } = require('conflux-web-utils/src/type');
 const parse = require('../../lib/parse');
 
-parse.any = parse(v => v);
-parse.null = parse.any.validate(lodash.isNull);
+// ----------------------------------------------------------------------------
 parse.boolean = v => Boolean(Number(v));
 parse.number = Number;
 parse.bigNumber = BigNumber;
+
+parse.null = parse(v => v).validate(lodash.isNull);
+parse.uint = parse(Number).validate(v => v >= 0).validate(Number.isInteger);
 
 parse.transaction = parse({
   nonce: parse.number,
@@ -65,6 +67,15 @@ parse.getLogs = parse({
   fromEpoch: EpochNumber,
   toEpoch: EpochNumber,
   blockHashes: parse([BlockHash]).or(parse(BlockHash)),
+  address: parse([Address]).or(parse(Address)),
+  topics: [(parse.null).or(parse([Hex32])).or(parse(Hex32))],
+});
+
+parse.iterLogs = parse({
+  threshold: parse(parse.number, { default: 0.01 }),
+  limit: parse.uint,
+  fromEpoch: parse.uint,
+  toEpoch: parse.uint,
   address: parse([Address]).or(parse(Address)),
   topics: [(parse.null).or(parse([Hex32])).or(parse(Hex32))],
 });

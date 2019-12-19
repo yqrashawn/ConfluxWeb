@@ -1,18 +1,14 @@
 const { sleep, loop } = require('../utils');
 
-/**
- * Pending transaction
- */
-class PendingTransaction {
-  constructor(cfx, value) {
+class TransactionPoll {
+  constructor(cfx, txHashPromise) {
     this.cfx = cfx;
-    this.value = value;
+    this.txHashPromise = txHashPromise;
   }
 
   async then(resolve, reject) {
     try {
-      const result = await this.value;
-      resolve(result);
+      resolve(await this.txHashPromise);
     } catch (e) {
       reject(e);
     }
@@ -101,7 +97,7 @@ class PendingTransaction {
     return loop(
       async () => {
         const receipt = await this.executed({ delta, timeout });
-        const risk = await this.cfx.getRiskCoefficient(receipt.blockHash);
+        const risk = await this.cfx.getRiskCoefficient(receipt.epochNumber);
         if (risk < threshold) {
           return receipt;
         }
@@ -116,7 +112,7 @@ class PendingTransaction {
    * Async wait till contract create transaction deployed.
    * - transaction confirmed
    *
-   * @param [options] {object} - See `PendingTransaction.confirmed`
+   * @param [options] {object} - See `TransactionPoll.confirmed`
    * @return {Promise<string>} The contract address.
    */
   async deployed(options) {
@@ -128,4 +124,4 @@ class PendingTransaction {
   }
 }
 
-module.exports = PendingTransaction;
+module.exports = TransactionPoll;

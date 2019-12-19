@@ -107,7 +107,7 @@ Returns the current gas price oracle. The gas price is determined by the last fe
 
 ### Return
 
-`Promise.<number>` Gas price in drip.
+`Promise.<BigNumber>` Gas price in drip.
 
 ### Example
 
@@ -247,6 +247,25 @@ epochNumber | string,number | false    | this.defaultEpoch | The end epochNumber
 > await cfx.getTransactionCount("0xbbd9e9be525ab967e633bcdaeac8bd5723ed4d6b");
    61> await cfx.getTransactionCount("0xbbd9e9be525ab967e633bcdaeac8bd5723ed4d6b", EpochNumber.EARLIEST);
    0
+```
+
+## Conflux.getBestBlockHash
+
+TODO
+
+### Parameters
+
+`void`
+
+### Return
+
+`Promise.<string>` 
+
+### Example
+
+```
+> await cfx.getBestBlockHash();
+   "0x43ddda130fff8539b9f3c431aa1b48e021b3744aacd224cbd4bcdb64373f3dd5"
 ```
 
 ## Conflux.getBlocksByEpoch
@@ -547,7 +566,7 @@ options | object | true     |         | See `Transaction.callOptions`
 
 ### Return
 
-`Promise.<PendingTransaction>` The PendingTransaction object.
+`Promise.<TransactionPoll>` The TransactionPoll object.
 
 ### Example
 
@@ -632,7 +651,7 @@ hex  | string,Buffer | true     |         | Raw transaction string.
 
 ### Return
 
-`Promise.<PendingTransaction>` The PendingTransaction object. See `sendTransaction`
+`Promise.<TransactionPoll>` The TransactionPoll object. See `sendTransaction`
 
 ### Example
 
@@ -692,7 +711,7 @@ options | object | true     |         | See `Transaction.callOptions`
 
 ### Return
 
-`Promise.<number>` The used gas for the simulated call/transaction.
+`Promise.<BigNumber>` The used gas for the simulated call/transaction.
 
 
 ----------
@@ -751,7 +770,7 @@ options.code    | string  | false    |         | The byte code of the contract, 
      name: 'inc',
      params: [BigNumber{0x01}]
    }> await contract.count(); // data in block chain changed by transaction.
-   BigNumber { _hex: '0x65' }> logs = await contract.SelfEvent(account1.address).list()
+   BigNumber { _hex: '0x65' }> logs = await contract.SelfEvent(account1.address).getLogs()
    [
    {
       address: '0xc3ed1a06471be1d3bcd014051fbe078387ec0ad8',
@@ -796,7 +815,7 @@ options | object | true     |         | See `Transaction.callOptions`
 
 ### Return
 
-`Promise.<PendingTransaction>` The PendingTransaction object.
+`Promise.<TransactionPoll>` The TransactionPoll object.
 
 
 ## Contract.Called.estimateGas
@@ -837,12 +856,12 @@ epochNumber | string,number | true     |         | See `Conflux.call`.
 
 
 ----------
-# subscribe.pendingTransaction
-
-Pending transaction
+# poll.transaction
 
 
-## PendingTransaction.get
+
+
+## TransactionPoll.get
 
 Get transaction by hash.
 
@@ -858,7 +877,7 @@ options.delay | number | false    | 0       | Defer execute after `delay` ms.
 `Promise.<(Object|null)>` See `Conflux.getTransactionByHash`
 
 
-## PendingTransaction.mined
+## TransactionPoll.mined
 
 Async wait till transaction been mined.
 
@@ -877,7 +896,7 @@ options.timeout | number | false    | 30*1000 | Loop timeout in ms.
 `Promise.<object>` See `Conflux.getTransactionByHash`
 
 
-## PendingTransaction.executed
+## TransactionPoll.executed
 
 Async wait till transaction been executed.
 
@@ -898,7 +917,7 @@ options.timeout | number | false    | 60*1000 | Loop timeout in ms.
 `Promise.<object>` See `Conflux.getTransactionReceipt`
 
 
-## PendingTransaction.confirmed
+## TransactionPoll.confirmed
 
 Async wait till transaction been confirmed.
 
@@ -919,7 +938,7 @@ options.threshold | number | false    | 0.01      | Number in range (0,1)
 `Promise.<object>` See `Conflux.getTransactionReceipt`
 
 
-## PendingTransaction.deployed
+## TransactionPoll.deployed
 
 Async wait till contract create transaction deployed.
 - transaction confirmed
@@ -927,8 +946,8 @@ Async wait till contract create transaction deployed.
 ### Parameters
 
 Name    | Type   | Required | Default | Description
---------|--------|----------|---------|-----------------------------------
-options | object | false    |         | See `PendingTransaction.confirmed`
+--------|--------|----------|---------|--------------------------------
+options | object | false    |         | See `TransactionPoll.confirmed`
 
 ### Return
 

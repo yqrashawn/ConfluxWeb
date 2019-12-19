@@ -82,6 +82,5 @@ method    | string | true     |         | Json rpc method name.
 ### Example
 
 ```
-> await provider.call('cfx_epochNumber');
-> await provider.call('cfx_getBlockByHash', blockHash);
+> await provider.call('cfx_epochNumber');> await provider.call('cfx_getBlockByHash', blockHash);
 ```

@@ -4,9 +4,12 @@ const Transaction = require('conflux-web-utils/src/transaction');
 const providerFactory = require('../lib/provider');
 
 const parse = require('./utils/parse');
+const { decorate } = require('./utils');
 const Contract = require('./contract');
 const Wallet = require('./wallet');
-const Subscribe = require('./subscribe');
+
+const TransactionPoll = require('./poll/transaction');
+const LogPoll = require('./poll/log');
 
 /**
  * A sdk of conflux.
@@ -45,8 +48,15 @@ class Conflux {
     this.defaultGasPrice = defaultGasPrice;
     this.defaultGas = defaultGas;
 
-    this._afterExecution('sendRawTransaction', result => new Subscribe.PendingTransaction(this, result));
-    this._afterExecution('sendTransaction', result => new Subscribe.PendingTransaction(this, result));
+    decorate(this, 'sendTransaction', (func, params) => {
+      // XXX: must input promise as params for chain call like `cfx.sendTransaction(...).confirmed()`
+      return new TransactionPoll(this, func(...params));
+    });
+
+    decorate(this, 'sendRawTransaction', (func, params) => {
+      // XXX: must input promise as params for chain call like `cfx.sendRawTransaction(...).confirmed()`
+      return new TransactionPoll(this, func(...params));
+    });
   }
 
   /**
@@ -86,11 +96,6 @@ class Conflux {
     return this.provider;
   }
 
-  _afterExecution(name, after) {
-    const method = this[name].bind(this);
-    this.constructor.prototype[name] = (...args) => after(method(...args));
-  }
-
   /**
    * A shout cut for `new Contract(cfx, options);`
    *
@@ -117,7 +122,7 @@ class Conflux {
   /**
    * Returns the current gas price oracle. The gas price is determined by the last few blocks median gas price.
    *
-   * @return {Promise<number>} Gas price in drip.
+   * @return {Promise<BigNumber>} Gas price in drip.
    *
    * @example
    * > await cfx.gasPrice();
@@ -125,7 +130,7 @@ class Conflux {
    */
   async gasPrice() {
     const result = await this.provider.call('cfx_gasPrice');
-    return parse.number(result);
+    return parse.bigNumber(result);
   }
 
   /**
@@ -207,6 +212,10 @@ class Conflux {
     return parse.logs(result);
   }
 
+  iterLogs(options) {
+    return new LogPoll(this, parse.iterLogs(options));
+  }
+
   // ------------------------------- address ----------------------------------
   /**
    * Get the balance of an address at a given epochNumber.
@@ -252,7 +261,15 @@ class Conflux {
   }
 
   // -------------------------------- block -----------------------------------
-  // TODO
+  /**
+   * TODO
+   *
+   * @return {Promise<string>}
+   *
+   * @example
+   * > await cfx.getBestBlockHash();
+   "0x43ddda130fff8539b9f3c431aa1b48e021b3744aacd224cbd4bcdb64373f3dd5"
+   */
   async getBestBlockHash() {
     return this.provider.call('cfx_getBestBlockHash');
   }
@@ -426,7 +443,7 @@ class Conflux {
   }
 
   // eslint-disable-next-line no-unused-vars
-  async getRiskCoefficient(blockHash) {
+  async getRiskCoefficient(epochNumber) {
     // FIXME rpc not implement yet.
     return 0;
   }
@@ -531,7 +548,7 @@ class Conflux {
    * > NOTE: if `from` options is a instance of `Account`, this methods will sign by account local and send by `cfx_sendRawTransaction`, else send by `cfx_sendTransaction`
    *
    * @param options {object} - See `Transaction.callOptions`
-   * @return {Promise<PendingTransaction>} The PendingTransaction object.
+   * @return {Promise<TransactionPoll>} The TransactionPoll object.
    *
    * @example
    * > // TODO call with address, need `cfx_sendTransaction`
@@ -633,7 +650,7 @@ class Conflux {
    * Signs a transaction. This account needs to be unlocked.
    *
    * @param hex {string|Buffer} - Raw transaction string.
-   * @return {Promise<PendingTransaction>} The PendingTransaction object. See `sendTransaction`
+   * @return {Promise<TransactionPoll>} The TransactionPoll object. See `sendTransaction`
    *
    * @example
    * > await cfx.sendRawTransaction('0xf85f800382520894bbd9e9b...');
@@ -687,7 +704,7 @@ class Conflux {
    * Executes a message call or transaction and returns the amount of the gas used.
    *
    * @param options {object} - See `Transaction.callOptions`
-   * @return {Promise<number>} The used gas for the simulated call/transaction.
+   * @return {Promise<BigNumber>} The used gas for the simulated call/transaction.
    */
   async estimateGas(options) {
     if (options.gasPrice === undefined) {
@@ -703,7 +720,7 @@ class Conflux {
     }
 
     const result = await this.provider.call('cfx_estimateGas', Transaction.estimateOptions(options));
-    return parse.number(result);
+    return parse.bigNumber(result);
   }
 }
 

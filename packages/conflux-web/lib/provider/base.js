@@ -14,7 +14,7 @@ class BaseProvider {
    * @return {BaseProvider}
    */
   constructor(url, {
-    timeout = 60 * 1000,
+    timeout = 5 * 60 * 1000,
     logger = { info: () => undefined, error: () => undefined },
   } = {}) {
     this.url = url;

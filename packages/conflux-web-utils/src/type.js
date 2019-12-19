@@ -11,6 +11,7 @@ const lodash = require('lodash');
 const BigNumber = require('bignumber.js');
 
 BigNumber.config({
+  EXPONENTIAL_AT: 1e9,
   ROUNDING_MODE: BigNumber.ROUND_HALF_DOWN,
 });
 

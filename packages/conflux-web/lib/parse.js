@@ -14,8 +14,11 @@ class Parser extends Function {
       value = self.default;
     }
 
-    if (value === undefined && !self.required) {
-      return value;
+    if (value === undefined) {
+      if (self.required) {
+        throw new Error(`value is required, got ${value}`);
+      }
+      return undefined;
     }
 
     return self.func(value);

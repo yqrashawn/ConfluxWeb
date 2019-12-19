@@ -201,6 +201,7 @@ test('sendTransaction by address', async () => {
     expect(options.to).toEqual(undefined);
     expect(options.value).toEqual(undefined);
     expect(options.data).toEqual('0x');
+    return TX_HASH;
   };
   await cfx.sendTransaction({ from: ADDRESS });
   await cfx.sendTransaction({ nonce: 0, from: ADDRESS });
@@ -214,6 +215,7 @@ test('sendTransaction by address', async () => {
     expect(options.to).toEqual(ADDRESS);
     expect(options.value).toEqual('0x00');
     expect(options.data).toEqual('0x');
+    return TX_HASH;
   };
   await cfx.sendTransaction({
     nonce: '100',
@@ -236,6 +238,7 @@ test('sendTransaction by account', async () => {
   cfx.provider.call = async (method, hex) => {
     expect(method).toEqual('cfx_sendRawTransaction');
     expect(Hex.isHex(hex)).toEqual(true);
+    return TX_HASH;
   };
   await cfx.sendTransaction({ from: account });
 });
@@ -246,6 +249,7 @@ test('sendRawTransaction', async () => {
   cfx.provider.call = async (method, txHash) => {
     expect(method).toEqual('cfx_sendRawTransaction');
     expect(txHash).toEqual('0x01ff');
+    return TX_HASH;
   };
   await cfx.sendRawTransaction('01ff');
   await cfx.sendRawTransaction(Buffer.from([1, 255]));

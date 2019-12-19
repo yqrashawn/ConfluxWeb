@@ -3,6 +3,8 @@ const {
   abi: { FunctionCoder, EventCoder },
 } = require('conflux-web-utils');
 
+const { decorate } = require('./utils');
+
 /**
  * @memberOf Contract
  */
@@ -21,7 +23,7 @@ class Called {
    * > Note: This can alter the smart contract state.
    *
    * @param options {object} - See `Transaction.callOptions`
-   * @return {Promise<PendingTransaction>} The PendingTransaction object.
+   * @return {Promise<TransactionPoll>} The TransactionPoll object.
    */
   sendTransaction(options) {
     return this.method.cfx.sendTransaction({
@@ -138,11 +140,11 @@ class EventLog {
     this.topics = topics;
   }
 
-  async list(options) {
+  async getLogs(options) {
     const logs = await this.eventLog.cfx.getLogs({
+      ...options,
       address: this.address,
       topics: this.topics,
-      ...options,
     });
 
     logs.forEach(log => {
@@ -150,6 +152,24 @@ class EventLog {
     });
 
     return logs;
+  }
+
+  iterLogs(options) {
+    const iter = this.eventLog.cfx.iterLogs({
+      ...options,
+      address: this.address,
+      topics: this.topics,
+    });
+
+    decorate(iter, 'next', async (func, params) => {
+      const log = await func(...params);
+      if (log) {
+        log.params = this.eventLog.params(log);
+      }
+      return log;
+    });
+
+    return iter;
   }
 }
 
@@ -294,7 +314,7 @@ class Contract {
    * > await contract.count(); // data in block chain changed by transaction.
    BigNumber { _hex: '0x65' }
 
-   * > logs = await contract.SelfEvent(account1.address).list()
+   * > logs = await contract.SelfEvent(account1.address).getLogs()
    [
    {
       address: '0xc3ed1a06471be1d3bcd014051fbe078387ec0ad8',

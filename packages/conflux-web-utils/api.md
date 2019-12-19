@@ -805,6 +805,105 @@ values | array | true     |         | Array of hex string
  "0x"
 ```
 
+## type.Address
+
+Get and validate `Address` from value
+
+### Parameters
+
+Name  | Type                           | Required | Default | Description
+------|--------------------------------|----------|---------|------------
+value | string,number,Buffer,BigNumber | true     |         |
+
+### Return
+
+`string` 
+
+### Example
+
+```
+> Address('0123456789012345678901234567890123456789')
+ "0x0123456789012345678901234567890123456789"
+```
+
+## type.Hex32
+
+
+
+### Parameters
+
+Name  | Type                           | Required | Default | Description
+------|--------------------------------|----------|---------|------------
+value | string,number,Buffer,BigNumber | true     |         |
+
+### Return
+
+`string` 
+
+### Example
+
+```
+> Hex32('0123456789012345678901234567890123456789012345678901234567890123')
+ "0x0123456789012345678901234567890123456789012345678901234567890123"
+```
+
+## type.PrivateKey
+
+Get and validate `PrivateKey` from value.
+
+> same as `Hex32` in coincidence
+
+### Parameters
+
+Name  | Type                           | Required | Default | Description
+------|--------------------------------|----------|---------|------------
+value | string,number,Buffer,BigNumber | true     |         |
+
+### Return
+
+`string` 
+
+
+## type.BlockHash
+
+Get and validate `BlockHash` from value
+
+> same as `Hex32` in coincidence
+
+### Parameters
+
+Name  | Type                           | Required | Default | Description
+------|--------------------------------|----------|---------|------------
+value | string,number,Buffer,BigNumber | true     |         |
+
+### Return
+
+`string` 
+
+
+## type.TxHash
+
+Get and validate `TxHash` from value
+
+> same as `Hex32` in coincidence
+
+### Parameters
+
+Name  | Type                           | Required | Default | Description
+------|--------------------------------|----------|---------|------------
+value | string,number,Buffer,BigNumber | true     |         |
+
+### Return
+
+`string` 
+
+### Example
+
+```
+> TxHash('0123456789012345678901234567890123456789012345678901234567890123')
+ "0x0123456789012345678901234567890123456789012345678901234567890123"
+```
+
 ## type.Drip
 
 
@@ -927,48 +1026,6 @@ value | string,number,BigNumber | true     |         |
  "1"
 ```
 
-## type.PrivateKey
-
-Get and validate `PrivateKey` from value
-
-### Parameters
-
-Name  | Type                           | Required | Default | Description
-------|--------------------------------|----------|---------|------------
-value | string,number,Buffer,BigNumber | true     |         |
-
-### Return
-
-`string` 
-
-### Example
-
-```
-> PrivateKey('0123456789012345678901234567890123456789012345678901234567890123')
- "0x0123456789012345678901234567890123456789012345678901234567890123"
-```
-
-## type.Address
-
-Get and validate `Address` from value
-
-### Parameters
-
-Name  | Type                           | Required | Default | Description
-------|--------------------------------|----------|---------|------------
-value | string,number,Buffer,BigNumber | true     |         |
-
-### Return
-
-`string` 
-
-### Example
-
-```
-> Address('0123456789012345678901234567890123456789')
- "0x0123456789012345678901234567890123456789"
-```
-
 ## type.EpochNumber
 
 Get and validate `EpochNumber` from value
@@ -994,46 +1051,4 @@ value | string,number,Buffer,BigNumber | true     |         |
  "earliest"
 > EpochNumber('LATEST_STATE')
  "latest_state"
-```
-
-## type.BlockHash
-
-Get and validate `BlockHash` from value
-
-### Parameters
-
-Name  | Type                           | Required | Default | Description
-------|--------------------------------|----------|---------|------------
-value | string,number,Buffer,BigNumber | true     |         |
-
-### Return
-
-`string` 
-
-### Example
-
-```
-> BlockHash('0123456789012345678901234567890123456789012345678901234567890123')
- "0x0123456789012345678901234567890123456789012345678901234567890123"
-```
-
-## type.TxHash
-
-Get and validate `TxHash` from value
-
-### Parameters
-
-Name  | Type                           | Required | Default | Description
-------|--------------------------------|----------|---------|------------
-value | string,number,Buffer,BigNumber | true     |         |
-
-### Return
-
-`string` 
-
-### Example
-
-```
-> TxHash('0123456789012345678901234567890123456789012345678901234567890123')
- "0x0123456789012345678901234567890123456789012345678901234567890123"
 ```

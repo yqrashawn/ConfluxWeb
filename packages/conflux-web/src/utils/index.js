@@ -9,22 +9,6 @@ function sleep(ms) {
   return new Promise(resolve => setTimeout(resolve, ms));
 }
 
-class Timer {
-  constructor() {
-    this.startTime = Date.now();
-    this.lastTime = this.startTime;
-  }
-
-  get duration() {
-    return Date.now() - this.startTime;
-  }
-
-  async delta(ms) {
-    await sleep(ms + this.lastTime - Date.now());
-    this.lastTime = Date.now();
-  }
-}
-
 /**
  * Loop execute `func` if it return `undefined`
  *
@@ -36,20 +20,29 @@ class Timer {
  * @return {Promise<*>}
  */
 async function loop(func, { delta = 1000, timeout = 30 * 1000 } = {}) {
-  const timer = new Timer();
+  const startTime = Date.now();
 
-  while (timer.duration < timeout) {
+  for (let lastTime = startTime; Date.now() - startTime < timeout; lastTime = Date.now()) {
     const ret = await func();
     if (ret !== undefined) {
       return ret;
     }
-    await timer.delta(delta);
+
+    await sleep(lastTime + delta - Date.now());
   }
 
-  throw new Error(`Timeout after ${timeout} ms`);
+  throw new Error(`Timeout after ${Date.now() - startTime} ms`);
+}
+
+function decorate(instance, name, func) {
+  const method = instance[name];
+  instance[name] = function (...params) {
+    return func(method.bind(this), params);
+  };
 }
 
 module.exports = {
   sleep,
   loop,
+  decorate,
 };

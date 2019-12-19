@@ -16,7 +16,7 @@ cfx.provider = new MockProvider();
 test('gasPrice', async () => {
   const gasPrice = await cfx.gasPrice();
 
-  expect(Number.isInteger(gasPrice)).toEqual(true);
+  expect(BigNumber.isBigNumber(gasPrice)).toEqual(true);
 });
 
 test('epochNumber', async () => {
@@ -56,6 +56,12 @@ test('getTransactionCount', async () => {
   const txCount = await cfx.getTransactionCount(ADDRESS);
 
   expect(Number.isInteger(txCount)).toEqual(true);
+});
+
+test('getBestBlockHash', async () => {
+  const txHash = await cfx.getBestBlockHash();
+
+  expect(Hex.isHex(txHash)).toEqual(true);
 });
 
 test('getBlocksByEpoch', async () => {

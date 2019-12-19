@@ -25,12 +25,15 @@ test('randomBuffer', () => {
 test('randomPrivateKey', () => {
   const key1 = PrivateKey(randomPrivateKey());
   const key2 = PrivateKey(randomPrivateKey());
-  expect(key1).not.toEqual(key2);
+  expect(key1).not.toEqual(key2); // almost impossible
 
   const entropy = Hex.toBuffer('0x0123456789012345678901234567890123456789012345678901234567890123');
   const key3 = PrivateKey(randomPrivateKey(entropy));
   const key4 = PrivateKey(randomPrivateKey(entropy));
-  expect(key3).not.toEqual(key4);
+  expect(key3).not.toEqual(key4); // almost impossible
+
+  const entropyInvalid = Hex.toBuffer('0x0123456789');
+  expect(() => randomPrivateKey(entropyInvalid)).toThrow('entropy must be 32 length Buffer');
 });
 
 test('privateKeyToAddress', () => {

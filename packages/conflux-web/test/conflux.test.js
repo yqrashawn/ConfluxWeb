@@ -32,11 +32,15 @@ test('cfx.setProvider', () => {
   const cfx = new Conflux();
 
   expect(cfx.provider.constructor.name).toEqual('BaseProvider');
-  expect(cfx.provider.timeout).toEqual(60 * 1000);
+  expect(cfx.provider.timeout).toEqual(5 * 60 * 1000);
 
   cfx.setProvider('http://localhost:80', { timeout: 30 * 1000 });
   expect(cfx.provider.constructor.name).toEqual('HttpProvider');
   expect(cfx.provider.timeout).toEqual(30 * 1000);
+
+  cfx.setProvider('http://localhost:80', { timeout: 60 * 1000 });
+  expect(cfx.provider.constructor.name).toEqual('HttpProvider');
+  expect(cfx.provider.timeout).toEqual(60 * 1000);
 
   cfx.setProvider('ws://localhost:443');
   expect(cfx.provider.constructor.name).toEqual('WebsocketProvider');

@@ -31,10 +31,13 @@ test('Contract', async () => {
   expect(value.toString()).toEqual('100');
 
   value = await contract.count().estimateGas({ gasPrice: 101 });
-  expect(value).toEqual(21000);
+  expect(value).toEqual(BigNumber(21000));
 
-  const logs = await contract.SelfEvent(ADDRESS).list();
+  const logs = await contract.SelfEvent(ADDRESS).getLogs();
   expect(logs.length).toEqual(1);
+
+  const iter = contract.SelfEvent(ADDRESS).iterLogs();
+  expect(iter.filter.address).toEqual(ADDRESS);
 });
 
 test('decodeData.constructor', () => {
