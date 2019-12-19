@@ -183,9 +183,9 @@ class AddressCoder extends Coder {
   }
 }
 
-class NumberCoder extends Coder {
+class IntegerCoder extends Coder {
   static from({ type, name }) {
-    const match = type.match(/^(u?int)([0-9]*)$/);
+    const match = type.match(/^(int|uint)([0-9]*)$/);
     if (!match) {
       return undefined;
     }
@@ -193,26 +193,25 @@ class NumberCoder extends Coder {
     const [, label, bits] = match;
     return new this({
       name,
+      type: label,
       signed: !label.startsWith('u'),
-      size: bits ? parseInt(bits, 10) / BYTE_BITS : undefined,
+      bits: bits ? parseInt(bits, 10) : undefined,
     });
   }
 
-  constructor({ name, signed = false, size = WORD_BYTES } = {}) {
-    assert(Number.isInteger(size) && size <= WORD_BYTES, {
-      message: 'invalid number size',
-      expect: `integer && <=${WORD_BYTES}`,
-      got: size,
-      coder: { name, signed },
+  constructor({ name, type, signed = false, bits = 256 } = {}) {
+    assert(Number.isInteger(bits) && 0 < bits && bits <= 256 && (bits % 8 === 0), {
+      message: 'invalid bits',
+      expect: 'integer && 0<bits<=256 && bits%8==0',
+      got: bits,
+      coder: { name, type, signed },
     });
 
-    super({ name, type: `${signed ? '' : 'u'}int${size * BYTE_BITS}` });
+    super({ name });
+    this.type = `${type}${bits}`;
     this.signed = signed;
-    this.size = size;
-  }
-
-  get _bound() {
-    return BigNumber(2).pow(this.size * BYTE_BITS - (this.signed ? 1 : 0));
+    this.size = bits / BYTE_BITS;
+    this.bound = BigNumber(2).pow(bits - (this.signed ? 1 : 0));
   }
 
   /**
@@ -220,19 +219,17 @@ class NumberCoder extends Coder {
    * @return {Buffer}
    */
   encode(value) {
-    const bound = this._bound; // for call `getter` only once
-
     let number = BigNumber(value);
     let twosComplement = number;
 
     if (this.signed && number.lt(0)) {
-      twosComplement = number.plus(bound);
+      twosComplement = number.plus(this.bound);
       number = number.plus(BigNumber(2).pow(WORD_BYTES * BYTE_BITS));
     }
 
-    assert(twosComplement.gte(0) && twosComplement.lt(bound), {
+    assert(twosComplement.gte(0) && twosComplement.lt(this.bound), {
       message: 'bound error',
-      expect: `0<= && <${bound}`,
+      expect: `0<= && <${this.bound}`,
       got: twosComplement,
       coder: this,
       value,
@@ -246,15 +243,52 @@ class NumberCoder extends Coder {
    * @return {BigNumber}
    */
   decode(stream) {
-    const bound = this._bound; // for call `getter` only once
-
     let value = BigNumber(stream.read(this.size), 16); // 16: hex base
 
-    if (this.signed && value.gte(bound)) {
+    if (this.signed && value.gte(this.bound)) {
       value = value.minus(BigNumber(2).pow(this.size * BYTE_BITS));
     }
 
     return value;
+  }
+}
+
+class FixedCoder extends IntegerCoder {
+  static from({ type, name }) {
+    const match = type.match(/^(fixed|ufixed)(([0-9]+)x([0-9]+))?$/);
+    if (!match) {
+      return undefined;
+    }
+
+    const [, label, , bits, offset] = match;
+    return new this({
+      name,
+      type: label,
+      signed: !label.startsWith('u'),
+      bits: bits ? parseInt(bits, 10) : undefined,
+      offset: offset ? parseInt(offset, 10) : undefined,
+    });
+  }
+
+  constructor({ name, type, signed = false, bits = 128, offset = 18 } = {}) {
+    assert(Number.isInteger(offset) && 0 < offset && offset <= 80, {
+      message: 'invalid offset',
+      expect: 'integer && 0 <offset<=80',
+      got: offset,
+      coder: { name, signed, bits, offset },
+    });
+
+    super({ name, signed, bits });
+    this.type = `${type}${bits}x${offset}`;
+    this.power = BigNumber(10).pow(offset);
+  }
+
+  encode(value) {
+    return super.encode(BigNumber(value).times(this.power).integerValue());
+  }
+
+  decode(stream) {
+    return super.decode(stream).div(this.power);
   }
 }
 
@@ -275,14 +309,15 @@ class BytesCoder extends Coder {
   constructor({ name, size }) {
     if (size !== undefined) {
       assert(Number.isInteger(size) && size <= WORD_BYTES, {
-        message: 'invalid number size',
+        message: 'invalid size',
         expect: `integer && <=${WORD_BYTES}`,
         got: size,
         coder: { name },
       });
     }
 
-    super({ name, type: `bytes${size > 0 ? size : ''}` });
+    super({ name });
+    this.type = `bytes${size > 0 ? size : ''}`;
     this.size = size;
     this.dynamic = Boolean(size === undefined);
   }
@@ -371,15 +406,15 @@ class ArrayCoder extends Coder {
   constructor({ name, coder, size }) {
     if (size !== undefined) {
       assert(Number.isInteger(size) && 0 < size, {
-        message: 'invalid number size',
+        message: 'invalid size',
         expect: 'integer && >0',
         got: size,
         coder: { name },
       });
     }
 
-    super({ name, type: `${coder.type}[${size > 0 ? size : ''}]` });
-
+    super({ name });
+    this.type = `${coder.type}[${size > 0 ? size : ''}]`;
     this.size = size;
     this.coder = coder;
     this.dynamic = Boolean(size === undefined) || coder.dynamic;
@@ -439,7 +474,8 @@ class TupleCoder extends Coder {
   }
 
   constructor({ name, coders }) {
-    super({ name, type: `(${coders.map(coder => coder.type).join(',')})` });
+    super({ name });
+    this.type = `(${coders.map(coder => coder.type).join(',')})`;
     this.size = coders.length;
     this.coders = coders;
     this.dynamic = lodash.some(coders, coder => coder.dynamic);
@@ -484,7 +520,7 @@ class TupleCoder extends Coder {
 }
 
 // ----------------------------------------------------------------------------
-const UINT_CODER = new NumberCoder();
+const UINT_CODER = new IntegerCoder();
 
 /**
  * Get coder by abi component.
@@ -499,7 +535,8 @@ function getCoder(component) {
   // sorted by probability
   const coder = TupleCoder.from(component)
     || AddressCoder.from(component)
-    || NumberCoder.from(component)
+    || IntegerCoder.from(component)
+    || FixedCoder.from(component)
     || StringCoder.from(component)
     || BytesCoder.from(component)
     || ArrayCoder.from(component)

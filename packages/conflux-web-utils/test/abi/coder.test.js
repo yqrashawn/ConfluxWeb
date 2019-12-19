@@ -66,13 +66,13 @@ test('address', () => {
 });
 
 describe('number', () => {
-  test('size error', () => {
-    expect(() => getCoder({ type: 'int100' })).toThrow('invalid number size');
+  test('bits error', () => {
+    expect(() => getCoder({ type: 'int100' })).toThrow('invalid bits');
   });
 
   test('int8', () => {
     const coder = getCoder({ type: 'int8' });
-    expect(coder.constructor.name).toEqual('NumberCoder');
+    expect(coder.constructor.name).toEqual('IntegerCoder');
     expect(coder.type).toEqual('int8');
     expect(coder.signed).toEqual(true);
     expect(coder.size).toEqual(1);
@@ -92,7 +92,7 @@ describe('number', () => {
 
   test('uint8', () => {
     const coder = getCoder({ type: 'uint8' });
-    expect(coder.constructor.name).toEqual('NumberCoder');
+    expect(coder.constructor.name).toEqual('IntegerCoder');
     expect(coder.type).toEqual('uint8');
     expect(coder.signed).toEqual(false);
     expect(coder.size).toEqual(1);
@@ -103,12 +103,12 @@ describe('number', () => {
     testEncodeAndDecode(coder, BigNumber(0), '0x0000000000000000000000000000000000000000000000000000000000000000');
     testDecode(coder, BigNumber(128), '0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff80');
     testDecode(coder, BigNumber(128), '0x0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcd80');
-    expect(() => coder.encode(-1)).toThrow();
+    expect(() => coder.encode(-1)).toThrow('bound error');
   });
 
   test('int', () => {
     const coder = getCoder({ type: 'int' });
-    expect(coder.constructor.name).toEqual('NumberCoder');
+    expect(coder.constructor.name).toEqual('IntegerCoder');
     expect(coder.type).toEqual('int256');
     expect(coder.signed).toEqual(true);
     expect(coder.size).toEqual(32);
@@ -121,7 +121,7 @@ describe('number', () => {
 
   test('uint', () => {
     const coder = getCoder({ type: 'uint' });
-    expect(coder.constructor.name).toEqual('NumberCoder');
+    expect(coder.constructor.name).toEqual('IntegerCoder');
     expect(coder.type).toEqual('uint256');
     expect(coder.signed).toEqual(false);
     expect(coder.size).toEqual(32);
@@ -132,9 +132,80 @@ describe('number', () => {
   });
 });
 
+describe('fixed', () => {
+  test('bits error', () => {
+    expect(() => getCoder({ type: 'fixed127x18' })).toThrow('invalid bits');
+    expect(() => getCoder({ type: 'fixed128x0' })).toThrow('invalid offset');
+  });
+
+  test('fixed8x1', () => {
+    const coder = getCoder({ type: 'fixed8x1' }); // n * 10 ** 1
+    expect(coder.constructor.name).toEqual('FixedCoder');
+    expect(coder.type).toEqual('fixed8x1');
+    expect(coder.signed).toEqual(true);
+    expect(coder.size).toEqual(1);
+
+    testEncode(coder, 12.7, '0x000000000000000000000000000000000000000000000000000000000000007f');
+    testDecode(coder, BigNumber(12.7), '0x000000000000000000000000000000000000000000000000000000000000007f');
+
+    expect(() => coder.encode(-12.9)).toThrow('bound error');
+    testEncodeAndDecode(coder, BigNumber(-12.8), '0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff80');
+    testEncodeAndDecode(coder, BigNumber(-3.2), '0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffe0');
+    testEncode(coder, BigNumber(-3.15), '0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffe0');
+    testEncode(coder, BigNumber(-3.14), '0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffe1');
+    testEncodeAndDecode(coder, BigNumber(-3.1), '0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffe1');
+    testEncodeAndDecode(coder, BigNumber(0), '0x0000000000000000000000000000000000000000000000000000000000000000');
+    testEncodeAndDecode(coder, BigNumber(3.1), '0x000000000000000000000000000000000000000000000000000000000000001f');
+    testEncode(coder, BigNumber(3.14), '0x000000000000000000000000000000000000000000000000000000000000001f');
+    testEncode(coder, BigNumber(3.15), '0x0000000000000000000000000000000000000000000000000000000000000020');
+    testEncodeAndDecode(coder, BigNumber(3.2), '0x0000000000000000000000000000000000000000000000000000000000000020');
+    testEncodeAndDecode(coder, BigNumber(12.7), '0x000000000000000000000000000000000000000000000000000000000000007f');
+    expect(() => coder.encode(12.8)).toThrow('bound error');
+  });
+
+  test('ufixed8x1', () => {
+    const coder = getCoder({ type: 'ufixed8x1' }); // n * 10 ** 1
+    expect(coder.constructor.name).toEqual('FixedCoder');
+    expect(coder.type).toEqual('ufixed8x1');
+    expect(coder.signed).toEqual(false);
+    expect(coder.size).toEqual(1);
+
+    expect(() => coder.encode(-0.05)).toThrow('bound error');
+    testEncode(coder, BigNumber(-0.04), '0x0000000000000000000000000000000000000000000000000000000000000000');
+    testEncodeAndDecode(coder, BigNumber(0), '0x0000000000000000000000000000000000000000000000000000000000000000');
+    testEncodeAndDecode(coder, BigNumber(3.1), '0x000000000000000000000000000000000000000000000000000000000000001f');
+    testEncode(coder, BigNumber(3.14), '0x000000000000000000000000000000000000000000000000000000000000001f');
+    testEncode(coder, BigNumber(3.15), '0x0000000000000000000000000000000000000000000000000000000000000020');
+    testEncodeAndDecode(coder, BigNumber(3.2), '0x0000000000000000000000000000000000000000000000000000000000000020');
+    testEncodeAndDecode(coder, BigNumber(25.5), '0x00000000000000000000000000000000000000000000000000000000000000ff');
+    expect(() => coder.encode(25.6)).toThrow('bound error');
+  });
+
+  test('fixed', () => {
+    const coder = getCoder({ type: 'fixed' }); // n * 10 ** 18
+    expect(coder.constructor.name).toEqual('FixedCoder');
+    expect(coder.type).toEqual('fixed128x18');
+    expect(coder.signed).toEqual(true);
+    expect(coder.size).toEqual(16);
+
+    testEncodeAndDecode(coder, BigNumber(-12.9), '0xffffffffffffffffffffffffffffffffffffffffffffffff4cf9fe58dd760000');
+    testEncodeAndDecode(coder, BigNumber(12.8), '0x000000000000000000000000000000000000000000000000b1a2bc2ec5000000');
+  });
+
+  test('ufixed', () => {
+    const coder = getCoder({ type: 'ufixed' }); // n * 10 ** 18
+    expect(coder.constructor.name).toEqual('FixedCoder');
+    expect(coder.type).toEqual('ufixed128x18');
+    expect(coder.signed).toEqual(false);
+    expect(coder.size).toEqual(16);
+
+    testEncodeAndDecode(coder, BigNumber(25.6), '0x0000000000000000000000000000000000000000000000016345785d8a000000');
+  });
+});
+
 describe('bytes', () => {
   test('size error', () => {
-    expect(() => getCoder({ type: 'bytes100' })).toThrow('invalid number size');
+    expect(() => getCoder({ type: 'bytes100' })).toThrow('invalid size');
   });
 
   test('bytesN', () => {
@@ -197,7 +268,7 @@ test('string', () => {
 
 describe('array', () => {
   test('common', () => {
-    expect(() => getCoder({ type: 'uint8[0]' })).toThrow('invalid number size');
+    expect(() => getCoder({ type: 'uint8[0]' })).toThrow('invalid size');
   });
 
   test('static[N]', () => {
