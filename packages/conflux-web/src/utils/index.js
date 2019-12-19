@@ -1,3 +1,5 @@
+const parse = require('./parse');
+
 /**
  * Await sleep.
  *
@@ -13,13 +15,13 @@ function sleep(ms) {
  * Loop execute `func` if it return `undefined`
  *
  * @memberOf utils
- * @param func {function} - Function to execute.
  * @param [options] {object}
  * @param [options.delta=1000] {number} - Loop transaction interval in ms.
  * @param [options.timeout=30*1000] {number} - Loop timeout in ms.
+ * @param func {function} - Function to execute.
  * @return {Promise<*>}
  */
-async function loop(func, { delta = 1000, timeout = 30 * 1000 } = {}) {
+async function loop({ delta = 1000, timeout = 30 * 1000 }, func) {
   const startTime = Date.now();
 
   for (let lastTime = startTime; Date.now() - startTime < timeout; lastTime = Date.now()) {
@@ -41,8 +43,28 @@ function decorate(instance, name, func) {
   };
 }
 
+class LazyPromise {
+  constructor(func, params) {
+    this._func = func;
+    this._params = params;
+    this._promise = null; // not call `func(...params)` immediately
+  }
+
+  async then(resolve, reject) {
+    this._promise = this._promise || this._func(...this._params);
+
+    try {
+      resolve(await this._promise);
+    } catch (e) {
+      reject(e);
+    }
+  }
+}
+
 module.exports = {
   sleep,
   loop,
   decorate,
+  LazyPromise,
+  parse,
 };

@@ -71,13 +71,4 @@ parse.getLogs = parse({
   topics: [(parse.null).or(parse([Hex32])).or(parse(Hex32))],
 });
 
-parse.iterLogs = parse({
-  threshold: parse(parse.number, { default: 0.01 }),
-  limit: parse.uint,
-  fromEpoch: parse.uint,
-  toEpoch: parse.uint,
-  address: parse([Address]).or(parse(Address)),
-  topics: [(parse.null).or(parse([Hex32])).or(parse(Hex32))],
-});
-
 module.exports = parse;

@@ -23,7 +23,7 @@ class Called {
    * > Note: This can alter the smart contract state.
    *
    * @param options {object} - See `Transaction.callOptions`
-   * @return {Promise<TransactionPoll>} The TransactionPoll object.
+   * @return {Promise<PendingTransaction>} The PendingTransaction object.
    */
   sendTransaction(options) {
     return this.method.cfx.sendTransaction({
@@ -140,22 +140,8 @@ class EventLog {
     this.topics = topics;
   }
 
-  async getLogs(options) {
-    const logs = await this.eventLog.cfx.getLogs({
-      ...options,
-      address: this.address,
-      topics: this.topics,
-    });
-
-    logs.forEach(log => {
-      log.params = this.eventLog.params(log);
-    });
-
-    return logs;
-  }
-
-  iterLogs(options) {
-    const iter = this.eventLog.cfx.iterLogs({
+  getLogs(options) {
+    const iter = this.eventLog.cfx.getLogs({
       ...options,
       address: this.address,
       topics: this.topics,

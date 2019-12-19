@@ -1,5 +1,5 @@
 const { Hex } = require('conflux-web-utils/src/type');
-const parse = require('../src/utils/parse');
+const { parse } = require('../src/utils');
 
 test('parse.boolean', () => {
   expect(parse.boolean(undefined)).toEqual(false);

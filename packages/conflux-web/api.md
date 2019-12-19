@@ -155,7 +155,7 @@ options.limit       | number                | false    |         | Limit log num
 
 ### Return
 
-`Promise.<array>` Array of log objects.
+`Promise.<LogIterator>` Array of log objects.
 - `string` address: Address this event originated from.
 - `string[]` topics: An array with max 4 32 Byte topics, topic 1-3 contains indexed parameters of the event.
 - `string` data: The data containing non-indexed log parameter.
@@ -171,7 +171,7 @@ options.limit       | number                | false    |         | Limit log num
 ### Example
 
 ```
-> await cfx.getPastLogs({
+> await cfx.getLogs({
       address: '0xbd72de06cd4a94ad31ed9303cf32a2bccb82c404',
       fromEpoch: 0,
       toEpoch: 'latest_mined',
@@ -184,22 +184,54 @@ options.limit       | number                | false    |         | Limit log num
 
    [
    {
-    address: '0xbd72de06cd4a94ad31ed9303cf32a2bccb82c404',
-    blockHash: '0x701afee0ffc49aaebadf0e6618b6ec1715d31e7aa639e2e00dc8df10994e0283',
-    data: '0x',
-    epochNumber: 542556,
-    logIndex: 0,
-    removed: false,
-    topics: [
-      '0xb818399ffd68e821c34de8d5fbc5aeda8456fdb9296fc1b02bf6245ade7ebbd4',
-      '0x0000000000000000000000001ead8630345121d19ee3604128e5dc54b36e8ea6'
-    ],
-    transactionHash: '0x5a301d2c342709d7de9da24bd096ab3754ea328b016d85ab3410d375616f5d0d',
-    transactionIndex: 0,
-    transactionLogIndex: 0,
-    type: 'mined'
-   },
+      address: '0xbd72de06cd4a94ad31ed9303cf32a2bccb82c404',
+      blockHash: '0x701afee0ffc49aaebadf0e6618b6ec1715d31e7aa639e2e00dc8df10994e0283',
+      data: '0x',
+      epochNumber: 542556,
+      logIndex: 0,
+      removed: false,
+      topics: [
+        '0xb818399ffd68e821c34de8d5fbc5aeda8456fdb9296fc1b02bf6245ade7ebbd4',
+        '0x0000000000000000000000001ead8630345121d19ee3604128e5dc54b36e8ea6'
+      ],
+      transactionHash: '0x5a301d2c342709d7de9da24bd096ab3754ea328b016d85ab3410d375616f5d0d',
+      transactionIndex: 0,
+      transactionLogIndex: 0,
+      type: 'mined'
+     },
    ]
+```
+
+```
+> logIter = cfx.getLogs({
+      address: '0xbd72de06cd4a94ad31ed9303cf32a2bccb82c404',
+      fromEpoch: 'latest_mined',
+      limit: 2,
+      })await logIter.next({threshold: 0.01, delta: 1000});
+   {
+      address: '0xbd72de06cd4a94ad31ed9303cf32a2bccb82c404',
+      ...
+   }await logIter.next();
+   {
+      address: '0xbd72de06cd4a94ad31ed9303cf32a2bccb82c404',
+      ...
+   }await logIter.next();
+   undefined
+```
+
+```
+> logIter = cfx.getLogs({
+      address: '0xbd72de06cd4a94ad31ed9303cf32a2bccb82c404',
+      fromEpoch: 'latest_mined',
+      limit: 2,
+      })> for await (const log of iter) {
+       console.log(log);
+     }
+   {
+      address: '0xbd72de06cd4a94ad31ed9303cf32a2bccb82c404',
+      ...
+   }
+   ...
 ```
 
 ## Conflux.getBalance
@@ -566,7 +598,7 @@ options | object | true     |         | See `Transaction.callOptions`
 
 ### Return
 
-`Promise.<TransactionPoll>` The TransactionPoll object.
+`Promise.<PendingTransaction>` The PendingTransaction object.
 
 ### Example
 
@@ -651,7 +683,7 @@ hex  | string,Buffer | true     |         | Raw transaction string.
 
 ### Return
 
-`Promise.<TransactionPoll>` The TransactionPoll object. See `sendTransaction`
+`Promise.<PendingTransaction>` The PendingTransaction object. See `sendTransaction`
 
 ### Example
 
@@ -815,7 +847,7 @@ options | object | true     |         | See `Transaction.callOptions`
 
 ### Return
 
-`Promise.<TransactionPoll>` The TransactionPoll object.
+`Promise.<PendingTransaction>` The PendingTransaction object.
 
 
 ## Contract.Called.estimateGas
@@ -856,12 +888,12 @@ epochNumber | string,number | true     |         | See `Conflux.call`.
 
 
 ----------
-# poll.transaction
+# poll.pendingTransaction
 
 
 
 
-## TransactionPoll.get
+## PendingTransaction.get
 
 Get transaction by hash.
 
@@ -877,7 +909,7 @@ options.delay | number | false    | 0       | Defer execute after `delay` ms.
 `Promise.<(Object|null)>` See `Conflux.getTransactionByHash`
 
 
-## TransactionPoll.mined
+## PendingTransaction.mined
 
 Async wait till transaction been mined.
 
@@ -896,7 +928,7 @@ options.timeout | number | false    | 30*1000 | Loop timeout in ms.
 `Promise.<object>` See `Conflux.getTransactionByHash`
 
 
-## TransactionPoll.executed
+## PendingTransaction.executed
 
 Async wait till transaction been executed.
 
@@ -917,7 +949,7 @@ options.timeout | number | false    | 60*1000 | Loop timeout in ms.
 `Promise.<object>` See `Conflux.getTransactionReceipt`
 
 
-## TransactionPoll.confirmed
+## PendingTransaction.confirmed
 
 Async wait till transaction been confirmed.
 
@@ -938,7 +970,7 @@ options.threshold | number | false    | 0.01      | Number in range (0,1)
 `Promise.<object>` See `Conflux.getTransactionReceipt`
 
 
-## TransactionPoll.deployed
+## PendingTransaction.deployed
 
 Async wait till contract create transaction deployed.
 - transaction confirmed
@@ -946,8 +978,8 @@ Async wait till contract create transaction deployed.
 ### Parameters
 
 Name    | Type   | Required | Default | Description
---------|--------|----------|---------|--------------------------------
-options | object | false    |         | See `TransactionPoll.confirmed`
+--------|--------|----------|---------|-----------------------------------
+options | object | false    |         | See `PendingTransaction.confirmed`
 
 ### Return
 

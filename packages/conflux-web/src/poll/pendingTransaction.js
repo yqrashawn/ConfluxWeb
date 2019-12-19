@@ -1,17 +1,9 @@
-const { sleep, loop } = require('../utils');
+const { sleep, loop, LazyPromise } = require('../utils');
 
-class TransactionPoll {
-  constructor(cfx, txHashPromise) {
+class PendingTransaction extends LazyPromise {
+  constructor(cfx, func, params) {
+    super(func, params);
     this.cfx = cfx;
-    this.txHashPromise = txHashPromise;
-  }
-
-  async then(resolve, reject) {
-    try {
-      resolve(await this.txHashPromise);
-    } catch (e) {
-      reject(e);
-    }
   }
 
   /**
@@ -38,17 +30,14 @@ class TransactionPoll {
    * @return {Promise<object>} See `Conflux.getTransactionByHash`
    */
   async mined({ delta = 1000, timeout = 60 * 1000 } = {}) {
-    return loop(
-      async () => {
-        const tx = await this.get();
-        if (tx.blockHash) {
-          return tx;
-        }
+    return loop({ delta, timeout }, async () => {
+      const tx = await this.get();
+      if (tx.blockHash) {
+        return tx;
+      }
 
-        return undefined;
-      },
-      { delta, timeout },
-    );
+      return undefined;
+    });
   }
 
   /**
@@ -65,20 +54,17 @@ class TransactionPoll {
    */
   async executed({ delta = 1000, timeout = 5 * 60 * 1000 } = {}) {
     const txHash = await this;
-    return loop(
-      async () => {
-        const receipt = await this.cfx.getTransactionReceipt(txHash);
-        if (receipt) {
-          if (receipt.outcomeStatus === 0) {
-            return receipt;
-          }
-          throw new Error(`transaction "${txHash}" executed failed, outcomeStatus ${receipt.outcomeStatus}`);
+    return loop({ delta, timeout }, async () => {
+      const receipt = await this.cfx.getTransactionReceipt(txHash);
+      if (receipt) {
+        if (receipt.outcomeStatus === 0) {
+          return receipt;
         }
+        throw new Error(`transaction "${txHash}" executed failed, outcomeStatus ${receipt.outcomeStatus}`);
+      }
 
-        return undefined;
-      },
-      { delta, timeout },
-    );
+      return undefined;
+    });
   }
 
   /**
@@ -94,25 +80,22 @@ class TransactionPoll {
    * @return {Promise<object>} See `Conflux.getTransactionReceipt`
    */
   async confirmed({ threshold = 0.01, delta = 1000, timeout = 30 * 60 * 1000 } = {}) {
-    return loop(
-      async () => {
-        const receipt = await this.executed({ delta, timeout });
-        const risk = await this.cfx.getRiskCoefficient(receipt.epochNumber);
-        if (risk < threshold) {
-          return receipt;
-        }
+    return loop({ delta, timeout }, async () => {
+      const receipt = await this.executed({ delta, timeout });
+      const risk = await this.cfx.getRiskCoefficient(receipt.epochNumber);
+      if (risk < threshold) {
+        return receipt;
+      }
 
-        return undefined;
-      },
-      { delta, timeout },
-    );
+      return undefined;
+    });
   }
 
   /**
    * Async wait till contract create transaction deployed.
    * - transaction confirmed
    *
-   * @param [options] {object} - See `TransactionPoll.confirmed`
+   * @param [options] {object} - See `PendingTransaction.confirmed`
    * @return {Promise<string>} The contract address.
    */
   async deployed(options) {
@@ -124,4 +107,4 @@ class TransactionPoll {
   }
 }
 
-module.exports = TransactionPoll;
+module.exports = PendingTransaction;

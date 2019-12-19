@@ -35,9 +35,6 @@ test('Contract', async () => {
 
   const logs = await contract.SelfEvent(ADDRESS).getLogs();
   expect(logs.length).toEqual(1);
-
-  const iter = contract.SelfEvent(ADDRESS).iterLogs();
-  expect(iter.filter.address).toEqual(ADDRESS);
 });
 
 test('decodeData.constructor', () => {

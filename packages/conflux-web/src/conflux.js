@@ -3,13 +3,12 @@ const { Hex, Address, EpochNumber, BlockHash, TxHash } = require('conflux-web-ut
 const Transaction = require('conflux-web-utils/src/transaction');
 const providerFactory = require('../lib/provider');
 
-const parse = require('./utils/parse');
-const { decorate } = require('./utils');
+const { parse, decorate } = require('./utils');
 const Contract = require('./contract');
 const Wallet = require('./wallet');
 
-const TransactionPoll = require('./poll/transaction');
-const LogPoll = require('./poll/log');
+const PendingTransaction = require('./poll/pendingTransaction');
+const LogIterator = require('./poll/logIterator');
 
 /**
  * A sdk of conflux.
@@ -49,13 +48,15 @@ class Conflux {
     this.defaultGas = defaultGas;
 
     decorate(this, 'sendTransaction', (func, params) => {
-      // XXX: must input promise as params for chain call like `cfx.sendTransaction(...).confirmed()`
-      return new TransactionPoll(this, func(...params));
+      return new PendingTransaction(this, func, params);
     });
 
     decorate(this, 'sendRawTransaction', (func, params) => {
-      // XXX: must input promise as params for chain call like `cfx.sendRawTransaction(...).confirmed()`
-      return new TransactionPoll(this, func(...params));
+      return new PendingTransaction(this, func, params);
+    });
+
+    decorate(this, 'getLogs', (func, params) => {
+      return new LogIterator(this, func, params);
     });
   }
 
@@ -158,7 +159,7 @@ class Conflux {
    * @param [options.address] {string|string[]} - An address or a list of addresses to only get logs from particular account(s).
    * @param [options.topics] {array} - An array of values which must each appear in the log entries. The order is important, if you want to leave topics out use null, e.g. [null, '0x12...']. You can also pass an array for each topic with options for that topic e.g. [null, ['option1', 'option2']]
    * @param [options.limit] {number} - Limit log number.
-   * @return {Promise<array>} Array of log objects.
+   * @return {Promise<LogIterator>} Array of log objects.
    * - `string` address: Address this event originated from.
    * - `string[]` topics: An array with max 4 32 Byte topics, topic 1-3 contains indexed parameters of the event.
    * - `string` data: The data containing non-indexed log parameter.
@@ -172,7 +173,7 @@ class Conflux {
    * - `number` transactionLogIndex: Integer of the event index position in the transaction.
    *
    * @example
-   * > await cfx.getPastLogs({
+   * > await cfx.getLogs({
       address: '0xbd72de06cd4a94ad31ed9303cf32a2bccb82c404',
       fromEpoch: 0,
       toEpoch: 'latest_mined',
@@ -185,22 +186,56 @@ class Conflux {
 
    [
    {
-    address: '0xbd72de06cd4a94ad31ed9303cf32a2bccb82c404',
-    blockHash: '0x701afee0ffc49aaebadf0e6618b6ec1715d31e7aa639e2e00dc8df10994e0283',
-    data: '0x',
-    epochNumber: 542556,
-    logIndex: 0,
-    removed: false,
-    topics: [
-      '0xb818399ffd68e821c34de8d5fbc5aeda8456fdb9296fc1b02bf6245ade7ebbd4',
-      '0x0000000000000000000000001ead8630345121d19ee3604128e5dc54b36e8ea6'
-    ],
-    transactionHash: '0x5a301d2c342709d7de9da24bd096ab3754ea328b016d85ab3410d375616f5d0d',
-    transactionIndex: 0,
-    transactionLogIndex: 0,
-    type: 'mined'
-   },
+      address: '0xbd72de06cd4a94ad31ed9303cf32a2bccb82c404',
+      blockHash: '0x701afee0ffc49aaebadf0e6618b6ec1715d31e7aa639e2e00dc8df10994e0283',
+      data: '0x',
+      epochNumber: 542556,
+      logIndex: 0,
+      removed: false,
+      topics: [
+        '0xb818399ffd68e821c34de8d5fbc5aeda8456fdb9296fc1b02bf6245ade7ebbd4',
+        '0x0000000000000000000000001ead8630345121d19ee3604128e5dc54b36e8ea6'
+      ],
+      transactionHash: '0x5a301d2c342709d7de9da24bd096ab3754ea328b016d85ab3410d375616f5d0d',
+      transactionIndex: 0,
+      transactionLogIndex: 0,
+      type: 'mined'
+     },
    ]
+
+   * @example
+   * > logIter = cfx.getLogs({
+      address: '0xbd72de06cd4a94ad31ed9303cf32a2bccb82c404',
+      fromEpoch: 'latest_mined',
+      limit: 2,
+      })
+   * await logIter.next({threshold: 0.01, delta: 1000});
+   {
+      address: '0xbd72de06cd4a94ad31ed9303cf32a2bccb82c404',
+      ...
+   }
+   * await logIter.next();
+   {
+      address: '0xbd72de06cd4a94ad31ed9303cf32a2bccb82c404',
+      ...
+   }
+   * await logIter.next();
+   undefined
+
+   * @example
+   * > logIter = cfx.getLogs({
+      address: '0xbd72de06cd4a94ad31ed9303cf32a2bccb82c404',
+      fromEpoch: 'latest_mined',
+      limit: 2,
+      })
+   * > for await (const log of iter) {
+       console.log(log);
+     }
+   {
+      address: '0xbd72de06cd4a94ad31ed9303cf32a2bccb82c404',
+      ...
+   }
+   ...
    */
   async getLogs(options) {
     if (options.blockHashes !== undefined && (options.fromEpoch !== undefined || options.toEpoch !== undefined)) {
@@ -210,10 +245,6 @@ class Conflux {
     const result = await this.provider.call('cfx_getLogs', parse.getLogs(options));
 
     return parse.logs(result);
-  }
-
-  iterLogs(options) {
-    return new LogPoll(this, parse.iterLogs(options));
   }
 
   // ------------------------------- address ----------------------------------
@@ -550,7 +581,7 @@ class Conflux {
    * > NOTE: if `from` options is a instance of `Account`, this methods will sign by account local and send by `cfx_sendRawTransaction`, else send by `cfx_sendTransaction`
    *
    * @param options {object} - See `Transaction.callOptions`
-   * @return {Promise<TransactionPoll>} The TransactionPoll object.
+   * @return {Promise<PendingTransaction>} The PendingTransaction object.
    *
    * @example
    * > // TODO call with address, need `cfx_sendTransaction`
@@ -652,7 +683,7 @@ class Conflux {
    * Signs a transaction. This account needs to be unlocked.
    *
    * @param hex {string|Buffer} - Raw transaction string.
-   * @return {Promise<TransactionPoll>} The TransactionPoll object. See `sendTransaction`
+   * @return {Promise<PendingTransaction>} The PendingTransaction object. See `sendTransaction`
    *
    * @example
    * > await cfx.sendRawTransaction('0xf85f800382520894bbd9e9b...');
