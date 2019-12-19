@@ -13,14 +13,14 @@ const TX_HASH = '0xb0a0000000000000000000000000000000000000000000000000000000000
 const cfx = new Conflux();
 cfx.provider = new MockProvider();
 
-test('gasPrice', async () => {
-  const gasPrice = await cfx.gasPrice();
+test('getGasPrice', async () => {
+  const gasPrice = await cfx.getGasPrice();
 
   expect(BigNumber.isBigNumber(gasPrice)).toEqual(true);
 });
 
-test('epochNumber', async () => {
-  const epochNumber = await cfx.epochNumber();
+test('getEpochNumber', async () => {
+  const epochNumber = await cfx.getEpochNumber();
 
   expect(Number.isInteger(epochNumber)).toEqual(true);
 });
@@ -64,8 +64,8 @@ test('getBestBlockHash', async () => {
   expect(Hex.isHex(txHash)).toEqual(true);
 });
 
-test('getBlocksByEpoch', async () => {
-  const blockHashArray = await cfx.getBlocksByEpoch(0);
+test('getBlocksByEpochNumber', async () => {
+  const blockHashArray = await cfx.getBlocksByEpochNumber(0);
 
   expect(Array.isArray(blockHashArray)).toEqual(true);
   blockHashArray.forEach(txHash => {

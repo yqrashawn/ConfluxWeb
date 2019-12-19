@@ -125,10 +125,10 @@ class Conflux {
    * @return {Promise<BigNumber>} Gas price in drip.
    *
    * @example
-   * > await cfx.gasPrice();
-   0
+   * > await cfx.getGasPrice();
+   "0"
    */
-  async gasPrice() {
+  async getGasPrice() {
     const result = await this.provider.call('cfx_gasPrice');
     return parse.bigNumber(result);
   }
@@ -140,10 +140,10 @@ class Conflux {
    * @return {Promise<number>} EpochNumber
    *
    * @example
-   * > await cfx.epochNumber();
+   * > await cfx.getEpochNumber();
    200109
    */
-  async epochNumber(epochNumber = EpochNumber.LATEST_MINED) {
+  async getEpochNumber(epochNumber = EpochNumber.LATEST_MINED) {
     const result = await this.provider.call('cfx_epochNumber', EpochNumber(epochNumber));
     return parse.number(result);
   }
@@ -260,6 +260,56 @@ class Conflux {
     return parse.number(result);
   }
 
+  // -------------------------------- epoch -----------------------------------
+  // eslint-disable-next-line no-unused-vars
+  async getRiskCoefficient(epochNumber) {
+    // FIXME rpc not implement yet.
+    // const result = await this.provider.call('cfx_getRiskCoefficient', EpochNumber(epochNumber));
+    return 0;
+  }
+
+  /**
+   * Get the epochNumber pivot block info.
+   *
+   * @param epochNumber {string|number} - EpochNumber or string in ["latest_state", "latest_mined"]
+   * @param [detail=false] {boolean} - `true` return transaction object, `false` return TxHash array
+   * @return {Promise<object|null>} The block info (same as `getBlockByHash`).
+   *
+   * @example
+   * > await cfx.getBlockByEpochNumber(449);
+   {
+     hash: '0x59339ff28bc235cceac9fa588ebafcbf61316e6a8c86c7a1d7239b9445d98e40',
+     ...
+   }
+   */
+  async getBlockByEpochNumber(epochNumber, detail = false) {
+    if (!lodash.isBoolean(detail)) {
+      throw new Error('detail must be boolean');
+    }
+    const result = await this.provider.call('cfx_getBlockByEpochNumber', EpochNumber(epochNumber), detail);
+    return parse.block(result);
+  }
+
+  /**
+   * Get block hash array of a epochNumber.
+   *
+   * @param epochNumber {string|number} - EpochNumber or string in ["latest_state", "latest_mined"]
+   * @return {Promise<string[]>} Block hash array, last one is the pivot block hash of this epochNumber.
+   *
+   * @example
+   * > await cfx.getBlocksByEpochNumber(0);
+   ['0x2da120ad267319c181b12136f9e36be9fba59e0d818f6cc789f04ee937b4f593']
+
+   * > await cfx.getBlocksByEpochNumber(449);
+   [
+   '0x3d8b71208f81fb823f4eec5eaf2b0ec6b1457d381615eff2fbe24605ea333c39',
+   '0x59339ff28bc235cceac9fa588ebafcbf61316e6a8c86c7a1d7239b9445d98e40'
+   ]
+   */
+  async getBlocksByEpochNumber(epochNumber) {
+    return this.provider.call('cfx_getBlocksByEpoch', EpochNumber(epochNumber));
+  }
+
   // -------------------------------- block -----------------------------------
   /**
    * TODO
@@ -272,26 +322,6 @@ class Conflux {
    */
   async getBestBlockHash() {
     return this.provider.call('cfx_getBestBlockHash');
-  }
-
-  /**
-   * Get block hash array of a epochNumber.
-   *
-   * @param epochNumber {string|number} - EpochNumber or string in ["latest_state", "latest_mined"]
-   * @return {Promise<string[]>} Block hash array, last one is the pivot block hash of this epochNumber.
-   *
-   * @example
-   * > await cfx.getBlocksByEpoch(0);
-   ['0x2da120ad267319c181b12136f9e36be9fba59e0d818f6cc789f04ee937b4f593']
-
-   * > await cfx.getBlocksByEpoch(449);
-   [
-   '0x3d8b71208f81fb823f4eec5eaf2b0ec6b1457d381615eff2fbe24605ea333c39',
-   '0x59339ff28bc235cceac9fa588ebafcbf61316e6a8c86c7a1d7239b9445d98e40'
-   ]
-   */
-  async getBlocksByEpoch(epochNumber) {
-    return this.provider.call('cfx_getBlocksByEpoch', EpochNumber(epochNumber));
   }
 
   /**
@@ -395,28 +425,6 @@ class Conflux {
   }
 
   /**
-   * Get the epochNumber pivot block info.
-   *
-   * @param epochNumber {string|number} - EpochNumber or string in ["latest_state", "latest_mined"]
-   * @param [detail=false] {boolean} - `true` return transaction object, `false` return TxHash array
-   * @return {Promise<object|null>} The block info (same as `getBlockByHash`).
-   *
-   * @example
-   * > await cfx.getBlockByEpochNumber(449);
-   {
-     hash: '0x59339ff28bc235cceac9fa588ebafcbf61316e6a8c86c7a1d7239b9445d98e40',
-     ...
-   }
-   */
-  async getBlockByEpochNumber(epochNumber, detail = false) {
-    if (!lodash.isBoolean(detail)) {
-      throw new Error('detail must be boolean');
-    }
-    const result = await this.provider.call('cfx_getBlockByEpochNumber', EpochNumber(epochNumber), detail);
-    return parse.block(result);
-  }
-
-  /**
    * Get block by `blockHash` if pivot block of `epochNumber` is `pivotBlockHash`.
    *
    * @param blockHash {string} - Block hash which epochNumber expect to be `epochNumber`.
@@ -440,12 +448,6 @@ class Conflux {
       BlockHash(blockHash), BlockHash(pivotBlockHash), EpochNumber(epochNumber),
     );
     return parse.block(result);
-  }
-
-  // eslint-disable-next-line no-unused-vars
-  async getRiskCoefficient(epochNumber) {
-    // FIXME rpc not implement yet.
-    return 0;
   }
 
   // ----------------------------- transaction --------------------------------

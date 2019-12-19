@@ -97,7 +97,7 @@ close connection.
 > cfx.close();
 ```
 
-## Conflux.gasPrice
+## Conflux.getGasPrice
 
 Returns the current gas price oracle. The gas price is determined by the last few blocks median gas price.
 
@@ -112,11 +112,11 @@ Returns the current gas price oracle. The gas price is determined by the last fe
 ### Example
 
 ```
-> await cfx.gasPrice();
-   0
+> await cfx.getGasPrice();
+   "0"
 ```
 
-## Conflux.epochNumber
+## Conflux.getEpochNumber
 
 Returns the current epochNumber the client is on.
 
@@ -133,7 +133,7 @@ epochNumber | string,number | false    |         | The end epochNumber to count 
 ### Example
 
 ```
-> await cfx.epochNumber();
+> await cfx.getEpochNumber();
    200109
 ```
 
@@ -249,6 +249,56 @@ epochNumber | string,number | false    | this.defaultEpoch | The end epochNumber
    0
 ```
 
+## Conflux.getBlockByEpochNumber
+
+Get the epochNumber pivot block info.
+
+### Parameters
+
+Name        | Type          | Required | Default | Description
+------------|---------------|----------|---------|--------------------------------------------------------------
+epochNumber | string,number | true     |         | EpochNumber or string in ["latest_state", "latest_mined"]
+detail      | boolean       | false    | false   | `true` return transaction object, `false` return TxHash array
+
+### Return
+
+`Promise.<(object|null)>` The block info (same as `getBlockByHash`).
+
+### Example
+
+```
+> await cfx.getBlockByEpochNumber(449);
+   {
+     hash: '0x59339ff28bc235cceac9fa588ebafcbf61316e6a8c86c7a1d7239b9445d98e40',
+     ...
+   }
+```
+
+## Conflux.getBlocksByEpochNumber
+
+Get block hash array of a epochNumber.
+
+### Parameters
+
+Name        | Type          | Required | Default | Description
+------------|---------------|----------|---------|----------------------------------------------------------
+epochNumber | string,number | true     |         | EpochNumber or string in ["latest_state", "latest_mined"]
+
+### Return
+
+`Promise.<Array.<string>>` Block hash array, last one is the pivot block hash of this epochNumber.
+
+### Example
+
+```
+> await cfx.getBlocksByEpochNumber(0);
+   ['0x2da120ad267319c181b12136f9e36be9fba59e0d818f6cc789f04ee937b4f593']> await cfx.getBlocksByEpochNumber(449);
+   [
+   '0x3d8b71208f81fb823f4eec5eaf2b0ec6b1457d381615eff2fbe24605ea333c39',
+   '0x59339ff28bc235cceac9fa588ebafcbf61316e6a8c86c7a1d7239b9445d98e40'
+   ]
+```
+
 ## Conflux.getBestBlockHash
 
 TODO
@@ -266,31 +316,6 @@ TODO
 ```
 > await cfx.getBestBlockHash();
    "0x43ddda130fff8539b9f3c431aa1b48e021b3744aacd224cbd4bcdb64373f3dd5"
-```
-
-## Conflux.getBlocksByEpoch
-
-Get block hash array of a epochNumber.
-
-### Parameters
-
-Name        | Type          | Required | Default | Description
-------------|---------------|----------|---------|----------------------------------------------------------
-epochNumber | string,number | true     |         | EpochNumber or string in ["latest_state", "latest_mined"]
-
-### Return
-
-`Promise.<Array.<string>>` Block hash array, last one is the pivot block hash of this epochNumber.
-
-### Example
-
-```
-> await cfx.getBlocksByEpoch(0);
-   ['0x2da120ad267319c181b12136f9e36be9fba59e0d818f6cc789f04ee937b4f593']> await cfx.getBlocksByEpoch(449);
-   [
-   '0x3d8b71208f81fb823f4eec5eaf2b0ec6b1457d381615eff2fbe24605ea333c39',
-   '0x59339ff28bc235cceac9fa588ebafcbf61316e6a8c86c7a1d7239b9445d98e40'
-   ]
 ```
 
 ## Conflux.getBlockByHash
@@ -394,31 +419,6 @@ detail    | boolean | false    | false   | `true` return transaction object, `fa
       }
     ],
     ...
-   }
-```
-
-## Conflux.getBlockByEpochNumber
-
-Get the epochNumber pivot block info.
-
-### Parameters
-
-Name        | Type          | Required | Default | Description
-------------|---------------|----------|---------|--------------------------------------------------------------
-epochNumber | string,number | true     |         | EpochNumber or string in ["latest_state", "latest_mined"]
-detail      | boolean       | false    | false   | `true` return transaction object, `false` return TxHash array
-
-### Return
-
-`Promise.<(object|null)>` The block info (same as `getBlockByHash`).
-
-### Example
-
-```
-> await cfx.getBlockByEpochNumber(449);
-   {
-     hash: '0x59339ff28bc235cceac9fa588ebafcbf61316e6a8c86c7a1d7239b9445d98e40',
-     ...
    }
 ```
 

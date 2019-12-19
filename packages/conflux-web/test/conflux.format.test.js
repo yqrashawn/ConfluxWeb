@@ -98,14 +98,14 @@ test('getTransactionCount', async () => {
   await cfx.getTransactionCount(ADDRESS, 0);
 });
 
-test('getBlocksByEpoch', async () => {
-  await expect(cfx.getBlocksByEpoch()).rejects.toThrow('do not match hex string');
+test('getBlocksByEpochNumber', async () => {
+  await expect(cfx.getBlocksByEpochNumber()).rejects.toThrow('do not match hex string');
 
   cfx.provider.call = async (method, epochNumber) => {
     expect(method).toEqual('cfx_getBlocksByEpoch');
     expect(epochNumber).toEqual('0x00');
   };
-  await cfx.getBlocksByEpoch(0);
+  await cfx.getBlocksByEpochNumber(0);
 });
 
 test('getBlockByHash', async () => {

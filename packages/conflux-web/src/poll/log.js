@@ -71,7 +71,7 @@ class LogPoll {
 
   async next(options) {
     if (this._epoch === undefined) {
-      this._epoch = await this.cfx.epochNumber();
+      this._epoch = await this.cfx.getEpochNumber();
     }
 
     if (!this._queue.length) {

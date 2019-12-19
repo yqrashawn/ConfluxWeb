@@ -11,8 +11,8 @@ async function main() {
     logger: console,
   });
 
-  console.log(await cfx.gasPrice()); // 0
-  console.log(await cfx.epochNumber()); // 823992
+  console.log(await cfx.getGasPrice()); // 0
+  console.log(await cfx.getEpochNumber()); // 823992
 
   const balance = await cfx.getBalance('0xbbd9e9be525ab967e633bcdaeac8bd5723ed4d6b');
   console.log(balance); // BigNumber
@@ -21,7 +21,7 @@ async function main() {
 
   console.log(await cfx.getTransactionCount('0xbbd9e9be525ab967e633bcdaeac8bd5723ed4d6b'));
 
-  console.log(await cfx.getBlocksByEpoch(823498));
+  console.log(await cfx.getBlocksByEpochNumber(823498));
   console.log(await cfx.getBlockByEpochNumber(823498));
   console.log(await cfx.getBlockByEpochNumber(823498, true));
   console.log(await cfx.getBlockByHash('0x1372b2a02c6f198037587863a8bd1044e0fbb8444cace771fd0f2120461da35f'));
