@@ -310,7 +310,7 @@ test('call', async () => {
     expect(options.value).toEqual('0x64');
     expect(options.data).toEqual('0x');
 
-    expect(epochNumber).toEqual(EpochNumber.EARLIEST);
+    expect(epochNumber).toEqual(EpochNumber.LATEST_MINED);
   };
   await cfx.call(
     {
@@ -320,7 +320,7 @@ test('call', async () => {
       value: '100',
       data: '',
     },
-    EpochNumber.EARLIEST,
+    EpochNumber.LATEST_MINED,
   );
 });
 

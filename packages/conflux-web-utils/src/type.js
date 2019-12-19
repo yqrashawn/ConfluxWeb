@@ -347,8 +347,6 @@ Drip.toCFX = value => {
  "0x00"
  * > EpochNumber('100')
  "0x64"
- * > EpochNumber('earliest')
- "earliest"
  * > EpochNumber('LATEST_STATE')
  "latest_state"
  */
@@ -357,19 +355,12 @@ const EpochNumber = value => {
     value = value.toLowerCase();
   }
 
-  if ([EpochNumber.EARLIEST, EpochNumber.LATEST_STATE, EpochNumber.LATEST_MINED].includes(value)) {
+  if ([EpochNumber.LATEST_STATE, EpochNumber.LATEST_MINED].includes(value)) {
     return value;
   }
 
   return Hex.fromNumber(value);
 };
-
-/**
- * The earliest epochNumber where the genesis block in.
- *
- * @var {string}
- */
-EpochNumber.EARLIEST = 'earliest';
 
 /**
  * The latest epochNumber where the latest block with an executed state in.

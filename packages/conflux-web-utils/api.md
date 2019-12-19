@@ -660,12 +660,6 @@ options.v        | string,number           | false    |         | ECDSA recovery
 
 
 
-## type.EpochNumber.EARLIEST
-
-The earliest epochNumber where the genesis block in.
-`string`
-
-
 ## type.EpochNumber.LATEST_STATE
 
 The latest epochNumber where the latest block with an executed state in.
@@ -1047,8 +1041,6 @@ value | string,number,Buffer,BigNumber | true     |         |
  "0x00"
 > EpochNumber('100')
  "0x64"
-> EpochNumber('earliest')
- "earliest"
 > EpochNumber('LATEST_STATE')
  "latest_state"
 ```

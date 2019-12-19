@@ -159,9 +159,8 @@ test('EpochNumber', () => {
 
   expect(EpochNumber(0)).toEqual('0x00');
   expect(EpochNumber('100')).toEqual('0x64');
-  expect(EpochNumber(EpochNumber.EARLIEST)).toEqual(EpochNumber.EARLIEST);
-  expect(EpochNumber(EpochNumber.EARLIEST.toUpperCase())).toEqual(EpochNumber.EARLIEST);
   expect(EpochNumber(EpochNumber.LATEST_STATE)).toEqual(EpochNumber.LATEST_STATE);
+  expect(EpochNumber(EpochNumber.LATEST_STATE.toUpperCase())).toEqual(EpochNumber.LATEST_STATE);
   expect(EpochNumber(EpochNumber.LATEST_MINED)).toEqual(EpochNumber.LATEST_MINED);
   expect(() => EpochNumber('xxxxxxx')).toThrow('do not match hex string');
 });

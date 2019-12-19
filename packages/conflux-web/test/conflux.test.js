@@ -44,11 +44,11 @@ test('cfx.setProvider', () => {
 
   cfx.setProvider('ws://localhost:443');
   expect(cfx.provider.constructor.name).toEqual('WebsocketProvider');
-  expect(cfx.provider.timeout).toEqual(30 * 1000);
+  expect(cfx.provider.timeout).toEqual(60 * 1000);
 
   cfx.setProvider('');
   expect(cfx.provider.constructor.name).toEqual('BaseProvider');
-  expect(cfx.provider.timeout).toEqual(30 * 1000);
+  expect(cfx.provider.timeout).toEqual(60 * 1000);
 
   expect(() => cfx.setProvider()).toThrow('url must be string');
 });

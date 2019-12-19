@@ -146,8 +146,8 @@ Gets past logs, matching the given options.
 Name                | Type                  | Required | Default | Description
 --------------------|-----------------------|----------|---------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 options             | object                | false    |         |
-options.fromEpoch   | string,number         | false    |         | The number of the earliest block. (>=)
-options.toEpoch     | string,number         | false    |         | The number of the latest block.(<=)
+options.fromEpoch   | string,number         | false    |         | The number of the start block. (>=)
+options.toEpoch     | string,number         | false    |         | The number of the stop block.(<=)
 options.blockHashes | Array.<string>        | false    |         | The block hash list
 options.address     | string,Array.<string> | false    |         | An address or a list of addresses to only get logs from particular account(s).
 options.topics      | array                 | false    |         | An array of values which must each appear in the log entries. The order is important, if you want to leave topics out use null, e.g. [null, '0x12...']. You can also pass an array for each topic with options for that topic e.g. [null, ['option1', 'option2']]
@@ -245,7 +245,7 @@ epochNumber | string,number | false    | this.defaultEpoch | The end epochNumber
 
 ```
 > await cfx.getTransactionCount("0xbbd9e9be525ab967e633bcdaeac8bd5723ed4d6b");
-   61> await cfx.getTransactionCount("0xbbd9e9be525ab967e633bcdaeac8bd5723ed4d6b", EpochNumber.EARLIEST);
+   61> await cfx.getTransactionCount("0xbbd9e9be525ab967e633bcdaeac8bd5723ed4d6b", 0);
    0
 ```
 
@@ -275,8 +275,8 @@ Get block hash array of a epochNumber.
 ### Parameters
 
 Name        | Type          | Required | Default | Description
-------------|---------------|----------|---------|-----------------------------------------------------------
-epochNumber | string,number | true     |         | EpochNumber or string in ["latest", "earliest", "pending"]
+------------|---------------|----------|---------|----------------------------------------------------------
+epochNumber | string,number | true     |         | EpochNumber or string in ["latest_state", "latest_mined"]
 
 ### Return
 
@@ -285,7 +285,7 @@ epochNumber | string,number | true     |         | EpochNumber or string in ["la
 ### Example
 
 ```
-> await cfx.getBlocksByEpoch(EpochNumber.EARLIEST); // same as `cfx.getBlocksByEpoch(0)`
+> await cfx.getBlocksByEpoch(0);
    ['0x2da120ad267319c181b12136f9e36be9fba59e0d818f6cc789f04ee937b4f593']> await cfx.getBlocksByEpoch(449);
    [
    '0x3d8b71208f81fb823f4eec5eaf2b0ec6b1457d381615eff2fbe24605ea333c39',
@@ -405,7 +405,7 @@ Get the epochNumber pivot block info.
 
 Name        | Type          | Required | Default | Description
 ------------|---------------|----------|---------|--------------------------------------------------------------
-epochNumber | string,number | true     |         | EpochNumber or string in ["latest", "earliest", "pending"]
+epochNumber | string,number | true     |         | EpochNumber or string in ["latest_state", "latest_mined"]
 detail      | boolean       | false    | false   | `true` return transaction object, `false` return TxHash array
 
 ### Return
@@ -432,7 +432,7 @@ Name           | Type   | Required | Default | Description
 ---------------|--------|----------|---------|----------------------------------------------------------------
 blockHash      | string | true     |         | Block hash which epochNumber expect to be `epochNumber`.
 pivotBlockHash | string | true     |         | Block hash which expect to be the pivot block of `epochNumber`.
-epochNumber    | number | true     |         | EpochNumber or string in ["latest", "earliest", "pending"]
+epochNumber    | number | true     |         | EpochNumber or string in ["latest_state", "latest_mined"]
 
 ### Return
 
@@ -667,9 +667,9 @@ Get the code at a specific address.
 ### Parameters
 
 Name        | Type          | Required | Default           | Description
-------------|---------------|----------|-------------------|-----------------------------------------------------------
+------------|---------------|----------|-------------------|----------------------------------------------------------
 address     | string        | true     |                   | The contract address to get the code from.
-epochNumber | string,number | false    | this.defaultEpoch | EpochNumber or string in ["latest", "earliest", "pending"]
+epochNumber | string,number | false    | this.defaultEpoch | EpochNumber or string in ["latest_state", "latest_mined"]
 
 ### Return
 

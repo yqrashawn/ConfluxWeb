@@ -152,8 +152,8 @@ class Conflux {
    * Gets past logs, matching the given options.
    *
    * @param [options] {object}
-   * @param [options.fromEpoch] {string|number} - The number of the earliest block. (>=)
-   * @param [options.toEpoch] {string|number} - The number of the latest block.(<=)
+   * @param [options.fromEpoch] {string|number} - The number of the start block. (>=)
+   * @param [options.toEpoch] {string|number} - The number of the stop block.(<=)
    * @param [options.blockHashes] {string[]} - The block hash list
    * @param [options.address] {string|string[]} - An address or a list of addresses to only get logs from particular account(s).
    * @param [options.topics] {array} - An array of values which must each appear in the log entries. The order is important, if you want to leave topics out use null, e.g. [null, '0x12...']. You can also pass an array for each topic with options for that topic e.g. [null, ['option1', 'option2']]
@@ -252,7 +252,7 @@ class Conflux {
    * > await cfx.getTransactionCount("0xbbd9e9be525ab967e633bcdaeac8bd5723ed4d6b");
    61
 
-   * > await cfx.getTransactionCount("0xbbd9e9be525ab967e633bcdaeac8bd5723ed4d6b", EpochNumber.EARLIEST);
+   * > await cfx.getTransactionCount("0xbbd9e9be525ab967e633bcdaeac8bd5723ed4d6b", 0);
    0
    */
   async getTransactionCount(address, epochNumber = this.defaultEpoch) {
@@ -277,11 +277,11 @@ class Conflux {
   /**
    * Get block hash array of a epochNumber.
    *
-   * @param epochNumber {string|number} - EpochNumber or string in ["latest", "earliest", "pending"]
+   * @param epochNumber {string|number} - EpochNumber or string in ["latest_state", "latest_mined"]
    * @return {Promise<string[]>} Block hash array, last one is the pivot block hash of this epochNumber.
    *
    * @example
-   * > await cfx.getBlocksByEpoch(EpochNumber.EARLIEST); // same as `cfx.getBlocksByEpoch(0)`
+   * > await cfx.getBlocksByEpoch(0);
    ['0x2da120ad267319c181b12136f9e36be9fba59e0d818f6cc789f04ee937b4f593']
 
    * > await cfx.getBlocksByEpoch(449);
@@ -397,7 +397,7 @@ class Conflux {
   /**
    * Get the epochNumber pivot block info.
    *
-   * @param epochNumber {string|number} - EpochNumber or string in ["latest", "earliest", "pending"]
+   * @param epochNumber {string|number} - EpochNumber or string in ["latest_state", "latest_mined"]
    * @param [detail=false] {boolean} - `true` return transaction object, `false` return TxHash array
    * @return {Promise<object|null>} The block info (same as `getBlockByHash`).
    *
@@ -421,7 +421,7 @@ class Conflux {
    *
    * @param blockHash {string} - Block hash which epochNumber expect to be `epochNumber`.
    * @param pivotBlockHash {string} - Block hash which expect to be the pivot block of `epochNumber`.
-   * @param epochNumber {number} - EpochNumber or string in ["latest", "earliest", "pending"]
+   * @param epochNumber {number} - EpochNumber or string in ["latest_state", "latest_mined"]
    * @return {Promise<object>} The block info (same as `getBlockByHash`).
    *
    * @example
@@ -665,7 +665,7 @@ class Conflux {
    * Get the code at a specific address.
    *
    * @param address {string} - The contract address to get the code from.
-   * @param [epochNumber=this.defaultEpoch] {string|number} - EpochNumber or string in ["latest", "earliest", "pending"]
+   * @param [epochNumber=this.defaultEpoch] {string|number} - EpochNumber or string in ["latest_state", "latest_mined"]
    * @return {Promise<string>} Code hex string
    *
    * @example

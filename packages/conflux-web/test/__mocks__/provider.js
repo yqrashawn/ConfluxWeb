@@ -17,14 +17,14 @@ const fullNode = {
   },
 
   cfx_getBalance(address, epochNumber) {
-    if (epochNumber === EpochNumber.EARLIEST || epochNumber === '0x00') {
+    if (epochNumber === '0x00') {
       return '0x0';
     }
     return Hex(randomBuffer(4));
   },
 
   cfx_getTransactionCount(address, epochNumber) {
-    if (epochNumber === EpochNumber.EARLIEST || epochNumber === '0x00') {
+    if (epochNumber === '0x00') {
       return '0x0';
     }
     return Hex(randomBuffer(1));
@@ -35,7 +35,7 @@ const fullNode = {
   },
 
   cfx_getBlocksByEpoch(epochNumber) {
-    if (epochNumber === EpochNumber.EARLIEST || epochNumber === '0x00') {
+    if (epochNumber === '0x00') {
       return mockData.epoch[epochNumber];
     }
     if (epochNumber === '0x01') {
