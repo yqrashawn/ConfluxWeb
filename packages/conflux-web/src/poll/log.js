@@ -13,6 +13,15 @@ class LogPoll {
     this._queue = [];
   }
 
+  [Symbol.asyncIterator]() {
+    return {
+      next: async () => {
+        const value = await this.next();
+        return { value, done: value === undefined };
+      },
+    };
+  }
+
   async _isConfirmed(epochNumber) {
     if (epochNumber === undefined) {
       return false;
