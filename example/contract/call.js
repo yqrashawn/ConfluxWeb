@@ -37,6 +37,11 @@ async function main() {
    * `self` is a function which emit a `SelfEvent` event, but will not level log cause `cfx_call` operate.
    */
   console.log(await contract.self()); // undefined
+
+  const iter = contract.SelfEvent().getLogs({ fromEpoch: 545896, toEpoch: 660500 });
+  for await (const log of iter) {
+    console.log(log);
+  }
 }
 
 main().catch(e => console.error(e));

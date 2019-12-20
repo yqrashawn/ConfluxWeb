@@ -28,6 +28,15 @@ async function main() {
   console.log(await cfx.getBlockByHash('0x1372b2a02c6f198037587863a8bd1044e0fbb8444cace771fd0f2120461da35f', true));
   console.log(await cfx.getTransactionByHash('0x8079e8fe30fd88e351c6f51a7b2dc81df847ca1395a248af240bca31d74221d9'));
   console.log(await cfx.getTransactionReceipt('0x8079e8fe30fd88e351c6f51a7b2dc81df847ca1395a248af240bca31d74221d9'));
+
+  const iter = cfx.getLogs({
+    address: '0x32116df84f12e1fc936720a57bbdcba2a1e1ff05',
+    fromEpoch: 545896,
+    toEpoch: 660500,
+  });
+  for await (const log of iter) {
+    console.log(log);
+  }
 }
 
 main().catch(e => console.error(e));
