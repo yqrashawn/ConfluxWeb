@@ -9,7 +9,8 @@ const { decorate } = require('./utils');
  * @memberOf Contract
  */
 class Called {
-  constructor(method, { to, data }) {
+  constructor(cfx, method, { to, data }) {
+    this.cfx = cfx;
     this.method = method;
     this.to = to;
     this.data = data;
@@ -26,7 +27,7 @@ class Called {
    * @return {Promise<PendingTransaction>} The PendingTransaction object.
    */
   sendTransaction(options) {
-    return this.method.cfx.sendTransaction({
+    return this.cfx.sendTransaction({
       to: this.to,
       data: this.data,
       ...options,
@@ -42,7 +43,7 @@ class Called {
    * @return {Promise<number>} The used gas for the simulated call/transaction.
    */
   estimateGas(options) {
-    return this.method.cfx.estimateGas({
+    return this.cfx.estimateGas({
       to: this.to,
       data: this.data,
       ...options,
@@ -61,7 +62,7 @@ class Called {
    * @return {Promise<*>} Decoded contact call return.
    */
   async call(options, epochNumber) {
-    const result = await this.method.cfx.call(
+    const result = await this.cfx.call(
       {
         to: this.to,
         data: this.data,
@@ -82,23 +83,24 @@ class Called {
   }
 }
 
-class ContractFunction extends Function {
-  constructor(cfx, contract, fragment) {
-    super();
+class ContractFunction {
+  constructor(cfx, contract, fragment, code) {
     this.cfx = cfx;
     this.contract = contract;
     this.fragment = fragment;
 
     this.coder = new FunctionCoder(this.fragment);
-    this.code = this.coder.signature();
+    this.code = code || this.coder.signature();
 
-    return new Proxy(this, this.constructor);
+    return new Proxy(this.call.bind(this), {
+      get: (_, key) => this[key],
+    });
   }
 
-  static apply(self, _, params) {
-    return new Called(self, {
-      to: self.contract.address,
-      data: self.encode(params),
+  call(...params) {
+    return new Called(this.cfx, this, {
+      to: this.contract.address,
+      data: this.encode(params),
     });
   }
 
@@ -134,7 +136,8 @@ class ContractConstructor extends ContractFunction {
 
 // ----------------------------------------------------------------------------
 class EventLog {
-  constructor(eventLog, { address, topics }) {
+  constructor(cfx, eventLog, { address, topics }) {
+    this.cfx = cfx;
     this.eventLog = eventLog;
     this.address = address;
     this.topics = topics;
@@ -159,28 +162,30 @@ class EventLog {
   }
 }
 
-class ContractEvent extends Function {
+class ContractEvent {
   constructor(cfx, contract, fragment) {
-    super();
     this.cfx = cfx;
     this.contract = contract;
     this.fragment = fragment;
 
     this.coder = new EventCoder(this.fragment);
     this.code = this.coder.signature();
-    return new Proxy(this, this.constructor);
+
+    return new Proxy(this.call.bind(this), {
+      get: (_, key) => this[key],
+    });
   }
 
-  static apply(self, _, params) {
+  call(...params) {
     Object.entries(params).forEach(([index, param]) => {
       if (param !== undefined) {
-        params[index] = self.coder.encodeInputByIndex(param, index);
+        params[index] = this.coder.encodeInputByIndex(param, index);
       }
     });
 
-    return new EventLog(self, {
-      address: self.contract.address,
-      topics: [self.code, ...params],
+    return new EventLog(this.cfx, this, {
+      address: this.contract.address,
+      topics: [this.code, ...params],
     });
   }
 
@@ -200,11 +205,11 @@ class ABI {
     this._codeToEvent = {};
 
     Object.values(contract).forEach(instance => {
-      if (instance instanceof ContractConstructor) {
+      if (instance.constructor === ContractConstructor) {
         this._constructorFunction = instance;
-      } else if (instance instanceof ContractFunction) {
+      } else if (instance.constructor === ContractFunction) {
         this._codeToFunction[instance.code] = instance;
-      } else if (instance instanceof ContractEvent) {
+      } else if (instance.constructor === ContractEvent) {
         this._codeToEvent[instance.code] = instance;
       }
     });
@@ -336,8 +341,7 @@ class Contract {
     contractABI.forEach(fragment => {
       switch (fragment.type) {
         case 'constructor': // cover this.constructor
-          this.constructor = new ContractConstructor(cfx, this, fragment);
-          this.constructor.code = code; // set constructor.code to input code
+          this.constructor = new ContractConstructor(cfx, this, fragment, code);
           break;
 
         case 'function':

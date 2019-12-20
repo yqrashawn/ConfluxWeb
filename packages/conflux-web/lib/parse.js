@@ -1,27 +1,29 @@
 const lodash = require('lodash');
 
-class Parser extends Function {
+class Parser {
   constructor(func, { required = false, default: _default } = {}) {
-    super();
     this.func = func;
     this.required = required;
     this.default = _default !== undefined ? func(_default) : undefined;
-    return new Proxy(this, this.constructor);
+
+    return new Proxy(this.call.bind(this), {
+      get: (_, key) => this[key],
+    });
   }
 
-  static apply(self, _, [value]) {
+  call(value) {
     if (value === undefined) {
-      value = self.default;
+      value = this.default;
     }
 
     if (value === undefined) {
-      if (self.required) {
+      if (this.required) {
         throw new Error(`value is required, got ${value}`);
       }
       return undefined;
     }
 
-    return self.func(value);
+    return this.func(value);
   }
 
   parse(func) {
