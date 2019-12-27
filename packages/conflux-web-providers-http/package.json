@@ -1,6 +1,6 @@
 {
     "name": "conflux-web-providers-http",
-    "version": "1.2.2-alpha.0",
+    "version": "1.2.2-alpha.1",
     "description": "Module to handle conflux-web RPC connections over HTTP.",
     "repository": "",
     "license": "LGPL-3.0",
@@ -9,7 +9,7 @@
     },
     "main": "src/index.js",
     "dependencies": {
-        "conflux-web-core-helpers": "1.2.2-alpha.0",
+        "conflux-web-core-helpers": "1.2.2-alpha.1",
         "xhr2-cookies": "1.1.0"
     }
 }

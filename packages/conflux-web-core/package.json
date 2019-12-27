@@ -1,6 +1,6 @@
 {
     "name": "conflux-web-core",
-    "version": "1.2.2-alpha.0",
+    "version": "1.2.2-alpha.1",
     "description": "ConfluxWeb core tools for sub packages. This is an internal package.",
     "repository": "https://github.com/Conflux-Chain/ConfluxWeb/tree/conflux-web-1.2.1/packages/conflux-web-core",
     "license": "LGPL-3.0",
@@ -9,9 +9,9 @@
     },
     "main": "src/index.js",
     "dependencies": {
-        "conflux-web-core-helpers": "1.2.2-alpha.0",
-        "conflux-web-core-method": "1.2.2-alpha.0",
-        "conflux-web-core-requestmanager": "1.2.2-alpha.0",
+        "conflux-web-core-helpers": "1.2.2-alpha.1",
+        "conflux-web-core-method": "1.2.2-alpha.1",
+        "conflux-web-core-requestmanager": "1.2.2-alpha.1",
         "conflux-web-utils": "1.2.2-alpha.0"
     }
 }

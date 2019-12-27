@@ -1,6 +1,6 @@
 {
     "name": "conflux-web-core-subscriptions",
-    "version": "1.2.2-alpha.0",
+    "version": "1.2.2-alpha.1",
     "description": "Manages conflux-web subscriptions. This is an internal package.",
     "repository": "https://github.com/Conflux-Chain/ConfluxWeb/tree/conflux-web-1.2.1/packages/conflux-web-core-subscriptions",
     "license": "LGPL-3.0",
@@ -9,7 +9,7 @@
     },
     "main": "src/index.js",
     "dependencies": {
-        "conflux-web-core-helpers": "1.2.2-alpha.0",
+        "conflux-web-core-helpers": "1.2.2-alpha.1",
         "eventemitter3": "3.1.2",
         "underscore": "1.9.1"
     }

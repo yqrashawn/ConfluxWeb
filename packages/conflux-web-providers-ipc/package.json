@@ -1,6 +1,6 @@
 {
     "name": "conflux-web-providers-ipc",
-    "version": "1.2.2-alpha.0",
+    "version": "1.2.2-alpha.1",
     "description": "Module to handle conflux-web RPC connections over IPC sockets.",
     "repository": "https://github.com/Conflux-Chain/ConfluxWeb/tree/conflux-web-1.2.1/packages/conflux-web-providers-ipc",
     "license": "LGPL-3.0",
@@ -9,7 +9,7 @@
     },
     "main": "src/index.js",
     "dependencies": {
-        "conflux-web-core-helpers": "1.2.2-alpha.0",
+        "conflux-web-core-helpers": "1.2.2-alpha.1",
         "oboe": "2.1.4",
         "underscore": "1.9.1"
     }

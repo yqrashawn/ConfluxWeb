@@ -1,6 +1,6 @@
 {
     "name": "conflux-web-core-requestmanager",
-    "version": "1.2.2-alpha.0",
+    "version": "1.2.2-alpha.1",
     "description": "Web3 module to handle requests to external providers.",
     "repository": "https://github.com/Conflux-Chain/ConfluxWeb/tree/conflux-web-1.2.1/packages/conflux-web-core-requestmanager",
     "license": "LGPL-3.0",
@@ -9,10 +9,10 @@
     },
     "main": "src/index.js",
     "dependencies": {
-        "conflux-web-core-helpers": "1.2.2-alpha.0",
-        "conflux-web-providers-http": "1.2.2-alpha.0",
-        "conflux-web-providers-ipc": "1.2.2-alpha.0",
-        "conflux-web-providers-ws": "1.2.2-alpha.0",
+        "conflux-web-core-helpers": "1.2.2-alpha.1",
+        "conflux-web-providers-http": "1.2.2-alpha.1",
+        "conflux-web-providers-ipc": "1.2.2-alpha.1",
+        "conflux-web-providers-ws": "1.2.2-alpha.1",
         "underscore": "1.9.1"
     }
 }
