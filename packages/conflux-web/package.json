@@ -10,6 +10,9 @@
     "JavaScript",
     "API"
   ],
+  "scripts": {
+    "build": "rollup --config rollup.config.js"
+  },
   "dependencies": {
     "bignumber.js": "^9.0.0",
     "conflux-web-utils": "0.3.0-alpha.2",
@@ -22,5 +25,14 @@
     "src",
     "index.js",
     "yarn.lock"
-  ]
+  ],
+  "devDependencies": {
+    "@babel/preset-env": "^7.7.7",
+    "@rollup/plugin-commonjs": "^11.0.0",
+    "@rollup/plugin-json": "^4.0.1",
+    "@rollup/plugin-node-resolve": "^6.0.0",
+    "rollup": "^1.27.14",
+    "rollup-plugin-babel": "^4.3.3",
+    "rollup-plugin-node-builtins": "^2.1.2"
+  }
 }
